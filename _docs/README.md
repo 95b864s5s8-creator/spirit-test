@@ -20,6 +20,7 @@
 | [定价/定价矩阵.md](定价/compensation-matrix.md) | 价格结构 | ✅ 最新 |
 | [知识框架/总览.md](知识框架/knowledge-framework.md) | 项目整体知识框架 | ✅ 最新 |
 | [包装设计-v3.md](包装设计-v3.md) | 物料包装设计 | ✅ 最新 |
+| [CICD部署指南.md](CICD部署指南.md) | GitHub+Netlify 自动化部署 | ✅ 最新 |
 
 ---
 
