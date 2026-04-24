@@ -375,8 +375,8 @@
       number: '第 29 题',
       title: '你的同事能力很强但人很讨厌，TA被领导批评了，你的反应是——',
       options: [
-        { label: 'A', text: '跟人无关，TA做事确实有问题，被批评不意外', value: 'T' },
-        { label: 'B', text: '心里觉得正常，毕竟TA确实做错了', value: 'T' },
+        { label: 'A', text: '跟人无关，客观看就是TA做得不到位', value: 'T' },
+        { label: 'B', text: '跟人无关，但私下会帮TA说两句好话', value: 'T' },
         { label: 'C', text: '虽然TA平时很烦，但看TA被骂还是有点不忍心', value: 'F' },
         { label: 'D', text: '表面上说"太惨了"，心里其实有点幸灾乐祸', value: 'F' },
       ],
