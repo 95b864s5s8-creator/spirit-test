@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>测了吗 — 结果页样板</title>
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --card-bg: rgba(255,255,255,0.03);
+    --card-border: rgba(255,255,255,0.06);
+    --gold: #d4a847;
+    --gold-dim: rgba(212,168,71,0.5);
+    --text-primary: #e8e6e3;
+    --text-secondary: #a0a0a8;
+    --text-muted: #6a6a72;
+    --red-accent: #e06060;
+    --green-accent: #6ab06a;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    font-family: -apple-system, 'PingFang SC', 'Noto Sans SC', sans-serif;
+    background: var(--bg);
+    color: var(--text-primary);
+    max-width: 420px;
+    margin: 0 auto;
+    padding: 24px 20px 60px;
+    line-height: 1.7;
+  }
+
+  /* ===== 面标题 ===== */
+  .face-label {
+    font-size: 11px;
+    color: var(--text-muted);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    text-align: center;
+    margin-bottom: 24px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--card-border);
+  }
+  .face-label span { color: var(--gold-dim); }
+
+  /* ===== 氛围光晕 ===== */
+  .atmo-glow {
+    margin: 0 auto;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* ===== 分隔符 ===== */
+  .divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--card-border), transparent);
+    margin: 24px 0;
+  }
+
+  /* ===== 卡片通用 ===== */
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 16px;
+    padding: 20px;
+    margin-bottom: 16px;
+  }
+  .card-gold {
+    border-color: rgba(212,168,71,0.2);
+    background: rgba(212,168,71,0.04);
+  }
+
+  /* ===== Face 1 样式 ===== */
+  .f1-emoji { font-size: 88px; }
+  .f1-position {
+    text-align: center;
+    font-size: 12px;
+    color: var(--text-muted);
+    letter-spacing: 2px;
+    margin-top: 4px;
+  }
+  .f1-name {
+    text-align: center;
+    font-size: 24px;
+    font-weight: 700;
+    margin-top: 12px;
+    color: var(--gold);
+  }
+  .f1-quote {
+    text-align: center;
+    font-size: 15px;
+    color: var(--text-secondary);
+    font-style: italic;
+    margin-top: 8px;
+  }
+  .f1-subtitle {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-bottom: 10px;
+  }
+  .f1-text {
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 2;
+  }
+  .f1-text strong { color: var(--gold); font-weight: 600; }
+
+  /* ===== Face 2 样式 ===== */
+  .f2-header {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  .f2-group {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255,255,255,0.04);
+    padding: 4px 14px;
+    border-radius: 20px;
+    font-size: 13px;
+    color: var(--text-secondary);
+    margin-bottom: 12px;
+  }
+  .f2-emoji { font-size: 72px; }
+  .f2-title {
+    font-size: 22px;
+    font-weight: 700;
+    margin-top: 8px;
+  }
+  .f2-tagline {
+    font-size: 14px;
+    color: var(--text-secondary);
+    margin-top: 4px;
+  }
+  .f2-info-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    font-size: 14px;
+  }
+  .f2-info-row:last-child { border-bottom: none; }
+  .f2-info-label { color: var(--text-muted); font-size: 13px; }
+  .f2-info-value { color: var(--text-primary); font-weight: 600; }
+
+  /* ===== 状态条 ===== */
+  .state-bar {
+    display: flex;
+    gap: 4px;
+    margin-top: 12px;
+  }
+  .state-dot {
+    flex: 1;
+    height: 4px;
+    border-radius: 2px;
+    background: rgba(255,255,255,0.06);
+  }
+  .state-dot.active { background: var(--gold); }
+  .state-dot.half { background: var(--gold-dim); }
+
+  /* ===== Face 3 分享卡 ===== */
+  .share-card {
+    background: linear-gradient(180deg, rgba(212,168,71,0.06) 0%, rgba(255,255,255,0.02) 100%);
+    border: 1px solid rgba(212,168,71,0.15);
+    border-radius: 20px;
+    padding: 28px 24px;
+    text-align: center;
+    position: relative;
+  }
+  .share-brand {
+    font-size: 12px;
+    color: var(--text-muted);
+    letter-spacing: 2px;
+  }
+  .share-type-emoji { font-size: 56px; margin: 16px 0 8px; }
+  .share-type-name {
+    font-size: 20px;
+    font-weight: 700;
+  }
+  .share-group {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-top: 6px;
+    padding: 2px 10px;
+    border-radius: 10px;
+    background: rgba(255,255,255,0.04);
+  }
+  .share-divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--card-border), transparent);
+    margin: 16px 0;
+  }
+  .share-form-name {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--gold);
+  }
+  .share-deity {
+    font-size: 13px;
+    color: var(--text-secondary);
+    margin-top: 8px;
+  }
+  .share-deity strong { color: var(--gold); }
+  .share-quote {
+    font-size: 13px;
+    color: var(--text-muted);
+    font-style: italic;
+    margin-top: 6px;
+  }
+  .share-cta-text {
+    font-size: 13px;
+    color: var(--text-secondary);
+    margin-top: 20px;
+  }
+  .share-cta-btn {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 10px 28px;
+    border-radius: 24px;
+    border: 1px solid rgba(212,168,71,0.3);
+    background: rgba(212,168,71,0.08);
+    color: var(--gold);
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+  .share-cta-btn:hover { background: rgba(212,168,71,0.15); }
+  .share-watermark {
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-top: 20px;
+    letter-spacing: 2px;
+    opacity: 0.5;
+  }
+
+  /* ===== CTA产品推荐 ===== */
+  .product-card {
+    background: linear-gradient(135deg, rgba(212,168,71,0.08) 0%, rgba(255,255,255,0.02) 100%);
+    border: 1px solid rgba(212,168,71,0.12);
+    border-radius: 16px;
+    padding: 20px;
+    text-align: center;
+  }
+  .product-card .product-emoji { font-size: 36px; }
+  .product-card .product-title {
+    font-size: 15px;
+    font-weight: 600;
+    margin-top: 8px;
+    color: var(--text-primary);
+  }
+  .product-card .product-desc {
+    font-size: 13px;
+    color: var(--text-secondary);
+    margin-top: 6px;
+    line-height: 1.8;
+  }
+  .product-card .product-btn {
+    display: inline-block;
+    margin-top: 14px;
+    padding: 10px 24px;
+    border-radius: 24px;
+    background: var(--gold);
+    color: var(--bg);
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    transition: all 0.3s;
+  }
+  .product-card .product-btn:hover { opacity: 0.85; }
+
+  /* ===== 免责 ===== */
+  .disclaimer {
+    font-size: 12px;
+    color: var(--text-muted);
+    text-align: center;
+    margin-top: 24px;
+    line-height: 1.8;
+  }
+  .retest {
+    display: inline-block;
+    margin-top: 16px;
+    font-size: 13px;
+    color: var(--text-muted);
+    text-decoration: underline;
+    cursor: pointer;
+    text-align: center;
+    width: 100%;
+  }
+
+  /* ===== 动画 ===== */
+  @keyframes fadeIn { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }
+  @keyframes float { 0%,100% { transform:translateY(0); } 50% { transform:translateY(-8px); } }
+  .anim-1 { animation: fadeIn 0.6s 0s both; }
+  .anim-2 { animation: fadeIn 0.6s 0.3s both; }
+  .anim-3 { animation: fadeIn 0.6s 0.6s both; }
+  .anim-4 { animation: fadeIn 0.6s 0.9s both; }
+  .anim-5 { animation: fadeIn 0.6s 1.2s both; }
+  .anim-6 { animation: fadeIn 0.6s 1.5s both; }
+  .anim-float { animation: float 3s ease-in-out infinite; }
+
+  /* ===== 注释高亮 ===== */
+  .note {
+    position: relative;
+  }
+  .note::before {
+    content: attr(data-note);
+    position: absolute;
+    left: -12px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 10px;
+    color: var(--gold-dim);
+    white-space: nowrap;
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- FACE 1: 你的守护神（命运指派型） -->
+<!-- ═══════════════════════════════════════════════ -->
+<div class="face-label anim-1"><span>FACE 1</span> · 你的守护神已到位</div>
+
+<!-- 氛围层：神明emoji + 光晕 -->
+<div class="anim-2" style="text-align:center;margin-bottom:20px">
+  <div class="atmo-glow anim-float" style="width:180px;height:180px;background:radial-gradient(circle,rgba(106,176,106,0.15) 0%,transparent 70%)">
+    <div class="f1-emoji">⚡</div>
+  </div>
+</div>
+
+<!-- 神名 + 身份 -->
+<div class="anim-3">
+  <div class="f1-name">九天应元雷声普化天尊</div>
+  <div class="f1-position">破局突破 · 正面击碎</div>
+</div>
+
+<!-- 神明语录 -->
+<div class="anim-4" style="text-align:center;margin-top:16px">
+  <div class="f1-quote">「一雷惊醒梦中人」</div>
+</div>
+
+<div class="divider anim-4"></div>
+
+<!-- 诊断：你的困境 -->
+<div class="card anim-5">
+  <div class="f1-subtitle">你的困境</div>
+  <div class="f1-text">
+    你被困在一面看不到尽头的墙里。不是真的墙——是"算了"、"再说吧"、"也许下次"垒起来的墙。你知道墙后面有路，但你在墙这边待太久了，久到开始觉得墙里面也挺好的。
+  </div>
+</div>
+
+<!-- 为什么是TA -->
+<div class="card anim-6">
+  <div class="f1-subtitle">为什么是雷神</div>
+  <div class="f1-text">
+    雷神不跟你谈条件。不跟你讲"准备充分再出发"，不跟你分析利弊。<br><br>
+    <strong>一雷劈下去，墙碎了就是路。</strong><br><br>
+    你不需要准备好。你不需要想清楚。你需要的是动一下——哪怕方向不确定，动本身就是路。
+  </div>
+</div>
+
+<!-- 药方语录 -->
+<div class="card card-gold anim-6" style="text-align:center">
+  <div style="font-size:32px;margin-bottom:8px">⚡</div>
+  <div style="font-size:15px;color:var(--gold);font-style:italic;line-height:2;font-weight:600">
+    「别忍了。你那面"都行"的墙，该塌了。」
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- FACE 2: 你是什么人（自我认知型） -->
+<!-- ═══════════════════════════════════════════════ -->
+<div style="height:48px"></div>
+<div class="face-label"><span>FACE 2</span> · 你是什么人</div>
+
+<!-- emoji + 称号 -->
+<div class="f2-header">
+  <div class="atmo-glow" style="width:120px;height:120px;background:radial-gradient(circle,rgba(200,200,216,0.1) 0%,transparent 70%)">
+    <div class="f2-emoji">🎨</div>
+  </div>
+  <div class="f2-title">薛定谔的佛系</div>
+  <div class="f2-tagline">表面佛系，内心比谁都清楚自己想要什么</div>
+</div>
+
+<!-- 处方卡 -->
+<div class="card">
+  <div class="f2-subtitle">📋 神给你开的处方</div>
+  <div class="f2-info-row">
+    <span class="f2-info-label">先天属性</span>
+    <span class="f2-info-value">⚔️ 金型人</span>
+  </div>
+  <div class="f2-info-row">
+    <span class="f2-info-label">能量类型</span>
+    <span class="f2-info-value">🪫 蓄力待发型</span>
+  </div>
+  <div class="f2-info-row">
+    <span class="f2-info-label">五行状态</span>
+    <span class="f2-info-value" style="color:var(--gold)">土重金埋</span>
+  </div>
+  <div class="state-bar">
+    <div class="state-dot active"></div>
+    <div class="state-dot active"></div>
+    <div class="state-dot half"></div>
+    <div class="state-dot"></div>
+    <div class="state-dot"></div>
+  </div>
+  <div style="text-align:right;font-size:11px;color:var(--text-muted);margin-top:6px">能量值 38/100</div>
+</div>
+
+<!-- 终极诊断（50种形态） -->
+<div class="card">
+  <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+    <span style="font-size:40px">⛰️</span>
+    <div>
+      <div style="font-size:18px;font-weight:700;color:var(--gold)">土重金埋</div>
+      <div style="font-size:12px;color:var(--text-muted);font-style:italic">「土重金埋，才华窒息」</div>
+    </div>
+  </div>
+  <div style="font-size:14px;line-height:1.9;color:var(--text-secondary)">
+    你是一块被埋在土里的真金。不是你没有价值——是你被旧规矩、长辈干涉和过度保护封住了。你的才华在，但没人看得到，包括你自己。
+  </div>
+</div>
+
+<!-- 毒舌金句 -->
+<div class="card card-gold" style="text-align:center">
+  <div style="font-size:11px;color:var(--text-muted);margin-bottom:10px;letter-spacing:1px">来自你神的吐槽</div>
+  <div style="font-size:15px;font-style:italic;line-height:2">
+    你是世界上最精致的那个人<br>也是最脆弱的那个
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- FACE 3: 带走（分享 + 转化） -->
+<!-- ═══════════════════════════════════════════════ -->
+<div style="height:48px"></div>
+<div class="face-label"><span>FACE 3</span> · 带走</div>
+
+<!-- 分享卡 -->
+<div class="share-card">
+  <div class="share-brand">测了吗</div>
+  <div class="share-type-emoji">🎨</div>
+  <div class="share-type-name">薛定谔的佛系</div>
+
+  <div class="share-divider"></div>
+
+  <div class="share-form-name">土重金埋</div>
+  <div class="share-deity">⚡ 守护神：<strong>雷神</strong></div>
+  <div class="share-quote">「一雷惊醒梦中人」</div>
+
+  <div class="share-cta-text">你也来测测你的神是谁？</div>
+  <div class="share-cta-btn">📤 分享给朋友</div>
+
+  <div class="share-watermark">测了吗</div>
+</div>
+
+<!-- 疗愈推荐 -->
+<div class="product-card" style="margin-top:20px">
+  <div class="product-emoji">⚡</div>
+  <div class="product-title">雷击木手串</div>
+  <div class="product-desc">
+    被天雷劈过的木头，没死，反而获得了更强大的能量。<br>
+    跟你一模一样。
+  </div>
+  <div class="product-btn">🔮 查看守护神推荐</div>
+</div>
+
+<!-- 免责 + 重测 -->
+<div class="disclaimer">
+  此报告由玄学CT机自动生成，不构成医学建议。<br>
+  但如果你觉得说中了你，那可能是神仙真的在加班。
+</div>
+<div class="retest">重新测试</div>
+
+</body>
+</html>

@@ -1,0 +1,1193 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<title>测了吗</title>
+<link href="https://cdn.jsdelivr.net/npm/remixicon@4.6.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@200;400;700;900&family=Inter:wght@300;400;600;900&display=swap" rel="stylesheet">
+<style>
+/* ==================== CSS Reset & Variables ==================== */
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  /* 东方古典档案配色 */
+  --bg-primary:#f9f8f4;
+  --bg-card:#ffffff;
+  --bg-card-hover:#fffefa;
+  --gold:#c5a059;
+  --gold-light:#ddc078;
+  --gold-dim:#a68942;
+  --text-primary:#1a1a1a;
+  --text-secondary:#5a5a5a;
+  --text-muted:#9a9a9a;
+  --red-accent:#9d2933;
+  --green-accent:#5a8a5a;
+  --blue-accent:#4a7a9a;
+  --wood-color:#6a8a6a;
+  --fire-color:#9d2933;
+  --earth-color:#c5a059;
+  --metal-color:#8a8a9a;
+  --water-color:#4a7a9a;
+  --radius:4px;
+  --radius-sm:2px;
+  --transition:all .4s cubic-bezier(.4,0,.2,1);
+  --shadow-card:0 8px 32px rgba(0,0,0,0.06);
+  --shadow-heavy:0 40px 80px rgba(0,0,0,0.08);
+}
+html{font-size:16px;-webkit-tap-highlight-color:transparent}
+body{
+  font-family:'Noto Serif SC','Songti SC',SimSun,serif;
+  background:var(--bg-primary);color:var(--text-primary);
+  min-height:100vh;overflow-x:hidden;line-height:1.8;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* 英文字体 */
+.font-en{font-family:'Inter','Helvetica Neue',sans-serif}
+
+/* 固定顶部导航栏 */
+.result-nav{
+  position:fixed;top:0;left:0;right:0;z-index:200;
+  max-width:480px;margin:0 auto;
+  display:flex;justify-content:space-between;align-items:center;
+  padding:16px 24px;
+  background:rgba(249,248,244,0.85);backdrop-filter:blur(12px);
+  border-bottom:1px solid rgba(0,0,0,0.04);
+}
+.result-nav-left{font-family:'Inter',sans-serif;font-size:9px;letter-spacing:0.4em;color:rgba(0,0,0,0.3);font-weight:600;text-transform:uppercase}
+.result-nav-right{font-family:'Inter',sans-serif;font-size:9px;letter-spacing:0.4em;color:var(--red-accent);font-weight:900;text-transform:uppercase}
+
+/* 页面顶部留导航空间 */
+#page-result{padding-top:64px}
+body::before{
+  content:'';position:fixed;inset:0;z-index:-2;
+  background:
+    radial-gradient(ellipse 60% 50% at 20% 20%, rgba(197,160,89,0.06) 0%, transparent 70%),
+    radial-gradient(ellipse 50% 60% at 80% 80%, rgba(157,41,51,0.04) 0%, transparent 70%),
+    linear-gradient(180deg, #f2f0e9 0%, #f9f8f4 50%, #f9f8f4 100%);
+}
+body::after{
+  content:'';position:fixed;inset:0;z-index:-1;
+  background-image:url('https://www.transparenttextures.com/patterns/handmade-paper.png');
+  opacity:0.03;pointer-events:none;
+}
+
+.page{display:none;min-height:100vh;padding:20px 24px;max-width:480px;margin:0 auto}
+.page.active{display:flex;flex-direction:column;align-items:center}
+
+/* ==================== Animations ==================== */
+@keyframes fadeIn{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeInScale{from{opacity:0;transform:scale(.92)}to{opacity:1;transform:scale(1)}}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+@keyframes floatSlow{0%,100%{transform:translateY(0) rotate(0deg)}50%{transform:translateY(-8px) rotate(2deg)}}
+@keyframes pulse{0%,100%{opacity:.5;transform:scale(1)}50%{opacity:1;transform:scale(1.05)}}
+@keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
+@keyframes slideIn{from{opacity:0;transform:translateX(30px)}to{opacity:1;transform:translateX(0)}}
+@keyframes spinSlow{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+@keyframes breathe{0%,100%{opacity:.4;transform:scale(1)}50%{opacity:.7;transform:scale(1.05)}}
+@keyframes glow{0%,100%{box-shadow:0 0 20px rgba(197,160,89,0.08)}50%{box-shadow:0 0 30px rgba(197,160,89,0.15)}}
+@keyframes starTwinkle{0%,100%{opacity:0;transform:scale(.5)}50%{opacity:1;transform:scale(1)}}
+
+/* 波兰尼节奏：氛围先行，文字延迟 */
+.atmo-first{animation:fadeIn .8s cubic-bezier(.4,0,.2,1) both}
+.text-later{opacity:0;animation:fadeIn .6s cubic-bezier(.4,0,.2,1) .3s both}
+.text-later-d1{opacity:0;animation:fadeIn .6s cubic-bezier(.4,0,.2,1) .5s both}
+.text-later-d2{opacity:0;animation:fadeIn .6s cubic-bezier(.4,0,.2,1) .7s both}
+.text-later-d3{opacity:0;animation:fadeIn .6s cubic-bezier(.4,0,.2,1) .9s both}
+.text-later-d4{opacity:0;animation:fadeIn .6s cubic-bezier(.4,0,.2,1) 1.1s both}
+.animate-in{animation:fadeIn .6s cubic-bezier(.4,0,.2,1) both}
+.delay-1{animation-delay:.1s}
+.delay-2{animation-delay:.2s}
+.delay-3{animation-delay:.3s}
+.delay-4{animation-delay:.4s}
+
+/* 隐藏滚动条 */
+::-webkit-scrollbar{width:0px;background:transparent}
+
+/* ==================== Landing Page ==================== */
+#page-landing{justify-content:center;text-align:center;padding-top:10vh;position:relative}
+
+.logo-area{margin-bottom:40px;position:relative}
+.logo-icon{
+  font-size:72px;margin-bottom:24px;
+  animation:float 4s ease-in-out infinite;
+}
+.logo-title{
+  font-size:36px;font-weight:700;color:var(--text-primary);letter-spacing:8px;margin-bottom:12px;
+}
+.logo-subtitle{font-size:11px;color:var(--gold-dim);letter-spacing:6px;text-transform:uppercase;font-weight:700}
+
+.tagline{font-size:16px;color:var(--text-secondary);margin-bottom:48px;line-height:2;max-width:300px}
+.tagline em{color:var(--gold);font-style:normal}
+
+/* Decorative circles */
+.ink-circles{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none;z-index:-1}
+.ink-circle{position:absolute;border-radius:50%;border:1px solid rgba(197,160,89,0.08);animation:breathe 6s ease-in-out infinite}
+.ink-circle:nth-child(1){width:300px;height:300px;margin:-150px}
+.ink-circle:nth-child(2){width:500px;height:500px;margin:-250px;animation-delay:2s}
+.ink-circle:nth-child(3){width:700px;height:700px;margin:-350px;animation-delay:4s}
+
+/* Buttons */
+.btn-primary{
+  display:inline-block;padding:18px 56px;border:none;
+  background:var(--text-primary);color:var(--bg-primary);font-size:14px;font-weight:700;letter-spacing:6px;
+  cursor:pointer;transition:var(--transition);position:relative;overflow:hidden;
+  text-decoration:none;border-radius:var(--radius);
+  box-shadow:var(--shadow-card);
+}
+.btn-primary:hover,.btn-primary:active{
+  transform:translateY(-3px);
+  box-shadow:var(--shadow-heavy);
+}
+.btn-primary::after{
+  content:'';position:absolute;top:0;left:0;right:0;bottom:0;
+  background:linear-gradient(135deg,var(--gold),var(--gold-dim));
+  opacity:0;transition:opacity .3s;
+}
+.btn-primary:hover::after{opacity:1}
+.btn-primary span{position:relative;z-index:1}
+
+.disclaimer{font-size:11px;color:var(--text-muted);margin-top:40px;line-height:2;max-width:280px}
+
+/* ==================== Question Page ==================== */
+#page-quiz{justify-content:flex-start;padding-top:32px}
+
+.progress-bar{width:100%;max-width:400px;margin-bottom:32px}
+.progress-track{
+  height:2px;background:rgba(0,0,0,0.06);border-radius:2px;overflow:hidden;
+}
+.progress-fill{
+  height:100%;background:var(--gold);
+  border-radius:2px;transition:width .5s cubic-bezier(.4,0,.2,1);width:0;
+}
+.progress-text{font-size:11px;color:var(--text-muted);margin-top:10px;text-align:right;letter-spacing:2px;font-family:monospace}
+
+/* Question card - 档案感 */
+.question-card{
+  width:100%;max-width:400px;
+  background:var(--bg-card);border:1px solid rgba(0,0,0,0.04);
+  border-radius:var(--radius);padding:32px 28px;
+  box-shadow:var(--shadow-card);
+  transition:border-color .3s,box-shadow .3s;
+}
+.question-card.anim-next{animation:slideNext .35s cubic-bezier(.4,0,.2,1) both}
+.question-card.anim-prev{animation:slidePrev .35s cubic-bezier(.4,0,.2,1) both}
+
+/* 题型标记 */
+.card-grip{border-left:3px solid var(--red-accent)}
+.card-dilemma{border-left:3px solid var(--blue-accent)}
+.card-final{border-left:3px solid var(--gold)}
+
+.question-number{font-size:11px;color:var(--gold-dim);margin-bottom:14px;letter-spacing:2px;font-family:monospace}
+.question-title{font-size:18px;font-weight:400;line-height:1.8;margin-bottom:10px;color:var(--text-primary)}
+.question-subtitle{font-size:12px;color:var(--text-muted);margin-bottom:24px}
+
+/* Options */
+.options{display:flex;flex-direction:column;gap:12px}
+.option-btn{
+  padding:16px 18px;
+  background:rgba(0,0,0,0.02);border:1px solid rgba(0,0,0,0.06);
+  border-radius:var(--radius);
+  color:var(--text-primary);font-size:14px;line-height:1.7;
+  cursor:pointer;transition:var(--transition);text-align:left;
+  display:flex;align-items:flex-start;gap:14px;
+}
+.option-btn:hover,.option-btn:active{
+  border-color:var(--gold);background:rgba(197,160,89,0.04);
+  transform:translateX(4px);
+}
+.option-btn.selected{
+  border-color:var(--gold);background:rgba(197,160,89,0.06);
+  box-shadow:0 4px 16px rgba(197,160,89,0.1);
+  animation:optionPop .25s cubic-bezier(.4,0,.2,1);
+}
+.option-label{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:24px;height:24px;flex-shrink:0;
+  font-size:11px;border:1px solid var(--text-muted);border-radius:50%;
+  color:var(--text-muted);transition:var(--transition);
+}
+.option-btn.selected .option-label{border-color:var(--gold);color:var(--gold);background:rgba(197,160,89,0.1)}
+
+/* Date input */
+.date-input-group{display:flex;flex-direction:column;align-items:center;gap:20px}
+.date-label{font-size:14px;color:var(--text-secondary)}
+.birth-row{display:flex;gap:12px;align-items:center;flex-wrap:wrap;justify-content:center}
+.birth-field{display:flex;flex-direction:column;align-items:center;gap:6px}
+.birth-field label{font-size:11px;color:var(--text-muted)}
+.birth-field input{
+  width:72px;padding:12px 8px;background:rgba(0,0,0,0.02);border:1px solid rgba(0,0,0,0.08);
+  border-radius:var(--radius);color:var(--gold-dim);font-size:18px;text-align:center;outline:none;
+}
+.birth-field input:focus{border-color:var(--gold);box-shadow:0 0 20px rgba(197,160,89,0.1)}
+.birth-sep{font-size:18px;color:var(--text-muted);padding-top:18px}
+.btn-confirm{
+  margin-top:24px;padding:14px 48px;
+  background:var(--text-primary);color:var(--bg-primary);border:none;border-radius:var(--radius);
+  font-size:13px;font-weight:700;letter-spacing:4px;
+  cursor:pointer;transition:var(--transition);font-family:'Noto Serif SC',serif;
+  box-shadow:var(--shadow-card);
+}
+.btn-confirm:hover{transform:translateY(-2px);box-shadow:var(--shadow-heavy)}
+.birth-error{font-size:12px;color:var(--red-accent);margin-top:10px;min-height:18px}
+
+/* Nav buttons */
+.quiz-nav{width:100%;max-width:400px;display:flex;justify-content:space-between;align-items:center;margin-top:28px;min-height:44px}
+.btn-prev{
+  padding:10px 24px;background:transparent;border:1px solid rgba(0,0,0,0.08);
+  color:var(--text-secondary);border-radius:var(--radius);font-size:13px;cursor:pointer;
+  transition:var(--transition);visibility:hidden;font-family:'Noto Serif SC',serif;
+}
+.btn-prev.visible{visibility:visible}
+.btn-prev:hover{border-color:var(--gold);color:var(--gold)}
+
+@keyframes optionPop{0%{transform:scale(1)}40%{transform:scale(.97)}100%{transform:scale(1)}}
+@keyframes slideNext{from{opacity:0;transform:translateX(30px)}to{opacity:1;transform:translateX(0)}}
+@keyframes slidePrev{from{opacity:0;transform:translateX(-30px)}to{opacity:1;transform:translateX(0)}}
+
+/* ==================== Loading Page ==================== */
+#page-loading{justify-content:center;text-align:center}
+.loading-icon{font-size:64px;animation:pulse 2s ease-in-out infinite;margin-bottom:28px}
+.loading-text{font-size:15px;color:var(--gold);letter-spacing:4px;margin-bottom:14px}
+.loading-sub{font-size:13px;color:var(--text-muted);transition:opacity .3s}
+.loading-dots::after{content:'';animation:dots 1.5s steps(4,end) infinite}
+@keyframes dots{0%{content:''}25%{content:'.'}50%{content:'..'}75%{content:'...'}}
+
+/* ==================== Result Page — 档案风格 ==================== */
+#page-result{justify-content:flex-start;padding-top:0;padding-bottom:120px}
+
+.result-face{display:none;width:100%;margin-bottom:80px}
+.result-face.active{display:block;animation:fadeIn .6s cubic-bezier(.4,0,.2,1) both}
+
+/* 档案编号头部 */
+.archive-header{
+  width:100%;max-width:400px;
+  display:flex;justify-content:space-between;align-items:center;
+  padding:24px 0;border-bottom:1px solid rgba(0,0,0,0.04);margin-bottom:48px;
+}
+.archive-no{font-size:10px;color:rgba(0,0,0,0.25);letter-spacing:3px;font-family:monospace;text-transform:uppercase}
+.archive-brand{font-size:10px;color:var(--gold-dim);letter-spacing:3px;font-weight:700;text-transform:uppercase;display:flex;align-items:center;gap:8px}
+.archive-brand::before{content:'';display:block;width:6px;height:6px;border-radius:50%;background:var(--red-accent)}
+
+/* Face 1: 核心画像 */
+.face1-header{text-align:center;margin-bottom:40px}
+.face1-emoji{font-size:80px;margin:20px 0 16px;animation:floatSlow 4s ease-in-out infinite;text-align:center;display:flex;justify-content:center;align-items:center}
+.face1-title{
+  font-size:42px;font-weight:400;color:var(--text-primary);letter-spacing:6px;margin-bottom:12px;
+  line-height:1.3;
+}
+.face1-tagline{font-size:14px;color:var(--text-secondary);line-height:1.9;margin-bottom:32px;max-width:320px;margin-left:auto;margin-right:auto}
+
+/* 命理标签 */
+.element-badge{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:6px 20px;
+  background:rgba(197,160,89,0.08);border:1px solid rgba(197,160,89,0.15);
+  border-radius:20px;font-size:11px;color:var(--gold-dim);letter-spacing:3px;
+  margin-top:16px;
+}
+
+/* 旋转圆环 */
+.rotating-ring{
+  position:absolute;inset:-60px;
+  border:1px solid rgba(197,160,89,0.08);border-radius:50%;
+  animation:spinSlow 60s linear infinite;
+}
+.rotating-ring::before{
+  content:'';position:absolute;top:-3px;left:50%;width:6px;height:6px;
+  background:var(--gold);border-radius:50%;margin-left:-3px;
+}
+
+/* Section cards */
+.section-card{
+  width:100%;
+  background:var(--bg-card);border:1px solid rgba(0,0,0,0.04);
+  border-radius:var(--radius);padding:32px;margin-bottom:20px;
+  box-shadow:var(--shadow-card);
+  transition:transform .3s, box-shadow .3s;
+}
+.section-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-heavy)}
+.section-title{
+  font-size:13px;font-weight:700;color:var(--gold-dim);letter-spacing:3px;
+  margin-bottom:20px;padding-bottom:14px;
+  border-bottom:1px solid rgba(0,0,0,0.04);
+}
+.section-content{font-size:14px;line-height:2;color:var(--text-secondary)}
+.section-content strong{color:var(--text-primary);font-weight:700}
+
+/* 叠加态拆解卡片 */
+.superposition-card{
+  background:var(--bg-card);border:1px solid rgba(0,0,0,0.04);
+  border-radius:var(--radius);padding:28px 24px;margin-bottom:16px;
+  box-shadow:var(--shadow-card);transition:transform .3s,box-shadow .3s;
+  position:relative;overflow:hidden;
+}
+.superposition-card:hover{transform:translateY(-2px);box-shadow:var(--shadow-heavy)}
+
+/* 超大背景字 */
+.big-bg-char{
+  position:absolute;left:-20px;top:-40px;
+  font-size:140px;font-weight:900;color:rgba(0,0,0,0.02);
+  font-family:'Noto Serif SC',serif;pointer-events:none;user-select:none;
+  transition:color .5s;
+}
+.superposition-card:hover .big-bg-char{color:rgba(197,160,89,0.04)}
+
+/* Face 2: 四层递进 */
+.analysis-step{margin-bottom:64px;position:relative}
+.step-label{
+  font-size:36px;font-weight:700;margin-bottom:16px;
+  letter-spacing:-1px;
+}
+.step-title{
+  font-size:12px;color:var(--text-muted);letter-spacing:3px;text-transform:uppercase;
+  margin-bottom:16px;font-family:monospace;font-style:italic;
+}
+.step-content{font-size:15px;line-height:2.2;color:var(--text-secondary)}
+
+/* 左侧装饰线 */
+.step-line{
+  position:absolute;left:-16px;top:0;bottom:0;width:2px;
+  background:rgba(0,0,0,0.04);transition:background .3s;
+}
+.superposition-card:hover .step-line{background:rgba(197,160,89,0.2)}
+
+/* Face 3: 守护神 */
+.deity-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:24px}
+.deity-card{
+  background:var(--bg-card);border:1px solid rgba(0,0,0,0.04);
+  border-radius:var(--radius);padding:24px 16px;text-align:center;transition:var(--transition);
+  box-shadow:var(--shadow-card);
+}
+.deity-card:hover{border-color:var(--gold);transform:translateY(-4px);box-shadow:var(--shadow-heavy)}
+.deity-card.main-deity{border-color:var(--gold);background:linear-gradient(135deg,rgba(197,160,89,0.04),transparent)}
+.deity-emoji{font-size:48px;margin-bottom:12px}
+.deity-name{font-size:16px;font-weight:700;color:var(--text-primary);margin-bottom:4px}
+.deity-role{font-size:11px;color:var(--text-muted);margin-bottom:12px}
+.deity-reason{font-size:12px;color:var(--text-secondary);line-height:1.7;margin-bottom:14px}
+.deity-product{
+  display:inline-block;padding:4px 12px;
+  background:rgba(197,160,89,0.08);border-radius:12px;
+  font-size:11px;color:var(--gold-dim);
+}
+.deity-main-label{font-size:10px;color:var(--gold);letter-spacing:3px;margin-bottom:12px;font-weight:700}
+
+.dilemma-box{
+  margin-top:24px;background:rgba(197,160,89,0.04);border-radius:var(--radius);padding:24px;
+  border:1px solid rgba(197,160,89,0.08);
+}
+.dilemma-label{font-size:11px;color:var(--gold-dim);margin-bottom:10px;letter-spacing:2px}
+.dilemma-text{font-size:14px;line-height:2;color:var(--text-secondary)}
+
+/* 守护神三幕叙事 - 竖排风格 */
+.deity-narrative{
+  display:flex;flex-direction:column;align-items:center;
+  padding:40px 32px;background:var(--bg-card);border:1px solid rgba(0,0,0,0.04);
+  border-radius:var(--radius);box-shadow:var(--shadow-card);position:relative;
+}
+.deity-narrative::before{
+  content:'';position:absolute;top:0;right:0;
+  width:60px;height:60px;
+  background:linear-gradient(135deg,rgba(197,160,89,0.06),transparent);
+  border-radius:0 var(--radius) 0 100%;
+}
+.deity-vertical-text{
+  writing-mode:vertical-rl;height:280px;
+  font-size:18px;line-height:2.4;letter-spacing:4px;
+  color:var(--text-primary);margin:24px 0;
+}
+.deity-vertical-line{
+  width:1px;height:48px;
+  background:linear-gradient(to bottom,var(--red-accent),transparent);
+  opacity:0.3;
+}
+
+/* Face 4: 分享卡 */
+.share-card{
+  width:100%;
+  background:linear-gradient(135deg, rgba(242,240,233,1) 0%, rgba(249,248,244,1) 100%);
+  border:1px solid rgba(0,0,0,0.04);border-radius:var(--radius);
+  padding:36px 28px;text-align:center;margin-top:16px;position:relative;
+  box-shadow:var(--shadow-heavy);animation:glow 4s ease-in-out infinite;
+}
+.share-card-title{font-size:14px;font-weight:700;color:var(--gold-dim);margin-bottom:20px;letter-spacing:4px}
+.share-card-emoji{font-size:56px;margin-bottom:12px}
+.share-card-type{font-size:20px;font-weight:700;color:var(--text-primary);margin-bottom:8px;letter-spacing:2px}
+.share-card-roast{font-size:13px;color:var(--text-secondary);line-height:2;margin-bottom:20px;max-width:300px;margin-left:auto;margin-right:auto}
+.share-card-brand{font-size:10px;color:var(--text-muted);letter-spacing:4px;margin-top:16px}
+
+/* 火漆印章 */
+.seal-button{
+  width:64px;height:64px;
+  background:var(--red-accent);border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  color:white;font-size:24px;font-weight:900;font-family:'Noto Serif SC',serif;
+  box-shadow:0 8px 24px rgba(157,41,51,0.3);
+  cursor:pointer;transition:transform .3s;
+  position:relative;transform:rotate(6deg);
+}
+.seal-button:hover{transform:rotate(12deg)}
+.seal-button::before{
+  content:'';position:absolute;inset:3px;border:1px solid rgba(255,255,255,0.2);border-radius:50%;
+}
+
+/* CTA */
+.cta-section{text-align:center;margin-top:16px;margin-bottom:16px}
+.cta-text{font-size:13px;color:var(--text-secondary);margin-bottom:16px;line-height:2}
+.cta-btn{
+  display:inline-block;padding:16px 40px;
+  background:var(--text-primary);color:var(--bg-primary);border:none;border-radius:var(--radius);
+  font-size:13px;font-weight:700;cursor:pointer;transition:var(--transition);
+  letter-spacing:4px;text-decoration:none;
+  box-shadow:var(--shadow-card);
+}
+.cta-btn:hover{transform:translateY(-3px);box-shadow:var(--shadow-heavy)}
+
+.btn-share{
+  margin-top:20px;padding:12px 36px;
+  background:rgba(197,160,89,0.08);border:1px solid rgba(197,160,89,0.2);
+  color:var(--gold-dim);border-radius:var(--radius);
+  font-size:13px;cursor:pointer;transition:var(--transition);letter-spacing:3px;
+}
+.btn-share:hover{background:rgba(197,160,89,0.12);border-color:var(--gold)}
+.btn-share:active{transform:scale(.95);transition:transform .1s}
+
+.retest-link{
+  display:inline-block;margin-top:48px;font-size:12px;color:var(--text-muted);
+  cursor:pointer;transition:var(--transition);letter-spacing:2px;
+}
+.retest-link:hover{color:var(--gold)}
+
+.result-disclaimer{
+  text-align:center;margin-top:24px;font-size:11px;color:var(--text-muted);
+  line-height:2;max-width:320px;
+}
+
+/* Cognition box */
+.cognition-box{
+  margin-top:20px;background:rgba(0,0,0,0.02);border-radius:var(--radius);padding:20px;
+}
+.cognition-label{font-size:11px;color:var(--gold-dim);margin-bottom:10px;letter-spacing:2px}
+.cognition-external{font-size:14px;color:var(--text-primary);margin-bottom:8px}
+.cognition-internal{font-size:13px;color:var(--text-secondary);line-height:2;margin-bottom:10px;font-style:italic}
+.cognition-advice{font-size:13px;color:var(--gold);line-height:2}
+
+/* Warning */
+.warning-box{
+  background:rgba(157,41,51,0.04);border:1px solid rgba(157,41,51,0.1);
+  border-radius:var(--radius);padding:20px;margin-top:16px;
+}
+.warning-title{font-size:12px;color:var(--red-accent);font-weight:700;margin-bottom:10px;letter-spacing:2px}
+.warning-text{font-size:13px;color:var(--text-secondary);line-height:2}
+
+/* 固定底部CTA */
+.fixed-bottom-cta{
+  position:fixed;bottom:0;left:0;right:0;
+  padding:20px 24px;max-width:480px;margin:0 auto;
+  z-index:100;
+}
+.fixed-bottom-cta button{
+  width:100%;padding:18px;
+  background:var(--text-primary);color:var(--bg-primary);
+  border:none;border-radius:var(--radius);
+  font-size:13px;font-weight:700;letter-spacing:4px;
+  cursor:pointer;transition:transform .3s,box-shadow .3s;
+  box-shadow:var(--shadow-heavy);
+}
+.fixed-bottom-cta button:hover{transform:translateY(-3px)}
+
+/* ==================== Mobile optimizations ==================== */
+@media(max-width:380px){
+  .logo-title{font-size:28px;letter-spacing:6px}
+  .face1-title{font-size:32px}
+  .deity-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- ==================== Page: Landing ==================== -->
+<div class="page active" id="page-landing">
+  <div class="ink-circles">
+    <div class="ink-circle"></div>
+    <div class="ink-circle"></div>
+    <div class="ink-circle"></div>
+  </div>
+  <div class="logo-area animate-in">
+    <div class="logo-icon">☯️</div>
+    <div class="logo-title">测了吗</div>
+    <div class="logo-subtitle">Spirit Archive</div>
+  </div>
+  <div class="tagline animate-in delay-1">
+    你的症状已收到<br>正在为你匹配守护神
+  </div>
+  <div class="animate-in delay-2">
+    <button class="btn-primary" onclick="startQuiz()"><span>开始测试</span></button>
+  </div>
+  <div class="disclaimer animate-in delay-3">
+    准不准不好说，但至少挺好玩的<br>
+    认真你就输了
+  </div>
+</div>
+
+<!-- ==================== Page: Quiz ==================== -->
+<div class="page" id="page-quiz">
+  <div class="progress-bar">
+    <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
+    <div class="progress-text" id="progress-text"></div>
+  </div>
+  <div class="question-card" id="question-card"></div>
+  <div class="quiz-nav">
+    <button class="btn-prev" id="btn-prev" onclick="goPrev()">← 上一题</button>
+    <span></span>
+  </div>
+</div>
+
+<!-- ==================== Page: Loading ==================== -->
+<div class="page" id="page-loading">
+  <div class="loading-icon">☯️</div>
+  <div class="loading-text">正在生成你的专属报告<span class="loading-dots"></span></div>
+  <div class="loading-sub" id="loading-tip">八位东方神正在开会讨论你...</div>
+</div>
+
+<!-- ==================== Page: Result (长滚动) ==================== -->
+<div class="page" id="page-result">
+  <!-- 顶部固定导航栏 -->
+  <div class="result-nav" id="result-nav" style="display:none">
+    <div class="result-nav-left" id="nav-archive-no">Archive 0000</div>
+    <div class="result-nav-right">Status: Identified</div>
+  </div>
+  <!-- Face 1: 一句话总览 -->
+  <div class="result-face active" id="face-1"></div>
+  <!-- Face 2: 五行属性 + 核心特质 + 问题诊断 -->
+  <div class="result-face active" id="face-2"></div>
+  <!-- Face 3: 守护神 -->
+  <div class="result-face active" id="face-3"></div>
+</div>
+
+<!-- ==================== Engine Scripts ==================== -->
+<script charset="utf-8" src="engine/bazi-engine.js"></script>
+<script charset="utf-8" src="engine/personality-engine.js"></script>
+<script charset="utf-8" src="engine/form-data.js"></script>
+<script charset="utf-8" src="engine/deity-matrix.js"></script>
+<script charset="utf-8" src="engine/compensation-engine.js"></script>
+<script charset="utf-8" src="engine/superposition-engine.js"></script>
+
+<script>
+// ==================== APP STATE ====================
+var currentQ = 0;
+var answers = null;
+var answeredMap = {}; // questionId -> selected optionIndex
+var resultData = null; // 存储最终结果供分享用
+
+// ==================== EMOJI → ICON MAPPING ====================
+var EMOJI_ICON_MAP = {
+  '🧠': { icon: 'ri-brain-line', color: '#6a5acd' },
+  '💜': { icon: 'ri-heart-pulse-line', color: '#9370db' },
+  '⚓': { icon: 'ri-anchor-line', color: '#5a8a5a' },
+  '🔥': { icon: 'ri-fire-line', color: '#9d2933' },
+  '🌱': { icon: 'ri-plant-line', color: '#5a8a5a' },
+  '⛰️': { icon: 'ri-landscape-line', color: '#c5a059' },
+  '🌊': { icon: 'ri-drop-line', color: '#4a7a9a' },
+  '⚔️': { icon: 'ri-sword-line', color: '#8a8a9a' },
+  '☀️': { icon: 'ri-sun-line', color: '#ddc078' },
+  '🦁': { icon: 'ri-shield-star-line', color: '#c5a059' },
+  '🌙': { icon: 'ri-moon-line', color: '#9370db' },
+  '📚': { icon: 'ri-book-open-line', color: '#5a8a5a' },
+  '⚡': { icon: 'ri-flashlight-line', color: '#ddc078' },
+  '🌍': { icon: 'ri-earth-line', color: '#5a8a5a' },
+  '🏔️': { icon: 'ri-snowy-line', color: '#8a8a9a' },
+  '🐵': { icon: 'ri-bear-smile-line', color: '#c5a059' },
+  '🧘': { icon: 'ri-mental-health-line', color: '#6a5acd' },
+  '💰': { icon: 'ri-money-cny-circle-line', color: '#ddc078' },
+  '☯️': { icon: 'ri-contrast-2-line', color: '#4a7a9a' },
+  '🪷': { icon: 'ri-leaf-line', color: '#c9a0a0' },
+  '🛡️': { icon: 'ri-shield-line', color: '#4a7a9a' },
+  '🐉': { icon: 'ri-ghost-line', color: '#4a7a9a' },
+};
+function emojiToIcon(emoji, size) {
+  size = size || 1;
+  var m = EMOJI_ICON_MAP[emoji];
+  if (!m) return '<span style="font-size:' + (size * 48) + 'px">' + emoji + '</span>';
+  return '<i class="' + m.icon + '" style="font-size:' + (size * 48) + 'px;color:' + m.color + '"></i>';
+}
+
+// ==================== NAVIGATION ====================
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(function(p) { p.classList.remove('active'); });
+  document.getElementById(id).classList.add('active');
+  // 结果页显示导航栏，其他页隐藏
+  var nav = document.getElementById('result-nav');
+  if (nav) {
+    nav.style.display = (id === 'page-result') ? 'flex' : 'none';
+  }
+  window.scrollTo(0, 0);
+}
+
+// ==================== QUIZ LOGIC ====================
+function startQuiz() {
+  currentQ = 0;
+  answers = PersonalityEngine.createAnswers();
+  answeredMap = {};
+  showPage('page-quiz');
+  renderQuestion();
+}
+
+// 进度文案——5乐章节奏，对齐31题
+var PROGRESS_LABELS = [
+  '放轻松，就当刷小红书', '还行，继续', '你对朋友圈的态度很有趣', '社交达人还是社恐，快出来了', '快过了新手村',
+  '开始上头了', '你的消费观暴露了', '这题有点扎心', '你的逻辑还是你的嘴', '神正在翻你的档案…', '有意思，你比想象中有趣',
+  '进入深水区了', 'DDL战士还是时间管理大师', '旅行的样子出卖了你', '多任务模式启动', '你的神已经到了，正在找你',
+  '认真想，这道题很重要', '下面哪个更像你？', '你的灵魂正在被读取', '神正在开会讨论你…', '你的队友在等你', '人生这道选择题…',
+  '第二回合，再聊聊', '你讲故事的方式出卖了你', '说明书到底看不看', '断舍离还是囤积癖', '社交电量还剩多少', '你的同事需要你', '最后两题了', '你的守护神即将揭晓',
+];
+function getProgressLabel(pct) {
+  var idx = Math.min(Math.floor(pct / 100 * PROGRESS_LABELS.length), PROGRESS_LABELS.length - 1);
+  return PROGRESS_LABELS[idx];
+}
+
+// 彩蛋——特定题号完成后闪过一句吐槽
+var SOUL_SNACKS = {
+  10: '你的神正在翻你的档案…',
+  16: '这道题有点危险，小心答',
+  23: '你的神已经到了，正在找你',
+  29: '最后两题了，你的神有点犹豫该派谁来',
+};
+
+function renderQuestion(direction) {
+  var questions = PersonalityEngine.QUESTIONS;
+  var q = questions[currentQ];
+  var total = questions.length;
+  var pct = (currentQ / total * 100);
+  document.getElementById('progress-fill').style.width = pct + '%';
+  document.getElementById('progress-text').textContent = (currentQ + 1) + ' / ' + total + '  ' + getProgressLabel(pct);
+
+  var btnPrev = document.getElementById('btn-prev');
+  if (currentQ > 0) {
+    btnPrev.classList.add('visible');
+  } else {
+    btnPrev.classList.remove('visible');
+  }
+
+  var card = document.getElementById('question-card');
+  card.style.animation = 'none';
+  card.offsetHeight;
+
+  card.className = 'question-card';
+  if (q.type === 'grip') card.classList.add('card-grip');
+  else if (q.type === 'dilemma') card.classList.add('card-dilemma');
+  else if (q.type === 'business') card.classList.add('card-final');
+
+  if (direction === 'next') card.classList.add('anim-next');
+  else if (direction === 'prev') card.classList.add('anim-prev');
+  else card.style.animation = 'fadeIn .4s ease both';
+
+  if (q.type === 'date') {
+    card.innerHTML =
+      '<div class="question-number">' + q.number + '</div>' +
+      '<div class="question-title">' + q.title + '</div>' +
+      '<div class="question-subtitle">' + (q.subtitle || '') + '</div>' +
+      '<div class="date-input-group">' +
+        '<div class="birth-row">' +
+          '<div class="birth-field"><label>年</label><input type="number" id="birth-year" min="1900" max="2026" placeholder="1990"></div>' +
+          '<div class="birth-sep">年</div>' +
+          '<div class="birth-field"><label>月</label><input type="number" id="birth-month" min="1" max="12" placeholder="6"></div>' +
+          '<div class="birth-sep">月</div>' +
+          '<div class="birth-field"><label>日</label><input type="number" id="birth-day" min="1" max="31" placeholder="15"></div>' +
+        '</div>' +
+        '<div class="birth-field" style="flex-direction:row;gap:8px;align-items:center;margin-top:8px">' +
+          '<label style="font-size:12px;color:var(--text-muted)">出生时间段</label>' +
+          '<select id="birth-hour" style="padding:10px 14px;background:rgba(0,0,0,0.02);border:1px solid rgba(0,0,0,0.08);border-radius:var(--radius);color:var(--gold-dim);font-size:14px;outline:none">' +
+            '<option value="0">深夜 (23:00-01:00)</option>' +
+            '<option value="1">凌晨 (01:00-03:00)</option>' +
+            '<option value="3">凌晨 (03:00-05:00)</option>' +
+            '<option value="5">清晨 (05:00-07:00)</option>' +
+            '<option value="7">上午 (07:00-09:00)</option>' +
+            '<option value="9">上午 (09:00-11:00)</option>' +
+            '<option value="11" selected>中午 (11:00-13:00)</option>' +
+            '<option value="13">下午 (13:00-15:00)</option>' +
+            '<option value="15">下午 (15:00-17:00)</option>' +
+            '<option value="17">傍晚 (17:00-19:00)</option>' +
+            '<option value="19">晚上 (19:00-21:00)</option>' +
+            '<option value="21">夜晚 (21:00-23:00)</option>' +
+          '</select>' +
+          '<span style="font-size:11px;color:var(--text-muted)">不确定就选中午</span>' +
+        '</div>' +
+        '<div class="birth-error" id="birth-error"></div>' +
+        '<button class="btn-confirm" onclick="submitDate()">确定</button>' +
+      '</div>';
+    if (answers.birth) {
+      document.getElementById('birth-year').value = answers.birth.year;
+      document.getElementById('birth-month').value = answers.birth.month;
+      document.getElementById('birth-day').value = answers.birth.day;
+      document.getElementById('birth-hour').value = answers.birth.hour;
+    }
+  } else {
+    var optsHtml = '';
+    q.options.forEach(function(opt, idx) {
+      var isSelected = answeredMap[currentQ] === idx;
+      optsHtml +=
+        '<div class="option-btn' + (isSelected ? ' selected' : '') + '" onclick="selectOption(' + idx + ')">' +
+          '<span class="option-label">' + opt.label + '</span>' +
+          '<span>' + opt.text + '</span>' +
+        '</div>';
+    });
+    card.innerHTML =
+      '<div class="question-number">' + q.number + '</div>' +
+      '<div class="question-title">' + q.title + '</div>' +
+      (q.subtitle ? '<div class="question-subtitle">' + q.subtitle + '</div>' : '') +
+      '<div class="options">' + optsHtml + '</div>';
+  }
+}
+
+function submitDate() {
+  var year = parseInt(document.getElementById('birth-year').value);
+  var month = parseInt(document.getElementById('birth-month').value);
+  var day = parseInt(document.getElementById('birth-day').value);
+  var hour = parseInt(document.getElementById('birth-hour').value);
+  var errEl = document.getElementById('birth-error');
+
+  if (!year || year < 1900 || year > 2026) { errEl.textContent = '请输入有效年份'; return; }
+  if (!month || month < 1 || month > 12) { errEl.textContent = '月份 1-12'; return; }
+  if (!day || day < 1 || day > 31) { errEl.textContent = '日期 1-31'; return; }
+  errEl.textContent = '';
+
+  answers.birth = { year: year, month: month, day: day, hour: hour };
+  answeredMap[currentQ] = 0;
+  goNext();
+}
+
+function selectOption(idx) {
+  var card = document.getElementById('question-card');
+  card.querySelectorAll('.option-btn').forEach(function(b) { b.classList.remove('selected'); });
+  card.querySelectorAll('.option-btn')[idx].classList.add('selected');
+
+  PersonalityEngine.recordAnswer(answers, currentQ, idx);
+  answeredMap[currentQ] = idx;
+
+  var fill = document.querySelector('.progress-fill');
+  if (fill) {
+    fill.classList.remove('glow-pulse');
+    void fill.offsetWidth;
+    fill.classList.add('glow-pulse');
+  }
+
+  setTimeout(goNext, 350);
+}
+
+function goNext() {
+  var total = PersonalityEngine.QUESTIONS.length;
+  if (SOUL_SNACKS[currentQ]) {
+    var card = document.getElementById('question-card');
+    card.style.animation = 'none';
+    card.offsetHeight;
+    card.className = 'question-card';
+    card.style.animation = 'fadeIn .3s ease both';
+    card.innerHTML =
+      '<div style="text-align:center;padding:60px 20px">' +
+        '<div style="font-size:36px;margin-bottom:20px;color:var(--gold)">✨</div>' +
+        '<div style="font-size:14px;color:var(--gold);line-height:2;letter-spacing:2px">' + SOUL_SNACKS[currentQ] + '</div>' +
+      '</div>';
+    setTimeout(function() {
+      if (currentQ < total - 1) { currentQ++; renderQuestion('next'); }
+      else { showLoading(); }
+    }, 1200);
+  } else {
+    if (currentQ < total - 1) {
+      currentQ++;
+      renderQuestion('next');
+    } else {
+      showLoading();
+    }
+  }
+}
+
+function goPrev() {
+  if (currentQ > 0) {
+    currentQ--;
+    renderQuestion('prev');
+  }
+}
+
+// ==================== LOADING ====================
+function showLoading() {
+  showPage('page-loading');
+  var tips = [
+    '八位东方神正在开会讨论你...',
+    '荣格正在从潜意识里给你写信...',
+    '观音大士和关圣帝君在协商你的治疗方案...',
+    '系统正在为你的神办理入驻手续...',
+    '文殊菩萨正在检查你的认知偏差...',
+    '达摩祖师说你的情况有点复杂...',
+    '你的性格档案正在被封印进法器中...',
+  ];
+  var tipIdx = 0;
+  var tipEl = document.getElementById('loading-tip');
+  var tipInterval = setInterval(function() {
+    tipIdx = (tipIdx + 1) % tips.length;
+    tipEl.style.opacity = 0;
+    setTimeout(function() { tipEl.textContent = tips[tipIdx]; tipEl.style.opacity = 1; }, 300);
+  }, 1500);
+
+  setTimeout(function() {
+    clearInterval(tipInterval);
+    generateResult();
+  }, 3500);
+}
+
+// ==================== RESULT GENERATION ====================
+function generateResult() {
+  var bazi = BaZiEngine.analyzeBaZi(answers.birth.year, answers.birth.month, answers.birth.day, answers.birth.hour);
+  var personality = PersonalityEngine.analyzePersonality(answers);
+  var formData = FormDataStore.FORMS[bazi.formKey] || null;
+
+  // 设置导航栏档案编号
+  var archiveNo = 'Archive ' + Math.floor(1000 + Math.random() * 9000);
+  var navEl = document.getElementById('nav-archive-no');
+  if (navEl) navEl.textContent = archiveNo;
+
+  var prescription = null;
+  var mainGod = null;
+  var deityConclusion = null;
+  if (bazi.cureElement && personality.type16) {
+    prescription = DeityMatrix.getDeityPrescription(
+      bazi.cureElement.wx, personality.type16, personality.dilemma
+    );
+    if (prescription) {
+      mainGod = prescription.deity;
+      deityConclusion = prescription.conclusion;
+    }
+  }
+
+  if (!mainGod) {
+    var deityMap = personality.type16 ? DeityData.TYPE_DEITY_MAP[personality.type16] : null;
+    mainGod = deityMap ? DeityData.DEITIES[deityMap.main] : null;
+  }
+
+  var compensation = null;
+  if (bazi.cureElement && personality.type16) {
+    compensation = CompensationEngine.analyze(personality.type16, bazi.cureElement.name);
+  }
+
+  resultData = { bazi: bazi, personality: personality, formData: formData, mainGod: mainGod, prescription: prescription, compensation: compensation };
+
+  renderFace1(personality.typeInfo, compensation, bazi, personality, mainGod);
+  renderFace2(bazi, personality, formData, compensation);
+  renderFace3(mainGod, deityConclusion, personality.typeInfo, bazi, compensation, personality);
+
+  requestAnimationFrame(function() {
+    initScrollReveal();
+  });
+
+  showPage('page-result');
+}
+
+// ==================== 波兰尼节奏：滚动揭示 ====================
+function initScrollReveal() {
+  var faces = document.querySelectorAll('.result-face');
+  faces.forEach(function(face, idx) {
+    if (idx === 0) return;
+    freezeAnimations(face);
+    face._revealed = false;
+  });
+
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting && !entry.target._revealed) {
+        entry.target._revealed = true;
+        unfreezeAnimations(entry.target);
+      }
+    });
+  }, { threshold: 0.15 });
+
+  faces.forEach(function(face, idx) {
+    if (idx > 0) observer.observe(face);
+  });
+}
+
+function freezeAnimations(container) {
+  var els = container.querySelectorAll('.atmo-first, .text-later, .text-later-d1, .text-later-d2, .text-later-d3, .text-later-d4');
+  els.forEach(function(el) {
+    el.style.animationPlayState = 'paused';
+    el._frozen = true;
+  });
+}
+
+function unfreezeAnimations(container) {
+  var els = container.querySelectorAll('.atmo-first, .text-later, .text-later-d1, .text-later-d2, .text-later-d3, .text-later-d4');
+  els.forEach(function(el) {
+    el.style.animationPlayState = 'running';
+    el._frozen = false;
+  });
+}
+
+// 生成档案编号
+function generateArchiveNo() {
+  return 'Archive No. ' + Math.floor(1000 + Math.random() * 9000) + '-' + String.fromCharCode(65 + Math.floor(Math.random() * 26));
+}
+
+// ==================== FACE 1: 灵魂叠加态命名 ====================
+function renderFace1(typeInfo, compensation, bazi, personality, mainGod) {
+  var html = '';
+  var camp = personality.type16 ? DeityMatrix.getCamp(personality.type16) : 'NT';
+  var cureName = bazi.cureElement ? bazi.cureElement.name : '';
+  var isStrong = bazi.strength.isStrong;
+  var spName = SuperpositionEngine.getFullName(camp, cureName, isStrong);
+  var campInfo = DeityMatrix.CAMP_INFO[camp] || DeityMatrix.CAMP_INFO.NT;
+  var archiveNo = generateArchiveNo();
+
+  html +=
+    '<div class="archive-header atmo-first">' +
+      '<span class="archive-no">' + archiveNo + '</span>' +
+      '<span class="archive-brand">ZEN ARCHIVE</span>' +
+    '</div>';
+
+  html += '<div style="position:relative;display:flex;flex-direction:column;align-items:center;margin-bottom:48px">';
+
+  // 旋转圆环
+  html += '<div class="rotating-ring"></div>';
+
+  // 氛围层：阵营emoji + 光晕
+  html +=
+    '<div class="atmo-glow" style="margin:0 auto;width:180px;height:180px;position:relative;background:radial-gradient(circle,rgba(197,160,89,0.1) 0%, transparent 70%)">' +
+      '<div class="face1-emoji">' + emojiToIcon(campInfo.emoji, 2) + '</div>' +
+    '</div>';
+
+  // 命理标签 - 已隐藏
+  html += '</div>';
+
+  // 叠加态命名
+  html +=
+    '<div class="text-later" style="text-align:center;margin-bottom:48px;padding:0 20px">' +
+      '<div class="face1-title">' + spName + '</div>' +
+      '<div style="font-size:12px;color:var(--text-muted);letter-spacing:4px;margin-top:12px;font-family:monospace;text-transform:uppercase">' + campInfo.name + '</div>' +
+    '</div>';
+
+  // 简短总述
+  var profile = SuperpositionEngine.getProfile(camp, cureName);
+  if (profile && profile.summary) {
+    html +=
+      '<div class="section-card text-later-d1" style="margin:0 0 80px">' +
+        '<div class="section-content" style="text-align:center">' +
+          '<p style="font-size:15px;color:var(--text-secondary);line-height:2.2">' + profile.summary + '</p>' +
+        '</div>' +
+      '</div>';
+  }
+
+  document.getElementById('face-1').innerHTML = html;
+}
+
+// ==================== FACE 2: 叠加态解释 ====================
+function renderFace2(bazi, personality, formData, compensation) {
+  var camp = personality.type16 ? DeityMatrix.getCamp(personality.type16) : 'NT';
+  var cureName = bazi.cureElement ? bazi.cureElement.name : '';
+  var isStrong = bazi.strength.isStrong;
+  var profile = SuperpositionEngine.getProfile(camp, cureName);
+
+  var html = '';
+
+  // 章节标题 - Phase II 格式
+  html +=
+    '<div style="margin-bottom:48px;opacity:0;animation:fadeIn .6s cubic-bezier(.4,0,.2,1) .2s both">' +
+      '<p style="font-family:Inter,sans-serif;font-size:10px;letter-spacing:0.6em;color:var(--gold);font-weight:600;text-transform:uppercase;margin-bottom:8px">Phase II : Structural Deconstruction</p>' +
+      '<h2 style="font-size:20px;font-weight:400;letter-spacing:0.2em;color:var(--text-primary)">心理空间解构</h2>' +
+    '</div>';
+
+  if (profile) {
+    var sections = [
+      { label: '面具', title: '生存策略', text: profile.mask ? profile.mask.text : '', color: 'var(--green-accent)' },
+      { label: '病灶', title: '性格调性', text: profile.deficit ? profile.deficit.text : '', color: 'var(--red-accent)' },
+      { label: '碰撞', title: '渴望', text: profile.collision ? profile.collision.text : '', color: 'var(--gold)' },
+      { label: '结果', title: '补偿状态', text: (isStrong ? profile.s_result : profile.w_result) ? (isStrong ? profile.s_result.text : profile.w_result.text) : '', color: 'var(--blue-accent)' }
+    ];
+    var secDelay = ['.3s', '.5s', '.7s', '.9s'];
+    var bgChars = ['面', '病', '撞', '果'];
+
+    for (var si = 0; si < sections.length; si++) {
+      var sec = sections[si];
+      if (!sec.text) continue;
+      var cleanTitle = sec.title;
+      html +=
+        '<div class="superposition-card" style="opacity:0;animation:fadeIn .7s cubic-bezier(.4,0,.2,1) ' + secDelay[si] + ' both;padding-left:32px">' +
+          '<div class="big-bg-char">' + bgChars[si] + '</div>' +
+          '<div class="step-line"></div>' +
+          '<div style="display:flex;align-items:center;gap:16px;margin-bottom:16px">' +
+            '<span class="step-label" style="color:' + sec.color + '">' + sec.label + '</span>' +
+            '<div style="height:1px;width:24px;background:rgba(0,0,0,0.08)"></div>' +
+            '<span style="font-size:11px;color:var(--text-muted);letter-spacing:2px;font-family:monospace;text-transform:uppercase;font-style:italic">' + cleanTitle + '</span>' +
+          '</div>' +
+          '<div class="step-content" style="font-size:15px;line-height:2.2;color:var(--text-secondary)">' + sec.text + '</div>' +
+        '</div>';
+    }
+  }
+
+  document.getElementById('face-2').innerHTML = html;
+}
+
+// ==================== FACE 3: 守护神 ====================
+function renderFace3(mainGod, deityConclusion, typeInfo, bazi, compensation, personality) {
+  var html = '';
+  var camp = personality.type16 ? DeityMatrix.getCamp(personality.type16) : 'NT';
+  var cureName = bazi.cureElement ? bazi.cureElement.name : '';
+  var isStrong = bazi.strength.isStrong;
+  var spName = SuperpositionEngine.getFullName(camp, cureName, isStrong);
+
+  if (!mainGod) {
+    html = '<div class="section-card"><div class="section-content" style="text-align:center;color:var(--text-muted)">守护神加载中…</div></div>';
+    document.getElementById('face-3').innerHTML = html;
+    return;
+  }
+
+  // 获取守护神英文名（从position提取或生成）
+  var deitySubtitle = mainGod.position || 'Guardian';
+  if (deitySubtitle.length > 10 && deitySubtitle.indexOf('——') > -1) {
+    deitySubtitle = deitySubtitle.split('——')[1] || deitySubtitle.split('—')[1] || 'Guardian';
+  }
+
+  // 守护神区块 — 深色背景风格（参考设计）
+  html +=
+    '<div style="background:#1a1a1a;color:#f7f6f2;padding:60px 40px;margin:80px -24px -120px;position:relative;overflow:hidden">' +
+      // 角落模糊光晕装饰
+      '<div style="position:absolute;top:-20%;left:-10%;width:60%;height:80%;background:#9d2933;blur:80px;opacity:0.06;pointer-events:none;border-radius:50%"></div>' +
+      '<div style="position:absolute;bottom:-20%;right:-10%;width:50%;height:70%;background:#c5a059;blur:60px;opacity:0.05;pointer-events:none;border-radius:50%"></div>' +
+      // Phase III 标题
+      '<div style="text-align:center;margin-bottom:48px">' +
+        '<p style="font-family:Inter,sans-serif;font-size:10px;letter-spacing:0.6em;color:#c5a059;font-weight:600;text-transform:uppercase;margin-bottom:8px">Phase III : Archetypal Guardian</p>' +
+        '<h2 style="font-size:24px;font-weight:400;letter-spacing:0.3em;color:#f7f6f2">神明矩阵匹配</h2>' +
+      '</div>' +
+      // 图腾装饰（CSS-only）
+      '<div style="position:relative;width:120px;height:120px;margin:0 auto 48px;display:flex;align-items:center;justify-content:center">' +
+        '<div style="position:absolute;inset:0;border:1px solid rgba(197,160,89,0.2);border-radius:50%"></div>' +
+        '<div style="position:absolute;wIDTH:80px;height:80px;border:1px solid rgba(197,160,89,0.3);transform:rotate(45deg);animation:spinSlow 40s linear infinite"></div>' +
+        '<div style="position:absolute;width:80px;height:80px;border:1px solid rgba(197,160,89,0.3);transform:rotate(-45deg);animation:spinSlow 40s linear infinite;animation-direction:reverse"></div>' +
+        '<div style="width:8px;height:8px;background:#9d2933;border-radius:50%;animation:pulse 4s ease-in-out infinite"></div>' +
+        '<div style="position:absolute;width:1px;height:100%;background:rgba(197,160,89,0.2)"></div>' +
+        '<div style="position:absolute;height:1px;width:100%;background:rgba(197,160,89,0.2)"></div>' +
+      '</div>' +
+      // 神名
+      '<div style="text-align:center;margin-bottom:12px">' +
+        '<h3 style="font-size:36px;font-weight:400;letter-spacing:0.4em;color:#f7f6f2;margin-bottom:12px">' + mainGod.name + '</h3>' +
+        '<p style="font-family:Inter,sans-serif;font-size:10px;letter-spacing:0.8em;color:#c5a059;font-weight:700;text-transform:uppercase;opacity:0.8">' + deitySubtitle + '</p>' +
+      '</div>' +
+      // 三幕叙事 Grid 布局
+      '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:32px;margin-top:60px;padding-top:40px;border-top:1px solid rgba(247,246,242,0.1)">' +
+        // Act I
+        '<div>' +
+          '<span style="font-family:Inter,sans-serif;font-size:9px;letter-spacing:0.3em;color:#c5a059;font-weight:600;text-transform:uppercase;display:block;margin-bottom:16px">Act I : Invoke</span>' +
+          '<p style="font-size:15px;line-height:2;color:rgba(247,246,242,0.9);font-weight:300;font-style:italic">' +
+            (deityConclusion && deityConclusion.act1 ? deityConclusion.act1 : '他在众生中寻觅，只为找一个能与你灵魂波长同步的人。') +
+          '</p>' +
+        '</div>' +
+        // Act II
+        '<div>' +
+          '<span style="font-family:Inter,sans-serif;font-size:9px;letter-spacing:0.3em;color:rgba(247,246,242,0.3);font-weight:600;text-transform:uppercase;display:block;margin-bottom:16px">Act II : Verify</span>' +
+          '<p style="font-size:14px;line-height:2;color:rgba(247,246,242,0.6);font-weight:300">' +
+            (deityConclusion && deityConclusion.act2 ? deityConclusion.act2 : '你是那根断掉的红线，他在月光下试图为你重新续上。') +
+          '</p>' +
+        '</div>' +
+        // Act III
+        '<div>' +
+          '<span style="font-family:Inter,sans-serif;font-size:9px;letter-spacing:0.3em;color:rgba(247,246,242,0.3);font-weight:600;text-transform:uppercase;display:block;margin-bottom:16px">Act III : Utilize</span>' +
+          '<p style="font-size:14px;line-height:2;color:rgba(247,246,242,0.6);font-weight:300">' +
+            (deityConclusion && deityConclusion.act3 ? deityConclusion.act3 : '你需要的是一个能忍受你沉默的人。将防备转化为观察，你会发现真正的自由。') +
+          '</p>' +
+        '</div>' +
+      '</div>' +
+    '</div>';
+
+  // 底部引言板块 — Act III 版本
+  html +=
+    '<div style="margin:80px 0 40px">' +
+      '<div style="border-left:2px solid var(--gold);padding-left:24px;margin-bottom:40px">' +
+        '<h4 style="font-family:Inter,sans-serif;font-size:10px;font-weight:900;letter-spacing:0.4em;color:var(--gold);text-transform:uppercase">Act III : Utilization</h4>' +
+        '<p style="font-size:11px;letter-spacing:0.2em;color:rgba(0,0,0,0.4);margin-top:4px;font-style:italic">行动即修行</p>' +
+      '</div>' +
+      '<div style="padding:32px 36px;border:1px solid rgba(0,0,0,0.04);background:rgba(255,255,255,0.5)">' +
+        '<p style="font-size:16px;line-height:2.4;color:rgba(0,0,0,0.7);font-weight:300;font-style:italic;text-align:justify">' +
+          '"约瑟夫·坎贝尔曾说：\'英雄之旅不是关于力量，而是关于成为。\' 你已完成自我认知的第一圈。接下来不是等待祝福降临，而是开始主动创造属于你的秩序。倦怠的反面不是休息，而是意义感的重新注入。"' +
+        '</p>' +
+      '</div>' +
+    '</div>';
+
+  // 固定底部CTA
+  html +=
+    '<div class="fixed-bottom-cta text-later-d3" style="position:relative;margin:0 -24px;padding:20px 24px;max-width:480px;margin-left:auto;margin-right:auto">' +
+      '<button onclick="alert(\'将跳转至产品页（演示模式）\')" style="width:100%;padding:18px;background:var(--text-primary);color:var(--bg-primary);border:none;border-radius:var(--radius);font-size:13px;font-weight:700;letter-spacing:4px;cursor:pointer;transition:transform .3s,box-shadow .3s;box-shadow:var(--shadow-heavy)">' +
+        '获取生命能量平衡方案' +
+      '</button>' +
+    '</div>';
+
+  // 分享卡
+  html +=
+    '<div class="share-card text-later-d4" style="text-align:left;padding:36px 32px 28px;margin-top:60px;position:relative;background:var(--bg-card)">' +
+      '<div style="position:absolute;top:16px;right:20px;font-size:9px;color:var(--gold-dim);letter-spacing:3px;opacity:0.5">测了吗</div>' +
+      '<div style="margin-bottom:20px">' +
+        '<div style="font-size:10px;color:var(--gold-dim);letter-spacing:4px;margin-bottom:16px">SOUL REPORT</div>' +
+        '<div style="display:flex;align-items:center;gap:20px">' +
+          '<div style="line-height:1;flex-shrink:0;font-size:48px">' + mainGod.emoji + '</div>' +
+          '<div>' +
+            '<div style="font-size:22px;font-weight:400;color:var(--text-primary);letter-spacing:3px;line-height:1.4">「' + spName + '」</div>' +
+            '<div style="font-size:11px;color:var(--text-muted);margin-top:8px;letter-spacing:2px">' + mainGod.name + '</div>' +
+          '</div>' +
+        '</div>' +
+      '</div>' +
+      '<div style="border:none;border-top:1px dashed rgba(197,160,89,0.15);margin:20px 0"></div>' +
+      '<button class="btn-share" onclick="shareResult()" style="width:100%;padding:14px 0;background:rgba(197,160,89,0.06);border:1px solid rgba(197,160,89,0.15);color:var(--gold-dim);border-radius:var(--radius);font-size:13px;cursor:pointer;letter-spacing:3px;transition:var(--transition)">截图保存你的灵魂报告</button>' +
+    '</div>' +
+    '<div class="result-disclaimer text-later-d4" style="background:var(--bg-primary)">' +
+      '此报告由玄学CT机自动生成，不构成医学建议。<br>' +
+      '但如果你觉得说中了你，那可能是神仙真的在加班。' +
+    '</div>' +
+    '<span class="retest-link text-later-d4" style="background:var(--bg-primary)" onclick="startQuiz()">重新测试</span>';
+
+  document.getElementById('face-3').innerHTML = html;
+}
+
+// ==================== SHARE ====================
+function shareResult() {
+  var btn = event.target;
+  var origHTML = btn.innerHTML;
+  btn.innerHTML = '已复制，去分享吧';
+  btn.style.pointerEvents = 'none';
+  setTimeout(function() {
+    btn.innerHTML = origHTML;
+    btn.style.pointerEvents = '';
+  }, 2000);
+
+  var mainGodName = resultData.mainGod ? resultData.mainGod.name : '';
+  var mainGodEmoji = resultData.mainGod ? resultData.mainGod.emoji : '';
+  var bazi = resultData.bazi;
+  var personality = resultData.personality;
+  var camp = personality.type16 ? DeityMatrix.getCamp(personality.type16) : 'NT';
+  var cureName = bazi.cureElement ? bazi.cureElement.name : '';
+  var isStrong = bazi.strength.isStrong;
+  var spName = SuperpositionEngine.getFullName(camp, cureName, isStrong);
+
+  var swWord = isStrong ? '外化' : '内化';
+  var hook = isStrong
+    ? '说我把痛变成了别人的问题，但只有自己知道有多累。'
+    : '说我把所有痛都吞进了自己身体里，一直没放出来过。';
+
+  var text = '我的灵魂叠加态是「' + spName + '」，守护神' + mainGodEmoji + mainGodName + '。' +
+    hook + '\n测测你的叠加态和守护神 →';
+  if (navigator.share) {
+    navigator.share({
+      title: '测了吗 — 看看你的守护神是谁',
+      text: text,
+      url: window.location.href
+    }).catch(function() {});
+  } else {
+    text += '\n' + window.location.href;
+    navigator.clipboard.writeText(text).catch(function() {
+      prompt('请手动复制分享给朋友：', text);
+    });
+  }
+}
+</script>
+</body>
+</html>

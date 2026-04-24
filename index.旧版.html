@@ -1,0 +1,3373 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<title>测了吗</title>
+<link href="https://cdn.jsdelivr.net/npm/remixicon@4.6.0/fonts/remixicon.css" rel="stylesheet">
+<style>
+/* ==================== CSS Reset & Variables ==================== */
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg-primary:#16161f;
+  --bg-card:rgba(255,255,255,0.06);
+  --bg-card-hover:rgba(255,255,255,0.10);
+  --gold:#d4a847;
+  --gold-light:#f0d78c;
+  --gold-dim:#8b7335;
+  --text-primary:#f0eee8;
+  --text-secondary:#b0aaa4;
+  --text-muted:#7a756e;
+  --red-accent:#e06060;
+  --blue-accent:#6a9ee0;
+  --green-accent:#5cc88a;
+  --wood-color:#6ab06a;
+  --fire-color:#e06060;
+  --earth-color:#d4a84d;
+  --metal-color:#c8c8d8;
+  --water-color:#6a9ee0;
+  --radius:16px;
+  --radius-sm:10px;
+  --transition:all .3s cubic-bezier(.4,0,.2,1);
+  --glass:rgba(255,255,255,0.07);
+  --glass-border:rgba(255,255,255,0.12);
+  --glass-blur:20px;
+}
+html{font-size:16px;-webkit-tap-highlight-color:transparent}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+  background:var(--bg-primary);color:var(--text-primary);
+  min-height:100vh;overflow-x:hidden;line-height:1.6;
+}
+/* 全局渐变背景 */
+body::before{
+  content:'';position:fixed;inset:0;z-index:-2;
+  background:
+    radial-gradient(ellipse 60% 50% at 20% 20%, rgba(212,168,71,0.06) 0%, transparent 70%),
+    radial-gradient(ellipse 50% 60% at 80% 80%, rgba(106,158,224,0.04) 0%, transparent 70%),
+    radial-gradient(ellipse 80% 40% at 50% 50%, rgba(224,96,96,0.03) 0%, transparent 60%),
+    linear-gradient(160deg, #161624 0%, #1a1a2e 50%, #16161f 100%);
+}
+.page{display:none;min-height:100vh;padding:20px 16px;max-width:480px;margin:0 auto}
+.page.active{display:flex;flex-direction:column;align-items:center}
+
+/* ==================== Animations ==================== */
+@keyframes fadeIn{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeInScale{from{opacity:0;transform:scale(.92)}to{opacity:1;transform:scale(1)}}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+@keyframes floatSlow{0%,100%{transform:translateY(0) rotate(0deg)}50%{transform:translateY(-8px) rotate(2deg)}}
+@keyframes pulse{0%,100%{opacity:.5;transform:scale(1)}50%{opacity:1;transform:scale(1.05)}}
+@keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
+@keyframes slideIn{from{opacity:0;transform:translateX(30px)}to{opacity:1;transform:translateX(0)}}
+@keyframes breathe{0%,100%{opacity:.4;transform:scale(1)}50%{opacity:.7;transform:scale(1.05)}}
+@keyframes glow{0%,100%{box-shadow:0 0 20px rgba(212,168,71,0.08),0 0 60px rgba(212,168,71,0.04)}50%{box-shadow:0 0 30px rgba(212,168,71,0.15),0 0 80px rgba(212,168,71,0.08)}}
+@keyframes starTwinkle{0%,100%{opacity:0;transform:scale(.5)}50%{opacity:1;transform:scale(1)}}
+/* ==================== 波兰尼节奏：氛围先行，文字延迟 ==================== */
+/* 氛围层——emoji/光效/颜色，先到达（0.6s ease-out） */
+.atmo-first{animation:fadeIn .6s cubic-bezier(.4,0,.2,1) both}
+/* 文字层——理性描述跟在后面（延迟1s后淡入） */
+.text-later{opacity:0;animation:fadeIn .8s cubic-bezier(.4,0,.2,1) 1s both}
+.text-later-d1{opacity:0;animation:fadeIn .8s cubic-bezier(.4,0,.2,1) 1.2s both}
+.text-later-d2{opacity:0;animation:fadeIn .8s cubic-bezier(.4,0,.2,1) 1.5s both}
+.text-later-d3{opacity:0;animation:fadeIn .8s cubic-bezier(.4,0,.2,1) 1.8s both}
+.text-later-d4{opacity:0;animation:fadeIn .8s cubic-bezier(.4,0,.2,1) 2.1s both}
+/* 氛围光晕——大尺寸模糊光斑，先铺底 */
+.atmo-glow{
+  position:relative;
+}
+.atmo-glow::before{
+  content:'';position:absolute;inset:0;
+  border-radius:50%;
+  animation:atmoGlowIn 1.2s cubic-bezier(.4,0,.2,1) both;
+  pointer-events:none;z-index:-1;
+}
+@keyframes atmoGlowIn{0%{opacity:0;transform:scale(.5)}100%{opacity:1;transform:scale(1)}}
+
+.animate-in{animation:fadeIn .6s cubic-bezier(.4,0,.2,1) both}
+.delay-1{animation-delay:.1s}
+.delay-2{animation-delay:.2s}
+.delay-3{animation-delay:.3s}
+.delay-4{animation-delay:.4s}
+
+/* ==================== Star Particles (全局装饰) ==================== */
+.stars{position:fixed;inset:0;pointer-events:none;z-index:-1;overflow:hidden}
+.star{
+  position:absolute;width:2px;height:2px;background:rgba(212,168,71,0.6);
+  border-radius:50%;animation:starTwinkle var(--dur) var(--delay) ease-in-out infinite;
+}
+
+/* ==================== Landing Page ==================== */
+#page-landing{justify-content:center;text-align:center;padding-top:12vh;position:relative}
+.logo-area{margin-bottom:36px;position:relative}
+.logo-icon{
+  font-size:72px;margin-bottom:20px;
+  animation:float 4s ease-in-out infinite;
+  filter:drop-shadow(0 0 20px rgba(212,168,71,0.3));
+}
+/* 光晕环绕 */
+.logo-icon::after{
+  content:'';position:absolute;top:50%;left:50%;
+  width:120px;height:120px;margin:-60px 0 0 -60px;
+  border-radius:50%;
+  background:radial-gradient(circle, rgba(212,168,71,0.12) 0%, transparent 70%);
+  animation:breathe 4s ease-in-out infinite;
+  pointer-events:none;
+}
+.logo-title{
+  font-size:32px;font-weight:800;color:var(--gold);letter-spacing:6px;margin-bottom:10px;
+  text-shadow:0 0 40px rgba(212,168,71,0.2);
+}
+.logo-subtitle{font-size:12px;color:var(--text-muted);letter-spacing:4px;text-transform:uppercase}
+.tagline{font-size:15px;color:var(--text-secondary);margin-bottom:44px;line-height:2;max-width:280px}
+.tagline em{color:var(--gold);font-style:normal}
+
+/* Decorative elements — 重新设计 */
+.ink-circles{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none;z-index:-1}
+.ink-circle{position:absolute;border-radius:50%;border:1px solid rgba(212,168,71,0.05);animation:breathe 5s ease-in-out infinite}
+.ink-circle:nth-child(1){width:300px;height:300px;margin:-150px}
+.ink-circle:nth-child(2){width:500px;height:500px;margin:-250px;animation-delay:1.5s}
+.ink-circle:nth-child(3){width:700px;height:700px;margin:-350px;animation-delay:3s}
+
+/* Buttons — 全面升级 */
+.btn-primary{
+  display:inline-block;padding:16px 52px;border:none;
+  background:linear-gradient(135deg, var(--gold), #b8922e);
+  color:#16161f;font-size:17px;font-weight:700;letter-spacing:4px;border-radius:60px;
+  cursor:pointer;transition:var(--transition);position:relative;overflow:hidden;
+  text-decoration:none;
+  box-shadow:0 4px 24px rgba(212,168,71,0.25), 0 0 60px rgba(212,168,71,0.08);
+}
+.btn-primary:hover,.btn-primary:active{
+  transform:translateY(-2px);
+  box-shadow:0 8px 32px rgba(212,168,71,0.35), 0 0 80px rgba(212,168,71,0.12);
+}
+.btn-primary::before{
+  content:'';position:absolute;inset:-2px;border-radius:62px;
+  background:linear-gradient(135deg, rgba(240,215,140,0.4), rgba(212,168,71,0.1), rgba(240,215,140,0.2));
+  z-index:-1;opacity:0;transition:opacity .3s;
+}
+.btn-primary:hover::before{opacity:1}
+/* 按钮光扫效果 */
+.btn-primary::after{
+  content:'';position:absolute;top:-50%;left:-60%;width:40%;height:200%;
+  background:linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+  transform:skewX(-20deg);
+  animation:btnShine 3s ease-in-out infinite;
+}
+@keyframes btnShine{0%,100%{left:-60%}50%{left:120%}}
+.disclaimer{font-size:11px;color:var(--text-muted);margin-top:36px;line-height:1.8;max-width:260px}
+
+/* ==================== Question Page ==================== */
+#page-quiz{justify-content:flex-start;padding-top:40px}
+.progress-bar{width:100%;max-width:360px;margin-bottom:28px}
+.progress-track{
+  height:4px;background:rgba(255,255,255,0.06);border-radius:4px;overflow:hidden;
+  backdrop-filter:blur(4px);
+}
+.progress-fill{
+  height:100%;background:linear-gradient(90deg, var(--gold-dim), var(--gold), var(--gold-light));
+  border-radius:4px;transition:width .5s cubic-bezier(.4,0,.2,1);width:0;
+  box-shadow:0 0 12px rgba(212,168,71,0.3);
+}
+.progress-text{font-size:12px;color:var(--text-muted);margin-top:8px;text-align:right;letter-spacing:1px}
+
+.question-card{
+  width:100%;max-width:400px;
+  background:var(--glass);border:1px solid var(--glass-border);
+  border-radius:var(--radius);padding:28px 24px;
+  backdrop-filter:blur(var(--glass-blur));-webkit-backdrop-filter:blur(var(--glass-blur));
+  animation:fadeInScale .4s cubic-bezier(.4,0,.2,1) both;
+  transition:border-color .3s,box-shadow .3s;
+}
+/* Grip题——微红氛围 */
+.card-grip{border-color:rgba(224,96,96,0.2);box-shadow:0 0 30px rgba(224,96,96,0.06)}
+.card-grip .question-title{color:#e8a0a0}
+/* 困境题——深蓝氛围 */
+.card-dilemma{border-color:rgba(106,158,224,0.2);box-shadow:0 0 30px rgba(106,158,224,0.06)}
+.card-dilemma .question-title{color:#a0c0e8}
+/* 终极题——金色氛围 */
+.card-final{border-color:rgba(212,168,71,0.25);box-shadow:0 0 30px rgba(212,168,71,0.08)}
+.card-final .question-title{color:var(--gold)}
+.question-number{font-size:12px;color:var(--gold-dim);margin-bottom:12px;letter-spacing:2px}
+.question-title{font-size:18px;font-weight:600;line-height:1.7;margin-bottom:8px;color:var(--text-primary)}
+.question-subtitle{font-size:12px;color:var(--text-muted);margin-bottom:20px}
+
+/* Options — 毛玻璃风格 */
+.options{display:flex;flex-direction:column;gap:10px}
+.option-btn{
+  padding:14px 18px;
+  background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);
+  border-radius:var(--radius-sm);
+  color:var(--text-primary);font-size:14px;line-height:1.6;
+  cursor:pointer;transition:var(--transition);text-align:left;
+  display:flex;align-items:flex-start;gap:10px;
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+}
+.option-btn:hover,.option-btn:active{
+  border-color:rgba(212,168,71,0.3);background:rgba(212,168,71,0.08);
+  transform:translateX(4px);
+}
+.option-btn.selected{
+  border-color:var(--gold);background:rgba(212,168,71,0.12);
+  box-shadow:0 0 20px rgba(212,168,71,0.1);
+}
+.option-label{
+  display:inline-block;width:24px;height:24px;line-height:24px;text-align:center;
+  font-size:11px;border:1px solid var(--text-muted);border-radius:50%;
+  color:var(--text-muted);flex-shrink:0;transition:var(--transition);
+}
+.option-btn.selected .option-label{border-color:var(--gold);color:var(--gold);background:rgba(212,168,71,0.1)}
+
+/* Date input */
+.date-input-group{display:flex;flex-direction:column;align-items:center;gap:16px}
+.date-label{font-size:14px;color:var(--text-secondary)}
+.birth-row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:center}
+.birth-field{display:flex;flex-direction:column;align-items:center;gap:4px}
+.birth-field label{font-size:11px;color:var(--text-muted)}
+.birth-field input{
+  width:64px;padding:10px 6px;background:rgba(255,255,255,0.04);border:1px solid rgba(212,168,71,0.25);
+  border-radius:8px;color:var(--gold);font-size:16px;text-align:center;outline:none;
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+}
+.birth-field input:focus{border-color:var(--gold);box-shadow:0 0 20px rgba(212,168,71,0.15)}
+.birth-sep{font-size:18px;color:var(--text-muted);padding-top:16px}
+.btn-confirm{
+  margin-top:20px;padding:12px 40px;
+  background:linear-gradient(135deg, var(--gold), #b8922e);
+  color:#16161f;border:none;border-radius:50px;font-size:15px;font-weight:700;
+  cursor:pointer;transition:var(--transition);letter-spacing:2px;
+  box-shadow:0 4px 16px rgba(212,168,71,0.2);
+}
+.btn-confirm:hover{opacity:.9;transform:translateY(-1px);box-shadow:0 6px 24px rgba(212,168,71,0.3)}
+.birth-error{font-size:12px;color:var(--red-accent);margin-top:8px;min-height:18px}
+
+/* Nav buttons */
+.quiz-nav{width:100%;max-width:400px;display:flex;justify-content:space-between;align-items:center;margin-top:24px;min-height:44px}
+.btn-prev{
+  padding:8px 20px;background:transparent;border:1px solid rgba(255,255,255,0.08);
+  color:var(--text-secondary);border-radius:50px;font-size:13px;cursor:pointer;
+  transition:var(--transition);visibility:hidden;
+}
+.btn-prev.visible{visibility:visible}
+.btn-prev:hover{border-color:var(--gold-dim);color:var(--gold)}
+
+/* ==================== Loading Page ==================== */
+#page-loading{justify-content:center;text-align:center}
+.loading-icon{font-size:64px;animation:pulse 2s ease-in-out infinite;margin-bottom:24px;filter:drop-shadow(0 0 20px rgba(212,168,71,0.3))}
+.loading-text{font-size:16px;color:var(--gold);letter-spacing:3px;margin-bottom:12px}
+.loading-sub{font-size:13px;color:var(--text-muted);transition:opacity .3s}
+.loading-dots::after{content:'';animation:dots 1.5s steps(4,end) infinite}
+@keyframes dots{0%{content:''}25%{content:'.'}50%{content:'..'}75%{content:'...'}}
+@keyframes taichiSpin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+
+/* ==================== Result Page — 单页长滚动 ==================== */
+#page-result{justify-content:flex-start;padding-top:20px;padding-bottom:80px}
+
+/* Result faces — 全部显示，去掉切换逻辑 */
+.result-face{display:none;width:100%;margin-bottom:40px}
+.result-face.active{display:block;animation:fadeIn .6s cubic-bezier(.4,0,.2,1) both}
+
+/* Face 1: 你是什么人 */
+.face1-header{text-align:center;margin-bottom:28px}
+.face1-badge{
+  display:inline-block;padding:5px 18px;
+  background:rgba(212,168,71,0.08);border:1px solid rgba(212,168,71,0.15);
+  border-radius:20px;font-size:11px;color:var(--gold-dim);letter-spacing:2px;margin-bottom:16px;
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+}
+.face1-emoji{font-size:56px;margin:12px 0 8px;animation:floatSlow 4s ease-in-out infinite;filter:drop-shadow(0 0 16px rgba(212,168,71,0.2));text-align:center;display:flex;justify-content:center;align-items:center}
+.face1-title{
+  font-size:28px;font-weight:800;color:var(--gold);letter-spacing:4px;margin-bottom:6px;
+  text-shadow:0 0 30px rgba(212,168,71,0.15);
+}
+.face1-tagline{font-size:14px;color:var(--text-secondary);line-height:1.7;margin-bottom:24px;max-width:320px}
+
+/* Section cards (shared) — 毛玻璃升级 */
+.section-card{
+  width:100%;
+  background:var(--glass);border:1px solid var(--glass-border);
+  border-radius:var(--radius);padding:24px;margin-bottom:16px;
+  backdrop-filter:blur(var(--glass-blur));-webkit-backdrop-filter:blur(var(--glass-blur));
+  transition:transform .3s, box-shadow .3s;
+}
+.section-card:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(0,0,0,0.2)}
+.section-title{
+  font-size:14px;font-weight:600;color:var(--gold);letter-spacing:2px;
+  margin-bottom:16px;padding-bottom:10px;
+  border-bottom:1px solid rgba(212,168,71,0.1);
+}
+.section-content{font-size:14px;line-height:1.9;color:var(--text-secondary)}
+.section-content strong{color:var(--text-primary);font-weight:600}
+
+/* Face 2: 你的精神状态 */
+.roast-card{border-color:rgba(224,96,96,0.15);background:rgba(224,96,96,0.03)}
+.roast-card .section-title{color:var(--red-accent);border-bottom-color:rgba(224,96,96,0.12)}
+.roast-text{font-size:15px;line-height:2;color:var(--text-primary);position:relative;padding-left:16px}
+.roast-text::before{
+  content:'\201C';position:absolute;left:0;top:-4px;font-size:48px;
+  color:var(--red-accent);opacity:.3;font-family:Georgia,serif;line-height:1;
+}
+.roast-highlight{color:var(--red-accent);font-weight:600}
+
+/* Grip section */
+.grip-card{border-color:rgba(212,168,71,0.12)}
+.grip-card .section-title{color:var(--gold);border-bottom-color:rgba(212,168,71,0.1)}
+.grip-trigger{font-size:13px;color:var(--text-muted);margin-bottom:8px}
+.grip-text{font-size:14px;line-height:1.9;color:var(--text-primary)}
+
+/* Form (终极形态) */
+.form-header{display:flex;align-items:center;gap:12px;margin-bottom:16px}
+.form-emoji{font-size:40px}
+.form-name{font-size:22px;font-weight:700;color:var(--gold)}
+.form-relation{font-size:12px;color:var(--text-muted);margin-bottom:4px}
+.form-traditional{font-size:13px;color:var(--text-secondary);font-style:italic;margin-bottom:12px}
+.form-explanation{font-size:14px;line-height:1.9;color:var(--text-secondary);margin-bottom:16px}
+.form-summary{
+  font-size:15px;line-height:1.8;color:var(--text-primary);
+  background:rgba(212,168,71,0.06);border-radius:8px;padding:14px 16px;
+}
+
+/* Face 3: 守护神 */
+.deity-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px}
+.deity-card{
+  background:var(--glass);border:1px solid var(--glass-border);
+  border-radius:var(--radius-sm);padding:18px 14px;text-align:center;transition:var(--transition);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+}
+.deity-card:hover{border-color:var(--gold-dim);transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,0.2)}
+.deity-card.main-deity{border-color:rgba(212,168,71,0.25);background:rgba(212,168,71,0.06)}
+.deity-emoji{font-size:36px;margin-bottom:8px}
+.deity-name{font-size:14px;font-weight:600;color:var(--text-primary);margin-bottom:2px}
+.deity-role{font-size:11px;color:var(--text-muted);margin-bottom:8px}
+.deity-reason{font-size:12px;color:var(--text-secondary);line-height:1.6;margin-bottom:10px}
+.deity-product{
+  display:inline-block;padding:3px 10px;
+  background:rgba(212,168,71,0.1);border-radius:12px;
+  font-size:11px;color:var(--gold-dim);
+}
+.deity-main-label{
+  font-size:10px;color:var(--gold);letter-spacing:2px;margin-bottom:8px;
+}
+.dilemma-box{
+  margin-top:16px;background:rgba(212,168,71,0.04);border-radius:10px;padding:16px;
+}
+.dilemma-label{font-size:12px;color:var(--gold-dim);margin-bottom:8px}
+.dilemma-text{font-size:14px;line-height:1.8;color:var(--text-primary);margin-bottom:8px}
+
+/* Face 4: 带走 */
+.share-card{
+  width:100%;
+  background:linear-gradient(135deg, rgba(212,168,71,0.08) 0%, rgba(106,158,224,0.04) 100%);
+  border:1px solid rgba(212,168,71,0.2);border-radius:var(--radius);
+  padding:28px 20px;text-align:center;margin-top:8px;position:relative;
+  backdrop-filter:blur(var(--glass-blur));-webkit-backdrop-filter:blur(var(--glass-blur));
+  animation:glow 4s ease-in-out infinite;
+}
+.share-card-title{font-size:16px;font-weight:600;color:var(--gold);margin-bottom:16px;letter-spacing:2px}
+.share-card-emoji{font-size:40px;margin-bottom:8px}
+.share-card-type{font-size:18px;font-weight:700;color:var(--text-primary);margin-bottom:4px}
+.share-card-roast{font-size:13px;color:var(--text-secondary);line-height:1.7;margin-bottom:16px;max-width:280px;margin-left:auto;margin-right:auto}
+.share-card-brand{font-size:10px;color:var(--text-muted);letter-spacing:3px;margin-top:12px}
+
+/* CTA */
+.cta-section{text-align:center;margin-top:8px;margin-bottom:8px}
+.cta-text{font-size:13px;color:var(--text-secondary);margin-bottom:12px;line-height:1.7}
+.cta-btn{
+  display:inline-block;padding:12px 36px;
+  background:linear-gradient(135deg, var(--gold), #b8922e);
+  color:#16161f;border:none;border-radius:50px;
+  font-size:14px;font-weight:700;cursor:pointer;transition:var(--transition);
+  letter-spacing:2px;text-decoration:none;
+  box-shadow:0 4px 20px rgba(212,168,71,0.25);
+}
+.cta-btn:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(212,168,71,0.35)}
+
+.btn-share{
+  margin-top:16px;padding:10px 32px;
+  background:rgba(212,168,71,0.08);border:1px solid rgba(212,168,71,0.25);
+  color:var(--gold);border-radius:50px;
+  font-size:13px;cursor:pointer;transition:var(--transition);letter-spacing:2px;
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+}
+.btn-share:hover{background:rgba(212,168,71,0.15);border-color:var(--gold)}
+
+/* Retest */
+.retest-link{
+  display:inline-block;margin-top:32px;font-size:12px;color:var(--text-muted);
+  text-decoration:underline;cursor:pointer;transition:var(--transition);
+}
+.retest-link:hover{color:var(--text-secondary)}
+
+/* Cognition box */
+.cognition-box{
+  margin-top:16px;background:var(--glass);border-radius:10px;padding:16px;
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+}
+.cognition-label{font-size:12px;color:var(--gold-dim);margin-bottom:8px}
+.cognition-external{font-size:14px;color:var(--text-primary);margin-bottom:6px}
+.cognition-internal{font-size:13px;color:var(--text-secondary);line-height:1.7;margin-bottom:8px;font-style:italic}
+.cognition-advice{font-size:13px;color:var(--gold);line-height:1.7}
+
+/* Warning */
+.warning-box{
+  background:rgba(224,96,96,0.05);border:1px solid rgba(224,96,96,0.12);
+  border-radius:var(--radius-sm);padding:16px;margin-top:12px;
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+}
+.warning-title{font-size:12px;color:var(--red-accent);font-weight:600;margin-bottom:8px;letter-spacing:1px}
+.warning-text{font-size:13px;color:var(--text-secondary);line-height:1.8}
+
+/* Disclaimer at bottom */
+.result-disclaimer{
+  text-align:center;margin-top:16px;font-size:11px;color:var(--text-muted);
+  line-height:1.6;max-width:320px;
+}
+
+/* ==================== Mobile optimizations ==================== */
+@media(max-width:380px){
+  .logo-title{font-size:26px;letter-spacing:4px}
+  .face1-title{font-size:22px}
+  .deity-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- 星星粒子背景 -->
+<div class="stars" id="stars-container"></div>
+
+<!-- ==================== Page: Landing ==================== -->
+<div class="page active" id="page-landing">
+  <div class="ink-circles">
+    <div class="ink-circle"></div>
+    <div class="ink-circle"></div>
+    <div class="ink-circle"></div>
+  </div>
+  <div class="logo-area animate-in">
+    <div class="logo-icon"><div style="width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,var(--gold),#b8922e,var(--gold-light));position:relative;box-shadow:0 0 30px rgba(212,168,71,0.3),inset 0 -4px 8px rgba(0,0,0,0.2)"><div style="position:absolute;top:12px;left:12px;width:48px;height:48px;border-radius:50%;border:2px solid rgba(255,255,255,0.25);background:radial-gradient(circle at 35% 35%,rgba(255,255,255,0.3),transparent 60%)"></div><div style="position:absolute;top:16px;left:16px;width:20px;height:20px;border-radius:50%;background:rgba(255,255,255,0.15);filter:blur(4px)"></div></div></div>
+    <div class="logo-title">测了吗</div>
+    <div class="logo-subtitle">CELEBRITY DEITY MATCH</div>
+  </div>
+  <div class="tagline animate-in delay-1">
+    你的症状已收到<br>正在为你匹配神明
+  </div>
+  <div class="animate-in delay-2">
+    <button class="btn-primary" onclick="startQuiz()">开测！</button>
+  </div>
+  <div class="disclaimer animate-in delay-3">
+    准不准不好说，但至少挺好玩的<br>
+    认真你就输了
+  </div>
+</div>
+
+<!-- ==================== Page: Quiz ==================== -->
+<div class="page" id="page-quiz">
+  <div class="progress-bar">
+    <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
+    <div class="progress-text" id="progress-text"></div>
+  </div>
+  <div class="question-card" id="question-card"></div>
+  <div class="quiz-nav">
+    <button class="btn-prev" id="btn-prev" onclick="goPrev()">← 上一题</button>
+    <span></span>
+  </div>
+</div>
+
+<!-- ==================== Page: Loading ==================== -->
+<div class="page" id="page-loading">
+  <div class="loading-icon"><div style="width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,var(--gold),#b8922e);position:relative;box-shadow:0 0 30px rgba(212,168,71,0.3);animation:taichiSpin 3s linear infinite"><div style="position:absolute;top:0;left:0;width:32px;height:32px;border-radius:32px 0 0 32px;background:#16161f"></div><div style="position:absolute;top:0;right:0;width:32px;height:32px;border-radius:0 32px 32px 0;background:var(--gold-light)"></div><div style="position:absolute;top:12px;left:12px;width:10px;height:10px;border-radius:50%;background:var(--gold-light)"></div><div style="position:absolute;top:12px;right:12px;width:10px;height:10px;border-radius:50%;background:#16161f"></div><div style="position:absolute;bottom:12px;left:12px;width:10px;height:10px;border-radius:50%;background:var(--gold-light)"></div><div style="position:absolute;bottom:12px;right:12px;width:10px;height:10px;border-radius:50%;background:#16161f"></div></div></div>
+  <div class="loading-text">正在推演命盘<span class="loading-dots"></span></div>
+  <div class="loading-sub" id="loading-tip">八位东方神正在开会讨论你...</div>
+</div>
+
+<!-- ==================== Page: Result (长滚动) ==================== -->
+<div class="page" id="page-result">
+  <!-- Face 1: 身份认同 -->
+  <div class="result-face active" id="face-1"></div>
+  <!-- Face 2: 出厂设置 -->
+  <div class="result-face active" id="face-2"></div>
+  <!-- Face 3: 代偿判定 -->
+  <div class="result-face active" id="face-3"></div>
+  <!-- Face 4: 守护神压轴 -->
+  <div class="result-face active" id="face-4"></div>
+</div>
+
+<!-- ==================== Engine Scripts ==================== -->
+<script>
+// === bazi-engine.js (inlined) ===
+/**
+ * 八字计算引擎 v2.1
+ * 
+ * 功能：出生日期 → 四柱干支 + 身强身弱 + 最旺五行 + 终极形态匹配
+ * 
+ * 算法依据：
+ * - 身强身弱：计分权重法（同党得分 vs 异党得分，50分界线）
+ * - 五行极值：108分制（月支40 + 3地支×12 + 4天干×8）
+ * - 平局处理：月令优先 → 异党优先 → 天干透出优先
+ * 
+ * 浏览器端：通过 window.BaZiEngine 访问所有导出函数
+ */
+(function(global) {
+  'use strict';
+
+// ==================== 基础常量 ====================
+
+const BA_ZI = {
+  // 天干（10个）
+  tianGan: ['甲', '乙', '丙', '丁', '戊', '己', '庚', '辛', '壬', '癸'],
+  // 天干→五行：0木 1火 2土 3金 4水
+  tianGanWuXing: [0, 0, 1, 1, 2, 2, 3, 3, 4, 4],
+  // 地支（12个）
+  diZhi: ['子', '丑', '寅', '卯', '辰', '巳', '午', '未', '申', '酉', '戌', '亥'],
+  // 地支→五行（本气）：0木 1火 2土 3金 4水
+  diZhiWuXing: [4, 2, 0, 0, 2, 1, 1, 2, 3, 3, 2, 0],
+  // 五行名称
+  wuXingNames: ['木', '火', '土', '金', '水'],
+  wuXingEmoji: ['🌱', '🔥', '⛰️', '⚔️', '🌊'],
+  // 天干白话描述（用户展示用）
+  tianGanDesc: [
+    '参天大树型——天生向上、不服就干',   // 甲
+    '花草藤蔓型——柔软但韧性十足',       // 乙
+    '太阳型——天生自带光芒、照亮别人',   // 丙
+    '烛火型——温柔细腻、暗夜中的光',     // 丁
+    '大山型——稳重可靠、能扛大事',       // 戊
+    '田园型——细腻包容、滋养万物',       // 己
+    '利刃型——果断刚毅、说一不二',       // 庚
+    '首饰型——精致讲究、内心有锋芒',     // 辛
+    '大海型——深邃包容、势不可挡',       // 壬
+    '细雨型——润物无声、聪慧灵动',       // 癸
+  ],
+};
+
+// ==================== 日历工具 ====================
+
+/**
+ * 农历节气数据（节气近似时刻，用于判断月令）
+ * 使用简化算法：按公历日期区间粗略判断月令
+ * 每月以「节气」为分界线，不是农历初一
+ */
+const JIE_QI_MONTHS = [
+  // [月份起始日, 月份结束日, 月支index]  (基于公历)
+  // 小寒~立春 → 丑月, 立春~惊蛰 → 寅月, ...
+  { monthStart: 1, dayStart: 6, monthEnd: 2, dayEnd: 3, zhi: 1 },   // 丑月 (小寒~立春)
+  { monthStart: 2, dayStart: 4, monthEnd: 3, dayEnd: 5, zhi: 2 },   // 寅月 (立春~惊蛰)
+  { monthStart: 3, dayStart: 6, monthEnd: 4, dayEnd: 4, zhi: 3 },   // 卯月 (惊蛰~清明)
+  { monthStart: 4, dayStart: 5, monthEnd: 5, dayEnd: 5, zhi: 4 },   // 辰月 (清明~立夏)
+  { monthStart: 5, dayStart: 6, monthEnd: 6, dayEnd: 5, zhi: 5 },   // 巳月 (立夏~芒种)
+  { monthStart: 6, dayStart: 6, monthEnd: 7, dayEnd: 6, zhi: 6 },   // 午月 (芒种~小暑)
+  { monthStart: 7, dayStart: 7, monthEnd: 8, dayEnd: 7, zhi: 7 },   // 未月 (小暑~立秋)
+  { monthStart: 8, dayStart: 8, monthEnd: 9, dayEnd: 7, zhi: 8 },   // 申月 (立秋~白露)
+  { monthStart: 9, dayStart: 8, monthEnd: 10, dayEnd: 7, zhi: 9 },  // 酉月 (白露~寒露)
+  { monthStart: 10, dayStart: 8, monthEnd: 11, dayEnd: 7, zhi: 10 }, // 戌月 (寒露~立冬)
+  { monthStart: 11, dayStart: 8, monthEnd: 12, dayEnd: 6, zhi: 11 }, // 亥月 (立冬~大雪)
+  { monthStart: 12, dayStart: 7, monthEnd: 12, dayEnd: 31, zhi: 0 }, // 子月 (大雪~小寒)
+  { monthStart: 1, dayStart: 1, monthEnd: 1, dayEnd: 5, zhi: 0 },   // 子月 (元旦~小寒)
+];
+
+/**
+ * 根据公历日期获取月支index
+ */
+function getMonthZhi(month, day) {
+  for (const jq of JIE_QI_MONTHS) {
+    if (month === jq.monthStart && day >= jq.dayStart) return jq.zhi;
+    if (month === jq.monthEnd && day <= jq.dayEnd) return jq.zhi;
+    if (month > jq.monthStart && month < jq.monthEnd) return jq.zhi;
+  }
+  return 0; // fallback 子月
+}
+
+/**
+ * 根据公历日期获取月干index
+ * 规律：甲己之年丙作首，乙庚之岁戊为头...
+ * 年干 % 5 → 月干起始index: 2(丙), 4(戊), 6(庚), 8(壬), 0(甲)
+ */
+function getMonthGan(yearGanIdx, monthZhiIdx) {
+  const startGanMap = [2, 4, 6, 8, 0]; // 甲→丙起, 乙→戊起, ...
+  const startGan = startGanMap[yearGanIdx % 5];
+  return (startGan + monthZhiIdx) % 10;
+}
+
+/**
+ * 根据公历日期获取日干index
+ * 基准日：2000-01-07 = 甲子日 (index=0)
+ */
+function getDayGan(year, month, day) {
+  const base = new Date(2000, 0, 7);
+  const target = new Date(year, month - 1, day);
+  const diffDays = Math.round((target.getTime() - base.getTime()) / (1000 * 60 * 60 * 24));
+  return ((diffDays % 10) + 10) % 10;
+}
+
+/**
+ * 根据公历日期获取日支index
+ * 基准日：2000-01-07 = 子日 (index=0)
+ */
+function getDayZhi(year, month, day) {
+  const base = new Date(2000, 0, 7);
+  const target = new Date(year, month - 1, day);
+  const diffDays = Math.round((target.getTime() - base.getTime()) / (1000 * 60 * 60 * 24));
+  return ((diffDays % 12) + 12) % 12;
+}
+
+/**
+ * 根据公历日期获取年干index
+ */
+function getYearGan(year) {
+  // 公元年份 → 天干：(year - 4) % 10
+  return ((year - 4) % 10 + 10) % 10;
+}
+
+/**
+ * 根据公历日期获取年支index
+ */
+function getYearZhi(year) {
+  // 公元年份 → 地支：(year - 4) % 12
+  return ((year - 4) % 12 + 12) % 12;
+}
+
+/**
+ * 根据日干和时辰获取时干index
+ * 规律：甲己还加甲，乙庚丙作初...
+ * 日干 % 5 → 时干起始index
+ */
+function getHourGan(dayGanIdx, hourZhiIdx) {
+  const startGanMap = [0, 2, 4, 6, 8]; // 甲→甲起, 乙→丙起, ...
+  const startGan = startGanMap[dayGanIdx % 5];
+  return (startGan + hourZhiIdx) % 10;
+}
+
+/**
+ * 小时 → 时辰地支index
+ * 子时: 23-1, 丑时: 1-3, 寅时: 3-5, ...
+ */
+function getHourZhi(hour) {
+  // 将23点归为子时(0), 0点也归为子时
+  const adjusted = hour === 23 ? 0 : hour;
+  return Math.floor((adjusted + 1) / 2) % 12;
+}
+
+// ==================== 四柱干支 ====================
+
+function getFourPillars(year, month, day, hour = 12) {
+  const yearGan = getYearGan(year);
+  const yearZhi = getYearZhi(year);
+  const monthZhi = getMonthZhi(month, day);
+  const monthGan = getMonthGan(yearGan, monthZhi);
+  const dayGan = getDayGan(year, month, day);
+  const dayZhi = getDayZhi(year, month, day);
+  const hourZhi = getHourZhi(hour);
+  const hourGan = getHourGan(dayGan, hourZhi);
+
+  return { yearGan, yearZhi, monthGan, monthZhi, dayGan, dayZhi, hourGan, hourZhi };
+}
+
+// ==================== 五行计算 ====================
+
+/**
+ * 获取某位置的五行
+ */
+function getWuXing(ganIdx, zhiIdx) {
+  return {
+    ganWuXing: BA_ZI.tianGanWuXing[ganIdx],
+    zhiWuXing: BA_ZI.diZhiWuXing[zhiIdx],
+  };
+}
+
+/**
+ * 五行相生关系
+ * 木(0)→火(1)→土(2)→金(3)→水(4)→木(0)
+ */
+const WU_XING_SHENG = { 0: 1, 1: 2, 2: 3, 3: 4, 4: 0 };
+/**
+ * 五行相克关系
+ * 木(0)克土(2), 火(1)克金(3), 土(2)克水(4), 金(3)克木(0), 水(4)克火(1)
+ */
+const WU_XING_KE = { 0: 2, 1: 3, 2: 4, 3: 0, 4: 1 };
+
+/**
+ * 判断是否为同党（同类 + 生我者）
+ * @param {number} dayMasterWuXing 日主五行 (0-4)
+ * @param {number} targetWuXing 目标五行 (0-4)
+ */
+function isSameParty(dayMasterWuXing, targetWuXing) {
+  if (targetWuXing === dayMasterWuXing) return true; // 同类（比劫）
+  if (WU_XING_SHENG[targetWuXing] === dayMasterWuXing) return true; // 生我者（印枭）
+  return false;
+}
+
+// ==================== 身强身弱 ====================
+
+/**
+ * 计算身强身弱得分
+ * @param {object} pillars - getFourPillars的返回值
+ * @returns {{ score: number, isStrong: boolean }}
+ */
+function calcStrength(pillars) {
+  const { monthZhi, yearZhi, dayZhi, hourZhi } = pillars;
+  const dayMasterWX = BA_ZI.tianGanWuXing[pillars.dayGan];
+
+  let score = 0;
+
+  // 1. 月支（月令）—— 权重40分
+  const monthZhiWX = BA_ZI.diZhiWuXing[monthZhi];
+  if (isSameParty(dayMasterWX, monthZhiWX)) {
+    score += 40; // 得令
+  }
+  // 失令 +0分，不加分
+
+  // 2. 其他地支（年支、日支、时支）—— 每个12分
+  const otherZhi = [yearZhi, dayZhi, hourZhi];
+  for (const zhi of otherZhi) {
+    const zhiWX = BA_ZI.diZhiWuXing[zhi];
+    if (isSameParty(dayMasterWX, zhiWX)) {
+      score += 12;
+    }
+  }
+
+  // 3. 所有天干（年干、月干、日干、时干）—— 每个8分
+  // 注意：日干也计入（日主自身也算8分，因为日主就是自己）
+  const allGan = [pillars.yearGan, pillars.monthGan, pillars.dayGan, pillars.hourGan];
+  for (const gan of allGan) {
+    const ganWX = BA_ZI.tianGanWuXing[gan];
+    if (isSameParty(dayMasterWX, ganWX)) {
+      score += 8;
+    }
+  }
+
+  return {
+    score,
+    isStrong: score >= 50,
+  };
+}
+
+// ==================== 五行极值 ====================
+
+/**
+ * 计算八字中各五行的得分
+ * @param {object} pillars - getFourPillars的返回值
+ * @returns {{ scores: number[], maxElement: number, maxScore: number }}
+ */
+function calcWuXingScores(pillars) {
+  const scores = [0, 0, 0, 0, 0]; // 木火土金水
+
+  // 月支 40分
+  scores[BA_ZI.diZhiWuXing[pillars.monthZhi]] += 40;
+
+  // 年支、日支、时支 各12分
+  scores[BA_ZI.diZhiWuXing[pillars.yearZhi]] += 12;
+  scores[BA_ZI.diZhiWuXing[pillars.dayZhi]] += 12;
+  scores[BA_ZI.diZhiWuXing[pillars.hourZhi]] += 12;
+
+  // 年干、月干、日干、时干 各8分
+  scores[BA_ZI.tianGanWuXing[pillars.yearGan]] += 8;
+  scores[BA_ZI.tianGanWuXing[pillars.monthGan]] += 8;
+  scores[BA_ZI.tianGanWuXing[pillars.dayGan]] += 8;
+  scores[BA_ZI.tianGanWuXing[pillars.hourGan]] += 8;
+
+  // 找最旺五行（含平局处理）
+  const maxScore = Math.max(...scores);
+  const maxElement = resolveTie(scores, pillars, maxScore);
+
+  return { scores, maxElement, maxScore };
+}
+
+/**
+ * 平局处理
+ * 1. 月令优先：并列中谁占了月支谁赢
+ * 2. 异党优先：都没占月令时，日主的异党（克/泄/耗）优先
+ * 3. 天干透出优先：同为异党时，天干出现的那个赢
+ */
+function resolveTie(scores, pillars, maxScore) {
+  const dayMasterWX = BA_ZI.tianGanWuXing[pillars.dayGan];
+  const monthZhiWX = BA_ZI.diZhiWuXing[pillars.monthZhi];
+
+  // 找出所有达到最高分的五行
+  const candidates = [];
+  for (let i = 0; i < 5; i++) {
+    if (scores[i] === maxScore) candidates.push(i);
+  }
+
+  if (candidates.length === 1) return candidates[0];
+
+  // 1. 月令优先
+  const monthWinner = candidates.find(c => c === monthZhiWX);
+  if (monthWinner !== undefined) return monthWinner;
+
+  // 2. 异党优先（克我/我生/我克）
+  const isYiDang = (wx) => {
+    return wx === WU_XING_KE[dayMasterWX]  // 克我（官杀）
+      || wx === WU_XING_SHENG[dayMasterWX] // 我生（食伤）
+      || wx === WU_XING_KE[WU_XING_SHENG[dayMasterWX]]; // 我克（财）的推导：我生的五行所克的不对...
+    // 正确推导：我克=我生的五行的所克？不对。
+    // 直接定义：木克土，火克金，土克水，金克木，水克火
+    // 异党 = 克我 + 我生 + 我克（除同类和生我之外的所有）
+  };
+
+  // 重新定义异党：非同党即为异党
+  const isYiDangStrict = (wx) => {
+    return !isSameParty(dayMasterWX, wx);
+  };
+
+  const yiDangCandidates = candidates.filter(c => isYiDangStrict(c));
+  if (yiDangCandidates.length === 1) return yiDangCandidates[0];
+  if (yiDangCandidates.length > 1) {
+    // 3. 天干透出优先
+    // 收集所有天干的五行
+    const ganWuXings = [
+      BA_ZI.tianGanWuXing[pillars.yearGan],
+      BA_ZI.tianGanWuXing[pillars.monthGan],
+      BA_ZI.tianGanWuXing[pillars.dayGan],
+      BA_ZI.tianGanWuXing[pillars.hourGan],
+    ];
+    for (const ganWX of ganWuXings) {
+      if (yiDangCandidates.includes(ganWX)) return ganWX;
+    }
+    // 都没有天干透出，返回第一个
+    return yiDangCandidates[0];
+  }
+
+  // 所有候选都是同党（理论上不太可能），取第一个
+  return candidates[0];
+}
+
+// ==================== 终极形态匹配 ====================
+
+/**
+ * 日主五行与最旺五行的关系映射
+ * 每种日主对应5种最旺五行的形态ID
+ * ID: A=我生(输出), B=我克(现实), C=克我(压力), D=生我(输入), E=同类(自我)
+ * 
+ * 但实际上是按最旺五行的种类来排列，不是按十神关系
+ * 这里按 review-results.md 中的实际排列：
+ *   木型：火/土/金/水/木 → A/B/C/D/E（但实际排列是火土金水木）
+ *   火型：土/金/水/木/火 → A/B/C/D/E
+ *   土型：金/水/木/火/土 → A/B/C/D/E
+ *   金型：水/木/火/土/金 → A/B/C/D/E
+ *   水型：木/火/土/金/水 → A/B/C/D/E
+ */
+
+// 最旺五行 → 形态ID偏移 (每种日主的5种形态按最旺五行排列)
+// 对应关系：最旺五行index → 形态ID (A=0, B=1, C=2, D=3, E=4)
+const FORM_ID_BY_ELEMENT = {
+  // 木型日主：火(0)→A, 土(1)→B, 金(2)→C, 水(3)→D, 木(4)→E
+  0: { 1: 0, 2: 1, 3: 2, 4: 3, 0: 4 },  // 日主木：火最旺→A, 土最旺→B, 金最旺→C, 水最旺→D, 木最旺→E
+  // 火型日主：土(0)→A, 金(1)→B, 水(2)→C, 木(3)→D, 火(4)→E
+  1: { 2: 0, 3: 1, 4: 2, 0: 3, 1: 4 },
+  // 土型日主：金(0)→A, 水(1)→B, 木(2)→C, 火(3)→D, 土(4)→E
+  2: { 3: 0, 4: 1, 0: 2, 1: 3, 2: 4 },
+  // 金型日主：水(0)→A, 木(1)→B, 火(2)→C, 土(3)→D, 金(4)→E
+  3: { 4: 0, 0: 1, 1: 2, 2: 3, 3: 4 },
+  // 水型日主：木(0)→A, 火(1)→B, 土(2)→C, 金(3)→D, 水(4)→E
+  4: { 0: 0, 1: 1, 2: 2, 3: 3, 4: 4 },
+};
+
+// 形态ID: 0=A(身强), 1=B(身弱)
+// formIndex: 0-4 对应 A-J 中的两种（身强=偶数, 身弱=奇数）
+// 形态Key: `{日主五行}_{formIndex}` 如 "0_3" = 木型第4种形态(D)
+
+/**
+ * 获取终极形态的Key
+ * @param {number} dayMasterWX 日主五行 (0-4)
+ * @param {number} maxElementWX 最旺五行 (0-4)
+ * @param {boolean} isStrong 是否身强
+ * @returns {string} 形态Key，如 "0_0" = 木型A形态
+ */
+function getFormKey(dayMasterWX, maxElementWX, isStrong) {
+  const formMap = FORM_ID_BY_ELEMENT[dayMasterWX];
+  const formIndex = formMap[maxElementWX]; // 0-4
+  // 每个formIndex对应两个形态：偶数=身强(ID字母), 奇数=身弱(下一个字母)
+  // formIndex 0 → 身强=A(0), 身弱=B(1)
+  // formIndex 1 → 身强=C(2), 身弱=D(3)
+  // formIndex 2 → 身强=E(4), 身弱=F(5)
+  // formIndex 3 → 身强=G(6), 身弱=H(7)
+  // formIndex 4 → 身强=I(8), 身弱=J(9)
+  const variantIndex = isStrong ? formIndex * 2 : formIndex * 2 + 1;
+  return `${dayMasterWX}_${variantIndex}`;
+}
+
+// ==================== 用神五行计算 ====================
+
+/**
+ * 用神五行推导表 v2.0（50条·含身强身弱）
+ * 
+ * 推导依据：十神生克关系 + 身强身弱承载力 + 通关化解
+ * - 身强：能扛，宜"克泄耗"（修剪、泄秀、输出）
+ * - 身弱：扛不住，宜"生扶"（补充、支撑、通关）
+ * 
+ * @param {number} dayMasterWX 日主五行 (0=木,1=火,2=土,3=金,4=水)
+ * @param {number} maxElementWX 最旺五行 (0-4)
+ * @param {boolean} isStrong 是否身强
+ * @returns {number} 用神五行 (0-4)
+ */
+const CURE_ELEMENT_MAP = {
+  // 木型日主
+  0: { // 日主=木
+    0: { strong: 3, weak: 4 },   // 最旺=木(同类) → 强:金(克), 弱:水(生)
+    1: { strong: 2, weak: 4 },   // 最旺=火(我生) → 强:土(泄秀变现), 弱:水(回血克火)
+    2: { strong: 1, weak: 0 },   // 最旺=土(我克) → 强:火(通关), 弱:木(帮身)
+    3: { strong: 4, weak: 4 },   // 最旺=金(克我) → 强:水(通关), 弱:水(通关)
+    4: { strong: 1, weak: 2 },   // 最旺=水(生我) → 强:火(泄秀), 弱:土(筑坝扎根)
+  },
+  // 火型日主
+  1: { // 日主=火
+    0: { strong: 2, weak: 2 },   // 最旺=木(生我) → 强:土(泄秀), 弱:土(泄秀输出)
+    1: { strong: 4, weak: 0 },   // 最旺=火(同类) → 强:水(克), 弱:木(生)
+    2: { strong: 3, weak: 0 },   // 最旺=土(我生) → 强:金(泄秀变现), 弱:木(生)
+    3: { strong: 2, weak: 0 },   // 最旺=金(我克) → 强:土(通关), 弱:木(通关帮身)
+    4: { strong: 2, weak: 0 },   // 最旺=水(克我) → 强:土(克水), 弱:木(通关化解)
+  },
+  // 土型日主
+  2: { // 日主=土
+    0: { strong: 1, weak: 1 },   // 最旺=木(克我) → 强:火(通关), 弱:火(通关)
+    1: { strong: 3, weak: 3 },   // 最旺=火(生我) → 强:金(泄秀降温), 弱:金(泄秀降温)
+    2: { strong: 0, weak: 1 },   // 最旺=土(同类) → 强:木(克), 弱:火(生)
+    3: { strong: 4, weak: 1 },   // 最旺=金(我生) → 强:水(泄秀), 弱:火(回血)
+    4: { strong: 0, weak: 1 },   // 最旺=水(我克) → 强:木(通关), 弱:火(帮身固坝)
+  },
+  // 金型日主
+  3: { // 日主=金
+    0: { strong: 1, weak: 2 },   // 最旺=木(我克) → 强:火(通关), 弱:土(帮身通关)
+    1: { strong: 4, weak: 2 },   // 最旺=火(克我) → 强:水(对抗激发), 弱:土(通关化解)
+    2: { strong: 4, weak: 4 },   // 最旺=土(生我) → 强:水(泄秀冲出), 弱:水(泄秀冲出)
+    3: { strong: 1, weak: 2 },   // 最旺=金(同类) → 强:火(克), 弱:土(生)
+    4: { strong: 0, weak: 2 },   // 最旺=水(我生) → 强:木(泄秀变现), 弱:土(回血克水)
+  },
+  // 水型日主
+  4: { // 日主=水
+    0: { strong: 1, weak: 3 },   // 最旺=木(我生) → 强:火(泄秀变现), 弱:金(回血)
+    1: { strong: 0, weak: 3 },   // 最旺=火(我克) → 强:木(通关), 弱:金(帮身)
+    2: { strong: 0, weak: 3 },   // 最旺=土(克我) → 强:木(对抗突破), 弱:金(通关化解)
+    3: { strong: 0, weak: 0 },   // 最旺=金(生我) → 强:木(泄秀流通), 弱:木(泄秀化浊)
+    4: { strong: 2, weak: 3 },   // 最旺=水(同类) → 强:土(克), 弱:金(生)
+  },
+};
+
+function getCureElement(dayMasterWX, maxElementWX, isStrong) {
+  const strength = isStrong ? 'strong' : 'weak';
+  return CURE_ELEMENT_MAP[dayMasterWX][maxElementWX][strength];
+}
+
+// ==================== 主入口 ====================
+
+/**
+ * 完整的八字分析
+ * @param {number} year  公历年
+ * @param {number} month 公历月(1-12)
+ * @param {number} day   公历日
+ * @param {number} hour  小时(0-23)，可选
+ * @returns {object} 完整分析结果
+ */
+function analyzeBaZi(year, month, day, hour = 12) {
+  // 1. 四柱干支
+  const pillars = getFourPillars(year, month, day, hour);
+
+  // 2. 日主信息
+  const dayMasterGan = pillars.dayGan;
+  const dayMasterWX = BA_ZI.tianGanWuXing[dayMasterGan];
+
+  // 3. 身强身弱
+  const strength = calcStrength(pillars);
+
+  // 4. 五行极值
+  const wuXing = calcWuXingScores(pillars);
+
+  // 5. 终极形态Key
+  const formKey = getFormKey(dayMasterWX, wuXing.maxElement, strength.isStrong);
+
+  // 6. 用神五行
+  const cureElement = getCureElement(dayMasterWX, wuXing.maxElement, strength.isStrong);
+
+  return {
+    pillars,
+    dayMasterGan,
+    dayMasterWX,
+    dayMasterName: BA_ZI.tianGan[dayMasterGan],
+    dayMasterWuXingName: BA_ZI.wuXingNames[dayMasterWX],
+    dayMasterEmoji: BA_ZI.wuXingEmoji[dayMasterWX],
+    dayMasterDesc: BA_ZI.tianGanDesc[dayMasterGan],
+    strength: {
+      score: strength.score,
+      isStrong: strength.isStrong,
+      label: strength.isStrong ? '能量满格 🔋' : '潜力股 🪫',
+      desc: strength.isStrong ? '天生就扛得住' : '别透支',
+    },
+    wuXing: {
+      scores: wuXing.scores,
+      maxElement: wuXing.maxElement,
+      maxElementName: BA_ZI.wuXingNames[wuXing.maxElement],
+      maxElementEmoji: BA_ZI.wuXingEmoji[wuXing.maxElement],
+      maxScore: wuXing.maxScore,
+    },
+    formKey,
+    cureElement: {
+      wx: cureElement,
+      name: BA_ZI.wuXingNames[cureElement],
+      emoji: BA_ZI.wuXingEmoji[cureElement],
+    },
+  };
+}
+
+/**
+ * 验证函数 — 用于开发调试
+ * 返回可读的四柱干支字符串
+ */
+function formatPillars(pillars) {
+  const B = BA_ZI;
+  return {
+    year: B.tianGan[pillars.yearGan] + B.diZhi[pillars.yearZhi],
+    month: B.tianGan[pillars.monthGan] + B.diZhi[pillars.monthZhi],
+    day: B.tianGan[pillars.dayGan] + B.diZhi[pillars.dayZhi],
+    hour: B.tianGan[pillars.hourGan] + B.diZhi[pillars.hourZhi],
+  };
+}
+
+// ==================== 导出 ====================
+global.BaZiEngine = {
+  getFourPillars,
+  calcStrength,
+  calcWuXingScores,
+  getFormKey,
+  getCureElement,
+  analyzeBaZi,
+  formatPillars,
+  // 常量也导出，供其他模块引用
+  BA_ZI,
+};
+
+})(typeof window !== 'undefined' ? window : this);
+
+// === end bazi-engine.js ===
+</script>
+<script>
+// === personality-engine.js (inlined) ===
+/**
+ * 荣格四维计分引擎 v3.0
+ * 
+ * 功能：答题数据 → 16型人格 + Grip + 核心困境 + 认知偏差
+ * 
+ * 31题结构（1出生日期 + 30选择题）：
+ * - IE（内外向）：题2+3+4+5+6+24+28（7票）
+ * - SN（直觉/感觉）：题7+8+9+25+26+21交叉（6票）
+ * - TF（思考/情感）：题10+11+12+29+30+22交叉（6票）
+ * - JP（判断/感知）：题13+14+15+16+27（5票）
+ * - Grip（劣势功能）：题17+18（2票复测，不一致取题17）
+ * - 核心困境：题19（单题直出，5选项，守护神Tie-Breaker）
+ * - 认知偏差：题20（单题直出，4选项）
+ * - 交叉IE×SN：题21（同时投IE和SN票）
+ * - 交叉TF×JP：题22（同时投TF和JP票）
+ * - 商业转化：题23（单题直出）
+ */
+(function(global) {
+  'use strict';
+
+  // ==================== 31题数据 v4（当代年轻人语境·5乐章节奏·彩蛋反转） ====================
+  const QUESTIONS = [
+    // ==================== 第1题：出生日期 ====================
+    {
+      id: 0, type: 'date',
+      number: '第 1 题',
+      title: '先报一下你的出厂日期',
+      subtitle: '别紧张，就填个生日而已',
+    },
+
+    // ==================== 🎵 入场（题2-6：轻松+共鸣） ====================
+
+    // 第2题：IE ① — 加微信
+    {
+      id: 1, type: 'choice', dim: 'IE',
+      number: '第 2 题',
+      title: '刚认识一个人加了微信，你通常会——',
+      options: [
+        { label: 'A', text: '先翻完对方三年朋友圈，然后主动发个表情包破冰', value: 'E' },
+        { label: 'B', text: '安静躺在通讯录里，三年后还是没说过话', value: 'I' },
+        { label: 'C', text: '对方不找我我绝对不找，但对方一找我秒回，还假装"刚看到"', value: null },
+      ],
+    },
+    // 第3题：IE ② — 聚会后
+    {
+      id: 2, type: 'choice', dim: 'IE',
+      number: '第 3 题',
+      title: '跟朋友吃完火锅回到家，你的状态是——',
+      options: [
+        { label: 'A', text: '意犹未尽，在群里发了一堆表情包，开始约下次', value: 'E' },
+        { label: 'B', text: '谢天谢地终于回来了，感觉社交电量正在一格一格恢复', value: 'I' },
+        { label: 'C', text: '跟对的人吃完能量满格，跟错的人吃完像上了一天班', value: null },
+      ],
+    },
+    // 第4题：IE ③ — 群聊
+    {
+      id: 3, type: 'choice', dim: 'IE',
+      number: '第 4 题',
+      title: '200人的群里有人@全体需要回复，你——',
+      options: [
+        { label: 'A', text: '秒回，顺便补充两句，说不定又聊起来了', value: 'E' },
+        { label: 'B', text: '心想"总有人会回的"，然后默默退出群聊红点', value: 'I' },
+        { label: 'C', text: '打了一段话又全删了，最后发了个"收到"的表情包', value: null },
+      ],
+    },
+    // 第5题：IE ④ — 饭局十人
+    {
+      id: 4, type: 'choice', dim: 'IE',
+      number: '第 5 题',
+      title: '一桌十个人的饭局，你认识的人只有两个——',
+      options: [
+        { label: 'A', text: '主动跟旁边不认识的人搭话，吃完又多了三个微信好友', value: 'E' },
+        { label: 'B', text: '默默吃菜，偶尔跟认识的两个人说两句，全程当听众', value: 'I' },
+        { label: 'C', text: '先观察一圈，遇到聊得来的话题才插几句', value: null },
+      ],
+    },
+    // 第6题：IE ⑤ — 周末被叫出门
+    {
+      id: 5, type: 'choice', dim: 'IE',
+      number: '第 6 题',
+      title: '周五晚上十点，有人突然说"出来坐坐"，你会——',
+      options: [
+        { label: 'A', text: '"五分钟后到"，衣服都来不及换', value: 'E' },
+        { label: 'B', text: '"今天太累了下次吧"——其实面膜都还没敷', value: 'I' },
+        { label: 'C', text: '先问"还有谁去"，只有认识的人才出门', value: null },
+      ],
+    },
+
+    // ==================== 🎵 上头（题7-12：梗+反转） ====================
+
+    // 第7题：SN ① — 短视频
+    {
+      id: 6, type: 'choice', dim: 'SN',
+      number: '第 7 题',
+      title: '刷到一个三分钟的视频标题写着"看完改变你的人生"，你会——',
+      options: [
+        { label: 'A', text: '看完搜了一晚上相关内容，凌晨三点在B站找到了系列深度解析', value: 'N' },
+        { label: 'B', text: '三秒划走，但下一个视频还是这个博主，又看了三个', value: 'S' },
+        { label: 'C', text: '先收藏到"稍后再看"，和里面另外647个视频做伴', value: null },
+      ],
+    },
+    // 第8题：SN ② — 消费决策
+    {
+      id: 7, type: 'choice', dim: 'SN',
+      number: '第 8 题',
+      title: '想买一个东西（比如降噪耳机），你的购买流程是——',
+      options: [
+        { label: 'A', text: '先看测评对比参数查讨论帖，纠结三天，最后买了个完全不同但更有创意的东西', value: 'N' },
+        { label: 'B', text: '直接连下两单，一个正品一个便宜的，到了对比一下退掉一个', value: 'S' },
+        { label: 'C', text: '在购物车里躺了半年，618也没买，最后因为朋友送了一个就用上了', value: null },
+      ],
+    },
+    // 第9题：SN ③ — 学新技能
+    {
+      id: 8, type: 'choice', dim: 'SN',
+      number: '第 9 题',
+      title: '心血来潮想学个新东西（剪辑/画画/编程），你的打开方式是——',
+      options: [
+        { label: 'A', text: '先看十篇"从零到精通"经验帖，研究最优路线，然后收藏了八个教程视频，感觉很努力了', value: 'N' },
+        { label: 'B', text: '直接找五分钟教程跟着做，做出来第一个丑到不行的成品，反而很有成就感', value: 'S' },
+        { label: 'C', text: '买了全套装备和课程，到现在塑封膜都没撕', value: null },
+      ],
+    },
+    // 第10题：TF ① — 朋友创业点子
+    {
+      id: 9, type: 'choice', dim: 'TF',
+      number: '第 10 题',
+      title: '朋友兴冲冲跟你说"我要做一个AI驱动的宠物相亲平台"，你会——',
+      options: [
+        { label: 'A', text: '"盈利模式是什么？获客成本怎么算？你了解过竞品吗？"', value: 'T' },
+        { label: 'B', text: '"有点意思诶——你先说说，我帮你想想怎么完善"', value: 'F' },
+        { label: 'C', text: '疯狂点头"可以可以"，内心已经在算这个能活多久', value: null },
+      ],
+    },
+    // 第11题：TF ② — 网上不同观点
+    {
+      id: 10, type: 'choice', dim: 'TF',
+      number: '第 11 题',
+      title: '刷到一个明显有问题的帖子，底下全是跟风的人，你会——',
+      options: [
+        { label: 'A', text: '打了三百字逐条反驳，引用了三个数据源，有理有据', value: 'T' },
+        { label: 'B', text: '想了想，争论下去没意义，划走', value: 'F' },
+        { label: 'C', text: '打了一百字又全删了，最后留了一个"嗯"', value: null },
+      ],
+    },
+    // 第12题：TF ③ — 朋友买丑东西
+    {
+      id: 11, type: 'choice', dim: 'TF',
+      number: '第 12 题',
+      title: '朋友花两千块买了个你觉得很丑的包，还特别开心地给你看，你会——',
+      options: [
+        { label: 'A', text: '"说实话，这个配色跟你的气质不太搭"', value: 'T' },
+        { label: 'B', text: '"哇挺好看的！你背这个真的很适合"', value: 'F' },
+        { label: 'C', text: '拍照发群里说"快看我朋友的新包"，但心里在替TA的钱包默哀', value: null },
+      ],
+    },
+
+    // ==================== 🎵 扎心（题13-17：当代焦虑） ====================
+
+    // 第13题：JP ① — 手机APP
+    {
+      id: 12, type: 'choice', dim: 'JP',
+      number: '第 13 题',
+      title: '你的手机APP是这样排的——',
+      options: [
+        { label: 'A', text: '按颜色和功能分文件夹，最常用的放第一屏黄金位置，换一次壁纸就重新排一遍', value: 'J' },
+        { label: 'B', text: '随便放，找APP靠搜索，有时候搜到了也不确定是哪个', value: 'P' },
+        { label: 'C', text: '每隔几个月强迫症发作大整理一次，一周后恢复原样', value: null },
+      ],
+    },
+    // 第14题：JP ② — DDL
+    {
+      id: 13, type: 'choice', dim: 'JP',
+      number: '第 14 题',
+      title: '周五下班前要交一份东西，你的操作是——',
+      options: [
+        { label: 'A', text: '周四晚上搞定，周五早上再检查一遍，然后假装刚做完', value: 'J' },
+        { label: 'B', text: '周五下午4:47开始写，4:59准时提交，心跳180', value: 'P' },
+        { label: 'C', text: '周四建了个空白文档起了个标题，周五4:47才打开', value: null },
+      ],
+    },
+    // 第15题：JP ③ — 旅行
+    {
+      id: 14, type: 'choice', dim: 'JP',
+      number: '第 15 题',
+      title: '说走就走出去旅个游，你的风格是——',
+      options: [
+        { label: 'A', text: '提前做攻略精确到每个景点待多久，到了发现景点在装修', value: 'J' },
+        { label: 'B', text: '带个行李箱出门，走到哪住到哪，主打随机，偶尔随机到荒郊野岭', value: 'P' },
+        { label: 'C', text: '做了精美攻略PPT，到了全凭心情，攻略在备忘录里积灰', value: null },
+      ],
+    },
+    // 第16题：JP ④ — 三任务并行
+    {
+      id: 15, type: 'choice', dim: 'JP',
+      number: '第 16 题',
+      title: '手上同时有三个任务要处理，你的习惯是——',
+      options: [
+        { label: 'A', text: '先排优先级，一个一个搞定，做完一个勾一个，最后一个收工', value: 'J' },
+        { label: 'B', text: '三个同时开，切换着做，哪个灵感来了先做哪个，最后发现三个都没做完', value: 'P' },
+        { label: 'C', text: '排了个优先级，但做到一半突然觉得另一个更急，结果全部重来', value: null },
+      ],
+    },
+    // 第17题：Grip ① — 突然心情差
+    {
+      id: 16, type: 'grip',
+      number: '第 17 题',
+      title: '某天你突然心情很差很差，你的本能反应是——',
+      subtitle: '选最接近你本能反应的那个',
+      options: [
+        { label: 'A', text: '打开外卖连点三家，边吃边刷短视频到凌晨四点，第二天什么都不记得', grip: 'Se' },
+        { label: 'B', text: '翻最近所有聊天记录，反复回想"是不是那句回得不对"', grip: 'Si' },
+        { label: 'C', text: '对身边所有人说话都带刺，"你能不能别烦我"，外卖晚到五分钟都要投诉', grip: 'Te' },
+        { label: 'D', text: '关机，谁消息都不回，拉窗帘在床上躺两天，外卖到了也不想开门', grip: 'Fe' },
+      ],
+    },
+
+    // ==================== 🎵 深潜（题18-23：核心探测） ====================
+
+    // 第18题：Grip ② — 持续焦虑复测
+    {
+      id: 17, type: 'grip',
+      number: '第 18 题',
+      title: '上题你选的是第一反应，那如果你持续焦虑一周，你会变成什么样——',
+      subtitle: '这次认真想，和你第一反应可能不一样',
+      options: [
+        { label: 'A', text: '疯狂消费，买一堆不需要的东西，拆快递的时候才后悔', grip: 'Se' },
+        { label: 'B', text: '把过去三年的事情全翻出来想一遍，连小学同学的表情都记起来了', grip: 'Si' },
+        { label: 'C', text: '试图控制一切，给每个人都制定了"你应该如何"的清单，包括快递员', grip: 'Te' },
+        { label: 'D', text: '开始回避所有人，连最亲密的朋友发消息都想装没看到', grip: 'Fe' },
+      ],
+    },
+    // 第19题：核心困境（→ 守护神Tie-Breaker）
+    {
+      id: 18, type: 'dilemma',
+      number: '第 19 题',
+      title: '下面哪个更像你最近的状态？',
+      options: [
+        { label: 'A', text: '我太累了，付出太多回报太少，好像没人看见我', dilemma: 'burdened' },
+        { label: 'B', text: '脑子停不下来，越想越焦虑，但行动跟不上', dilemma: 'overthinking' },
+        { label: 'C', text: '我知道该做什么，就是迈不动腿', dilemma: 'paralyzed' },
+        { label: 'D', text: '关系里我总是付出更多的那个，但好像没人珍惜', dilemma: 'one_sided' },
+        { label: 'E', text: '说不上哪里不对，就是觉得活着没劲', dilemma: 'numb' },
+      ],
+    },
+    // 第20题：认知偏差
+    {
+      id: 19, type: 'cognition',
+      number: '第 20 题',
+      title: '你在朋友圈/小红书上的样子，和真实的你——',
+      options: [
+        { label: 'A', text: '看起来光鲜亮丽很厉害，但只有我知道我在硬撑', cognition: 'high' },
+        { label: 'B', text: '看起来很佛很安静，但我脑子里已经吵了八百回合', cognition: 'low' },
+        { label: 'C', text: '我发什么就是什么，懒得立人设，也没精力演', cognition: 'accurate' },
+        { label: 'D', text: '我不怎么发朋友圈，别人眼中的我是个谜，连我自己都不知道', cognition: 'hidden' },
+      ],
+    },
+    // 第21题：交叉 IE×SN — 万字长文
+    {
+      id: 20, type: 'cross',
+      number: '第 21 题',
+      title: '一个朋友给你发了一篇万字长文分析当前的经济形势，你会——',
+      options: [
+        { label: 'A', text: '立刻看完，然后转发到群里配上自己的思考，又引发一轮讨论', crossIE: 'E', crossSN: 'N' },
+        { label: 'B', text: '收了但没看，觉得这种人就是想太多，过好自己的日子比什么都强', crossIE: 'I', crossSN: 'S' },
+        { label: 'C', text: '看了个开头觉得有点意思，但看到第三段就退出来了', crossIE: null, crossSN: null },
+      ],
+    },
+    // 第22题：交叉 TF×JP — 家务吵架
+    {
+      id: 21, type: 'cross',
+      number: '第 22 题',
+      title: '你和室友/伴侣因为做家务的事又吵了一架，你的后续操作是——',
+      options: [
+        { label: 'A', text: '列一张家务分工表贴在冰箱上，精确到谁倒垃圾谁洗碗', crossTF: 'T', crossJP: 'J' },
+        { label: 'B', text: '先冷静下来，等情绪过去了再聊，聊的时候尽量照顾对方感受', crossTF: 'F', crossJP: 'P' },
+        { label: 'C', text: '心里气得不行但嘴上不说，然后偷偷把家务全做了还假装没事', crossTF: null, crossJP: null },
+      ],
+    },
+    // 第23题：商业转化
+    {
+      id: 22, type: 'business',
+      number: '第 23 题',
+      title: '如果人生是一个开放世界游戏，你现在最想获得的道具是——',
+      options: [
+        { label: 'A', text: '一张地图——装备和等级都有了，但不知道主线任务是什么', business: 'direction' },
+        { label: 'B', text: '一双加速跑鞋——知道要去哪，但腿就是迈不动', business: 'execution' },
+        { label: 'C', text: '一瓶回血药——什么都有，但状态太差了，需要回城休息一下', business: 'health' },
+        { label: 'D', text: '一个召唤卷轴——一个人刷副本太孤独了，想召唤靠谱的队友', business: 'teamwork' },
+      ],
+    },
+
+    // ==================== 🎵 回暖（题24-31：轻松第二轮+彩蛋收尾） ====================
+
+    // 第24题：IE ⑥ — 线上社群
+    {
+      id: 23, type: 'choice', dim: 'IE',
+      number: '第 24 题',
+      title: '被拉进一个不太熟的微信群（比如业主群/行业交流群），你的画风是——',
+      options: [
+        { label: 'A', text: '第一周就发了10条消息，比在群里两年的老成员还活跃', value: 'E' },
+        { label: 'B', text: '潜水三个月，第一条消息是帮别人砍一刀', value: 'I' },
+        { label: 'C', text: '默默观察了一个月，才第一次冒泡，发了个表情包', value: null },
+      ],
+    },
+    // 第25题：SN ④ — 讲故事方式
+    {
+      id: 24, type: 'choice', dim: 'SN',
+      number: '第 25 题',
+      title: '跟朋友讲一件事的时候，你的习惯是——',
+      options: [
+        { label: 'A', text: '先说"你知道这件事让我想到了什么吗"然后开始讲背后的逻辑和关联', value: 'N' },
+        { label: 'B', text: '"上周三下午两点，在星巴克，那个人跟我说了这么一句话"——先讲细节', value: 'S' },
+        { label: 'C', text: '讲着讲着就跑题了，最后自己也忘了最初要讲什么', value: null },
+      ],
+    },
+    // 第26题：SN ⑤ — 看说明书
+    {
+      id: 25, type: 'choice', dim: 'SN',
+      number: '第 26 题',
+      title: '买了一个新电器（比如空气炸锅/投影仪），你的第一反应是——',
+      options: [
+        { label: 'A', text: '不看说明书，凭直觉乱按，结果发现了一种说明书上没写的用法', value: 'N' },
+        { label: 'B', text: '先把说明书从头到尾看一遍，然后按步骤来', value: 'S' },
+        { label: 'C', text: '去B站搜"XX开箱测评"，看别人怎么用的，比看说明书直观', value: null },
+      ],
+    },
+    // 第27题：JP ⑤ — 搬家整理
+    {
+      id: 26, type: 'choice', dim: 'JP',
+      number: '第 27 题',
+      title: '要搬个家/整理房间，你的风格是——',
+      options: [
+        { label: 'A', text: '先扔后搬，断舍离三箱，每样东西都有固定位置', value: 'J' },
+        { label: 'B', text: '全塞箱子，到了新地方再说，有些箱子到现在都没拆开', value: 'P' },
+        { label: 'C', text: '整理的时候发誓以后要保持，搬完一个月后又恢复猪窝模式', value: null },
+      ],
+    },
+    // 第28题：IE ⑦ — 独处vs社交
+    {
+      id: 27, type: 'choice', dim: 'IE',
+      number: '第 28 题',
+      title: '连续一周没有任何社交安排，你的感觉是——',
+      options: [
+        { label: 'A', text: '到第五天就开始不安了，疯狂约人，哪怕是楼下便利店见面都行', value: 'E' },
+        { label: 'B', text: '爽！这就是天堂！请再给我一周！', value: 'I' },
+        { label: 'C', text: '前三天很爽，第四天开始有点无聊，第五天偷偷看了一下朋友圈', value: null },
+      ],
+    },
+    // 第29题：TF ④ — 同事被批评
+    {
+      id: 28, type: 'choice', dim: 'TF',
+      number: '第 29 题',
+      title: '你的同事能力很强但人很讨厌，TA被领导批评了，你的反应是——',
+      options: [
+        { label: 'A', text: '跟事情本身无关，TA确实做得不对，被批评是正常的', value: 'T' },
+        { label: 'B', text: '虽然TA人很烦，但看TA被骂还是有点不忍心', value: 'F' },
+        { label: 'C', text: '表面上说"太惨了"，内心在偷笑，然后又觉得自己太坏了', value: null },
+      ],
+    },
+    // 第30题：TF ⑤ — 帮朋友做决策
+    {
+      id: 29, type: 'choice', dim: 'TF',
+      number: '第 30 题',
+      title: '朋友问你"我该不该分手/辞职/考研"，你会——',
+      options: [
+        { label: 'A', text: '帮TA列一个利弊分析表，把所有可能的结果都写出来让TA自己选', value: 'T' },
+        { label: 'B', text: '先问TA的感受，"你自己到底想要什么"，陪TA把情绪理清楚', value: 'F' },
+        { label: 'C', text: '"你要是来问我，那肯定是心里已经有答案了"', value: null },
+      ],
+    },
+    // 第31题：JP ⑥ — 收尾彩蛋
+    {
+      id: 30, type: 'choice', dim: 'JP',
+      number: '第 31 题',
+      title: '马上就要看结果了，你现在的心情是——',
+      options: [
+        { label: 'A', text: '赶紧出结果！我要看！看完立刻分享给朋友测一测', value: 'J' },
+        { label: 'B', text: '别急，让我再想想刚才那些题选得对不对，能不能重选', value: 'P' },
+        { label: 'C', text: '结果什么的都无所谓，主要就是想知道我的守护神是谁', value: null },
+      ],
+    },
+  ];
+
+  // ==================== 16型灵魂称号 ====================
+  const TYPE_16 = {
+    INTJ: { title: '下棋的人', emoji: '🎯', tagline: '别人在下棋，你连棋盘都重新设计了', roast: '你在脑子里赢了100场仗，现实里一场都没打过' },
+    INTP: { title: '精神上的扫地机器人', emoji: '🤖', tagline: '扫了一遍全屋，垃圾没扔，因为每片垃圾都在研究它为什么是垃圾', roast: '你能解释宇宙大爆炸，但解释不了为什么你还没开始做事' },
+    ENTJ: { title: '方向盘给我型', emoji: '🏎️', tagline: '不是你想开车，是你看不得别人开偏了', roast: '你不是在管理团队，你是在统治世界——虽然你的世界只有三个人' },
+    ENTP: { title: '脑洞不限速型', emoji: '💡', tagline: '上一秒在想改变世界，下一秒在研究怎么用AI自动翻煎饼', roast: '你开的坑比填的多，但每个坑你都讲得像已经填好了似的' },
+    INFJ: { title: '全网最准的互联网嘴替', emoji: '🎙️', tagline: '你说的每句话别人都想转发，但你自己只有3条朋友圈', roast: '你活成了所有人的心理咨询师，但谁来咨询你' },
+    INFP: { title: '精神上的流浪汉', emoji: '🌙', tagline: '世界是粗糙的，但你的内心有一座精装修的图书馆', roast: '你把世界想得太美了，以至于活在任何一个真实的地方都会失望' },
+    ENFJ: { title: '精神上的养妈', emoji: '👩‍🍼', tagline: '全人类的情绪稳定剂，但自己的情绪已经偷偷碎了一地', roast: '你恨不得拯救全人类，但你连自己的晚饭都没解决' },
+    ENFP: { title: '人形社交APP', emoji: '🎉', tagline: '每个人的列表里都有你，但你的列表里谁都不在首页', roast: '你的热情保质期比酸奶还短，但每次重启都像第一次一样认真' },
+    ISTJ: { title: '人形Excel', emoji: '📊', tagline: '世界可以乱，你的表格不能乱', roast: '你的Excel表格精确到小数点后两位，但生活这道题没有标准答案' },
+    ISFJ: { title: '感动中国幕后组', emoji: '🛡️', tagline: '你是所有人最后的退路，但你的"开始"键从来没按过', roast: '你是全世界的避风港，但你自己的港湾在哪里' },
+    ESTJ: { title: '人生的项目经理', emoji: '📋', tagline: '不是你在催别人，是你在替这个世界的效率焦虑', roast: '你是效率最高的那个人，也是最容易让人又爱又恨的那个人' },
+    ESFJ: { title: '人形群公告', emoji: '📢', tagline: '没你组织饭局，这帮人能饿一星期', roast: '你是所有人的好朋友，但深夜打开通讯录不知道该打给谁' },
+    ISTP: { title: '低功耗高能效型', emoji: '⚙️', tagline: '别人在内耗，你在拆门把手。不是修不好，是嫌慢', roast: '你什么都能修好，就是修不好自己的人际关系' },
+    ISFP: { title: '薛定谔的佛系', emoji: '🎨', tagline: '表面佛系，内心比谁都清楚自己想要什么', roast: '你是世界上最精致的那个人，也是最脆弱的那个' },
+    ESTP: { title: '人体肾上腺素泵', emoji: '🔥', tagline: '别人在想"会不会出事"，你在想"出了事再跑也不迟"', roast: '你活得像一部动作片，但动作片总有大结局' },
+    ESFP: { title: '行走的充电宝', emoji: '🔋', tagline: '有你在的地方，每个人的电量都+20%，除了你自己', roast: '你是全场的焦点，但散场之后你是全宇宙最孤独的人' },
+  };
+
+  // ==================== Grip警告数据 ====================
+  const GRIP_DATA = {
+    Se: {
+      title: '你的「本能开关」会失灵',
+      translate: '你平时活在脑子里，活在计划里，活在「未来某个时候」',
+      hit: '但你压力一大，这个开关就失灵了——你会暴饮暴食、疯狂下单、刷短视频到凌晨四点。你不是在享受当下，你是在用感官刺激麻痹自己的焦虑',
+      advice: '你的「本能开关」不是坏的，它只是太久没用了。偶尔允许自己不思考、只感受',
+    },
+    Si: {
+      title: '你的「回放键」会卡住',
+      translate: '你是个向前看的人，过去对你来说只是数据',
+      hit: '但你压力一大，「回放键」就卡住了——你会反复翻旧账、强迫检查、恐惧最坏的结果。你不是洒脱，你是连自己的过去都放不下',
+      advice: '你的「过去」不是敌人。偶尔回头看一眼，不是认输，是确认自己走了多远',
+    },
+    Te: {
+      title: '你的「情感盖子」会爆开',
+      translate: '你是个有原则的人，忠于自己的感受，平时看起来温柔但坚定',
+      hit: '但你压力一大，那个盖子就爆了——你会突然对所有人发火、变得控制欲极强、连猫吃饭都得按你的规矩来。你平时追求真实，崩溃时最虚伪',
+      advice: '你的「控制欲」不是坏的，它只是太久没被理解了。允许自己偶尔不完美',
+    },
+    Fe: {
+      title: '你的「连接线」会断裂',
+      translate: '你是个独立的人，平时不太需要别人，觉得感情这东西太麻烦',
+      hit: '但你压力一大，「连接线」就断了——你会关掉手机谁都不理、拉上窗帘躺三天、仿佛人间蒸发。你平时觉得感情都是多余，崩溃时比谁都矫情',
+      advice: '你的「孤独」不是自由，是逃避。偶尔让一个人进来，不会死',
+    },
+  };
+
+  // ==================== 计分引擎 ====================
+
+  // Grip第一票（题17）的缓存，用于复测不一致时回退
+  let _gripFirstVote = null;
+
+  /**
+   * 初始化答题状态
+   */
+  function createAnswers() {
+    _gripFirstVote = null;
+    return {
+      birth: null,    // { year, month, day, hour }
+      IE: [],         // 存储每题的值 'I'|'E'|null
+      SN: [],
+      TF: [],
+      JP: [],
+      grip: null,     // 'Se'|'Si'|'Te'|'Fe'
+      dilemma: null,  // 'output_overload'|'input_choked'|'pressure_crushed'|'lost_empty'
+      cognition: null, // 'high'|'low'|'accurate'
+      business: null, // 'direction'|'execution'|'health'|'teamwork'
+    };
+  }
+
+  /**
+   * 记录答案
+   */
+  function recordAnswer(answers, questionId, optionIndex) {
+    const q = QUESTIONS[questionId];
+    if (!q) return;
+
+    if (q.type === 'date') return;
+    if (q.type === 'grip') {
+      const gripVal = q.options[optionIndex].grip;
+      // 复测逻辑：第一次（题17）缓存，第二次（题18）对比
+      if (_gripFirstVote === null) {
+        _gripFirstVote = gripVal;
+        answers.grip = gripVal;
+      } else {
+        // 不一致时取第一票（本能反应更准）
+        answers.grip = _gripFirstVote;
+      }
+      return;
+    }
+    if (q.type === 'dilemma') {
+      answers.dilemma = q.options[optionIndex].dilemma;
+      return;
+    }
+    if (q.type === 'cognition') {
+      answers.cognition = q.options[optionIndex].cognition;
+      return;
+    }
+    if (q.type === 'cross') {
+      const opt = q.options[optionIndex];
+      if (opt.crossIE) answers.IE.push(opt.crossIE);
+      if (opt.crossSN) answers.SN.push(opt.crossSN);
+      if (opt.crossTF) answers.TF.push(opt.crossTF);
+      if (opt.crossJP) answers.JP.push(opt.crossJP);
+      return;
+    }
+    if (q.type === 'business') {
+      answers.business = q.options[optionIndex].business;
+      return;
+    }
+
+    // 标准维度题 (IE/SN/TF/JP)
+    if (q.dim) {
+      const value = q.options[optionIndex].value;
+      if (value) answers[q.dim].push(value);
+    }
+  }
+
+  /**
+   * 多数票判定
+   */
+  function majorityVote(votes) {
+    const valid = votes.filter(function(v) { return v !== null && v !== undefined; });
+    if (valid.length === 0) return null;
+    var counts = {};
+    for (var i = 0; i < valid.length; i++) {
+      counts[valid[i]] = (counts[valid[i]] || 0) + 1;
+    }
+    var max = 0, result = null;
+    var keys = Object.keys(counts);
+    for (var j = 0; j < keys.length; j++) {
+      if (counts[keys[j]] > max) { max = counts[keys[j]]; result = keys[j]; }
+    }
+    return result;
+  }
+
+  /**
+   * 计算最终16型人格
+   */
+  function calcType16(answers) {
+    var ie = majorityVote(answers.IE) || 'I';
+    var sn = majorityVote(answers.SN) || 'S';
+    var tf = majorityVote(answers.TF) || 'T';
+    var jp = majorityVote(answers.JP) || 'J';
+    return ie + sn + tf + jp;
+  }
+
+  /**
+   * 完整分析
+   */
+  function analyzePersonality(answers) {
+    var type16 = calcType16(answers);
+    var typeInfo = TYPE_16[type16];
+    var gripInfo = answers.grip ? GRIP_DATA[answers.grip] : null;
+
+    return {
+      type16: type16,
+      typeInfo: typeInfo,
+      grip: answers.grip,
+      gripInfo: gripInfo,
+      dilemma: answers.dilemma,
+      cognition: answers.cognition,
+      business: answers.business,
+      votes: {
+        IE: answers.IE,
+        SN: answers.SN,
+        TF: answers.TF,
+        JP: answers.JP,
+      },
+    };
+  }
+
+  // ==================== 导出 ====================
+  global.PersonalityEngine = {
+    QUESTIONS: QUESTIONS,
+    TYPE_16: TYPE_16,
+    GRIP_DATA: GRIP_DATA,
+    createAnswers: createAnswers,
+    recordAnswer: recordAnswer,
+    majorityVote: majorityVote,
+    calcType16: calcType16,
+    analyzePersonality: analyzePersonality,
+  };
+
+})(typeof window !== 'undefined' ? window : this);
+
+// === end personality-engine.js ===
+</script>
+<script>
+// === form-data.js (inlined) ===
+/**
+ * form-data.js — 50种终极形态完整数据
+ * 
+ * 数据来源: review-results.md v6 — 三位一体终极框架
+ * 核心逻辑: 日主五行 × 强弱状态 × 最旺五行 = 50种终极形态
+ * 
+ * formKey格式: "{日主五行}_{形态序号}"
+ *   日主五行: 0木 1火 2土 3金 4水
+ *   形态序号: 0-9 (A-J)，偶数=身强态(strong)，奇数=身弱态(weak)
+ */
+(function(global) {
+  'use strict';
+
+  var FORMS = {
+
+    // ===================== 🌳 木型人 =====================
+
+    "0_0": {
+      name: "木火通明", emoji: "✨", relation: "我生·输出", type: "strong",
+      traditional: "木火通明，才华尽显",
+      explanation: "你本是一棵生机勃勃的树（木），且自身能量极其充沛（身强）。当前代表才华的「火」最为旺盛，不仅没有消耗你，反而让你「木火通明」。你现在思维活跃，表达欲强，正处于灵感爆发、闪闪发光的绝佳状态，才华正在被世界看到",
+      roast: "你最近的状态就像一棵着了火的圣诞树——不是着火的那种，是闪闪发光的那种",
+      summary: "你的才华正在闪闪发光，灵感爆棚"
+    },
+    "0_1": {
+      name: "火多木焚", emoji: "🔥", relation: "我生·输出", type: "weak",
+      traditional: "木能生火，火多木焚",
+      explanation: "你是一棵敏感温柔的植物（木），但自身根基稍显薄弱（身弱）。当前代表付出的「火」过于旺盛，导致你「火多木焚」。你为了工作、目标或照顾他人，燃烧了自己所有的热情。你可能感到极度疲惫、灵感枯竭，甚至有情绪耗竭的风险，你需要立刻停下来给自己充电",
+      roast: "别人是蜡烛，你是柴火。烧得是挺旺的，但烧完就没了。留点木柴给自己过冬吧",
+      summary: "你在燃烧自己照亮别人，该充电了"
+    },
+    "0_2": {
+      name: "根深蒂固", emoji: "🏔️", relation: "我克·现实", type: "strong",
+      traditional: "身强担财，根深叶茂",
+      explanation: "你有着参天大树般的强悍生命力（木强），同时面临着广袤厚重的土壤（土旺）。因为你自身足够强大，能够稳稳扎根，把面前的压力和挑战全部转化成实打实的成就。你目前极度务实，掌控欲和行动力拉满，能扛住极大的压力并将其转化为现实的财富和成果",
+      roast: "别人在种花，你在种树。而且你种的树已经开始结果了，别人才刚把土翻完",
+      summary: "你稳得像一棵千年古树，什么压力都扛得住"
+    },
+    "0_3": {
+      name: "土重木折", emoji: "⚖️", relation: "我克·现实", type: "weak",
+      traditional: "土重木折，贪大求全",
+      explanation: "你本是灵动随和的花草（木弱），却试图去掌控一片过于广阔厚重的土地（土旺）。你给自己设定了过高的现实目标，或者正面临沉重的经济、物质压力。野心超出了目前的承载力，让你感到了深深的挫败感和压迫感",
+      roast: "你的野心比你的腿长，想跑到的地方比你能走到的地方远。先确认自己站得稳，再谈跑得快",
+      summary: "你的野心比你的腿长，先站稳再说"
+    },
+    "0_4": {
+      name: "栋梁之材", emoji: "🪓", relation: "克我·压力", type: "strong",
+      traditional: "烈火炼真金，利斧成栋梁",
+      explanation: "你是一棵野蛮生长的硬木（木强），而代表修剪和雕刻的利刃（金）此刻最为锋芒。这对你来说是完美的相遇！因为你扛得住敲打，外界的严格要求和高压挑战正在将你修剪成「栋梁之材」。你正处于快速成长、脱胎换骨的升华期",
+      roast: "你不是在吃苦，你是在被雕刻。等雕完了就是博物馆的展品——值钱的那种",
+      summary: "你正在被修剪成栋梁，虽然疼但值"
+    },
+    "0_5": {
+      name: "金锐木折", emoji: "💔", relation: "克我·压力", type: "weak",
+      traditional: "金锐木折，摧残天性",
+      explanation: "你本身能量不足、渴望自由（木弱），但周遭却充满了严苛的规则、强势的领导或沉重的打击（金旺）。条条框框和外界的强硬力量让你感到了严重的摧折感，自信心受挫，现在你最需要的是一个安全的避风港",
+      roast: "你不是长得不好，你是被人修剪太狠了。偶尔当一棵野草没什么不好，不需要谁批准你长什么样",
+      summary: "你被人修剪太狠了，需要喘口气"
+    },
+    "0_6": {
+      name: "繁花似锦", emoji: "🌸", relation: "生我·保护", type: "strong",
+      traditional: "水木清华，繁花似锦",
+      explanation: "你本就生命力旺盛（木强），且获得了源源不断的滋养和保护（水旺）。你处于一个极其安全、舒适的环境中。但要注意，过度的保护和输入可能会让你变得有些慵懒，沉溺于舒适区。大胆走出去输出你的能量吧",
+      roast: "你现在的状态就是一棵养在温室里的富贵竹——长得确实好，但你出去吹过风吗",
+      summary: "你被养得很好，但可能有点太舒适了"
+    },
+    "0_7": {
+      name: "水多木浮", emoji: "🌊", relation: "生我·保护", type: "weak",
+      traditional: "木赖水生，水多木浮",
+      explanation: "你原本是一棵需要扎根的小树（木弱），但周围泛滥的水（过度的思虑、杂乱的信息或长辈的过度干涉）淹没了你的土壤。你处于「水多木浮」的状态。想法太多但无从下手，随波逐流缺乏安全感。你需要减少无意义的输入，找准一件事狠狠扎根",
+      roast: "你的浏览器开了87个标签页，但一个都没读完。知识焦虑不是在充电，是在放电",
+      summary: "你想得太多做得太少，知识焦虑不是充电"
+    },
+    "0_8": {
+      name: "巨木成林", emoji: "🌲", relation: "同类·自我", type: "strong",
+      traditional: "木旺成林，独木难穿",
+      explanation: "你本就是木，且八字中木的力量达到了顶峰！你拥有极强的自我意识、无与伦比的倔强和竞争欲。你认定的事情绝对不改，但同时也容易因为过于固执、不懂变通而在人际交往中碰壁。你需要学着柔软一些",
+      roast: "你不是有主见，你是听不进人话。而且你觉得这是优点。偶尔装一下耳聋，人际关系会好很多",
+      summary: "你强到没人敢反驳你，但偶尔听听也好"
+    },
+    "0_9": {
+      name: "独木难支", emoji: "🏚️", relation: "同类·自我", type: "weak",
+      traditional: "木旺无根，独木难支",
+      explanation: "你表面上看似有很多朋友或同伴（木旺），但实际上内心缺乏真正的底气和依靠（身弱）。你常常强撑着表现出坚强独立的样子，其实处于「独木难支」的状态。试着卸下伪装，向真正关心你的人寻求帮助吧",
+      roast: "你不是没主见，你是在等一个值得你较劲的事。但别等太久了，椅子会塌",
+      summary: "你在假装坚强，其实需要一个靠山"
+    },
+
+    // ===================== 🔥 火型人 =====================
+
+    "1_0": {
+      name: "骄阳普照", emoji: "☀️", relation: "我生·输出", type: "strong",
+      traditional: "火土高亢，身强泄秀",
+      explanation: "你是一团能量爆棚的烈火（火强），且有着广阔的大地（土旺）让你去温暖。你不仅有满腔的热情和才华，更有极其强大的执行力。你能把自己的灵感完美落地变成现实成果，且极具包容心，是团队里发光发热、最靠谱的灵魂人物",
+      roast: "你是那种「不仅能画饼，还能把饼做出来让人吃」的人。这种人已经快绝种了",
+      summary: "你不仅能想还能干，是执行力最强的梦想家"
+    },
+    "1_1": {
+      name: "土多火晦", emoji: "🌧️", relation: "我生·输出", type: "weak",
+      traditional: "火能生土，土多火晦",
+      explanation: "你本是一盏温柔的烛光（火弱），却被铺天盖地的泥土（土旺）掩盖了。你付出的太多了，常常陷入琐碎的日常家务、繁重的基础工作，或为照顾他人情绪而委屈自己。这些「泥土」掩盖了你原本的灵气和光芒，让你感到疲惫与黯淡。学会拒绝，把光留给自己",
+      roast: "你是全宇宙最靠谱的灭火器，但你有没有想过——火也需要被看见，而不是一直被灭",
+      summary: "你靠谱到把自己累没了，光芒都被家务淹没了"
+    },
+    "1_2": {
+      name: "火炼真金", emoji: "💎", relation: "我克·现实", type: "strong",
+      traditional: "真金不怕火炼",
+      explanation: "你自带耀眼的烈焰（火强），面前正摆着坚硬的顽铁（金旺）。所谓「真金不怕火炼」，你拥有极其强大的气场和野心，能完美驾驭现实的压力。越是艰难的目标、越是大盘子的利益，越能激发你的斗志，正处于披荆斩棘、开创财富的巅峰期",
+      roast: "别人看到困难在躲，你看到困难在磨刀。这种变态级别的战斗力，建议直接去创业",
+      summary: "越难越兴奋，你是天生的破局者"
+    },
+    "1_3": {
+      name: "金多火熄", emoji: "❄️", relation: "我克·现实", type: "weak",
+      traditional: "金多火熄，理想破灭",
+      explanation: "你是一朵微弱的火苗（火弱），却试图去融化巨大的冰冷铁山（金旺）。你背负了太大的经济压力，或给自己设定了不切实际的物质目标。冷酷的现实正在反噬你，内心原本纯粹的理想之火即将熄灭。降低预期，从小目标开始重燃自信吧",
+      roast: "你的理想很好，但你的存款不支持。不是所有星星都够得着，先摘低处的",
+      summary: "理想很丰满现实很骨感，先降低预期"
+    },
+    "1_4": {
+      name: "水火既济", emoji: "🌊", relation: "克我·压力", type: "strong",
+      traditional: "水辅阳光，水火既济",
+      explanation: "你犹如天上的太阳（火强），下方是汹涌的江河（水旺）。这叫「水火既济」，是最顶级的平衡！你正处在高压、高挑战的环境中，但强大的你不仅没被打倒，反而借由压力折射出了更耀眼的光芒。你极具领导力，越是有难度越能展现非凡价值",
+      roast: "别人被压力压垮了，你被压力抛光了。你这种「越难越兴奋」体质，一般人真学不来",
+      summary: "高压反而让你发光，你是天生的领导者"
+    },
+    "1_5": {
+      name: "水多火灭", emoji: "🌧️", relation: "克我·压力", type: "weak",
+      traditional: "水能克火，水多火灭",
+      explanation: "你是一抹脆弱的星火（火弱），却遭遇了狂风暴雨的浇灌（水旺）。外界的苛责、严苛的规章制度或强势人物的打压，让你如履薄冰。你原本的热情被一盆盆冷水彻底浇灭，现在充满了深深的无力感。请立刻离开消耗你的寒冷环境，去寻找能给你温暖的人",
+      roast: "别人不是在给你提建议，是在给你浇冷水。离那些随身带灭火器的人远一点",
+      summary: "你的热情被冷水浇灭了，换个环境"
+    },
+    "1_6": {
+      name: "木火通明", emoji: "💡", relation: "生我·保护", type: "strong",
+      traditional: "木火通明，文思泉涌",
+      explanation: "你本就火焰炽热（火强），又得到了源源不断的优质燃料（木旺）。恭喜你，正处于著名的「木火通明」状态！头脑极其清醒，求知欲旺盛，文化素养和直觉灵感双双拉满。非常适合搞创作、学习新技能或深度思考，你的思想将像火炬一样照亮前路",
+      roast: "你最近脑子转得像直升机螺旋桨。趁热打铁，别等油凉了再起飞",
+      summary: "脑子转得像直升机，灵感爆发期"
+    },
+    "1_7": {
+      name: "木多火塞", emoji: "🫠", relation: "生我·保护", type: "weak",
+      traditional: "火赖木生，木多火塞",
+      explanation: "你只是一堆还没燃起的小火星（火弱），别人却好心办坏事往你身上堆了一整座森林（木旺）。长辈过度的保护、外界塞给你的庞杂建议，或者你自己想得太多，不仅没能帮你燃烧，反而把你「憋」住了。你现在感到胸闷、烦躁、有火发不出。停止内耗，行动起来",
+      roast: "你的待办清单比你的命还长。不是能力不够，是贪心太多。先把一根树枝烧完再说",
+      summary: "你被太多建议塞满了，该动起来不是想更多"
+    },
+    "1_8": {
+      name: "野火燎原", emoji: "🔥", relation: "同类·自我", type: "strong",
+      traditional: "野火燎原，不可阻挡",
+      explanation: "你本命属火，全局火势已经彻底失控！你拥有无穷无尽的精力和极具感染力的狂热情绪，行动力爆表。但此时的你极度自我、急躁甚至有些狂妄，容易在冲动下做出错误决策，或用言语灼伤身边最亲近的人。你需要「水」来冷静一下",
+      roast: "你的热情保质期比酸奶还短，而且你还觉得这是真诚。建议随身带灭火器——给自己准备的",
+      summary: "你精力无穷但太自我，容易灼伤身边人"
+    },
+    "1_9": {
+      name: "微火相依", emoji: "🕯️", relation: "同类·自我", type: "weak",
+      traditional: "无木生火，虚火浮炎",
+      explanation: "你表面上看起来很合群、很热情，身边似乎也有很多圈子和同伴（火旺），但实际上内心依然感到孤独和能量匮乏（身弱）。你习惯于用情绪的张扬来掩饰内心的不安，像一群小火苗抱团取暖，却缺乏真正的核心竞争力（木）。你需要沉淀下来给自己真正充电",
+      roast: "你的社交圈就像一堆火柴——看着热闹，真要点起来一根都不够用",
+      summary: "你用社交掩饰孤独，其实需要一个真正的圈子"
+    },
+
+    // ===================== ⛰️ 土型人 =====================
+
+    "2_0": {
+      name: "土金相生", emoji: "💼", relation: "我生·输出", type: "strong",
+      traditional: "土金相生，厚积薄发",
+      explanation: "你是一座根基深厚的大山（土强），且内里蕴藏着极其丰富的矿脉（金旺）。你不仅有着沉稳靠谱的性格，更具备极其锋利的才华和强大的执行力。你的想法绝不会停留在脑海里，而是能一步一个脚印地将其转化为实际成果",
+      roast: "你是那种「画饼→做饼→卖饼→上市」一条龙的人。别人还在PPT阶段，你已经把分公司开好了",
+      summary: "你是那种说做就做的人，从PPT到落地一条龙"
+    },
+    "2_1": {
+      name: "金多土变", emoji: "🔪", relation: "我生·输出", type: "weak",
+      traditional: "土能生金，金多土变",
+      explanation: "你本是一捧温和细腻的泥土（土弱），却为了孕育、包裹那些坚硬的矿石（金旺）而耗尽了心力。你可能一直在过度付出、不停表达或为了迎合外界标准而不断消耗自己。这种状态让你失去了土原本的厚重与边界感，深感精疲力竭。学会收回精力，停止无底线的讨好",
+      roast: "你被生活切了太多刀，都快成刺身了。偶尔也该当一块完整的石头，别总让人切",
+      summary: "你付出了太多失去了边界，该停下来了"
+    },
+    "2_2": {
+      name: "高坝蓄水", emoji: "🌊", relation: "我克·现实", type: "strong",
+      traditional: "身强担财，高坝蓄水",
+      explanation: "你拥有极其强悍的承载力（土强），面对汹涌而来的江河（水旺），你化身为一座坚不可摧的高峡大坝。你目前极度务实且头脑清醒，能完美掌控庞大的资源、财富或复杂的人际关系。欲望和利益不仅淹没不了你，反而成了你建立人生丰碑的蓄水池",
+      roast: "别人在洪水中挣扎，你在修大坝。而且修完还能发电。这种操作，建议直接写进教科书",
+      summary: "你掌控一切游刃有余，是天生的操盘手"
+    },
+    "2_3": {
+      name: "水多土流", emoji: "🚣️", relation: "我克·现实", type: "weak",
+      traditional: "水多土流，失去根基",
+      explanation: "你只是一片单薄的田园之土（土弱），却被卷入了汹涌泛滥的洪流（水旺）。过大的物质欲望、繁杂的任务或纠缠不清的情感关系，已经超出了你的承载极限。你感到自己正在失去掌控权，只能跟着环境随波逐流，缺乏安全感。请立刻做减法",
+      roast: "你在别人的洪流里当泥巴——不是你不够好，是你没站稳。先把脚下的地踩实了再说",
+      summary: "你快被现实淹没了，赶紧做减法"
+    },
+    "2_4": {
+      name: "培木成林", emoji: "🌳", relation: "克我·压力", type: "strong",
+      traditional: "厚德载物，培木成林",
+      explanation: "你是一片广袤肥沃的土地（土强），正承载着一片生机勃勃的森林（木旺）。外界给你的压力、重担和严格的规则（木），不仅没把你压垮，反而被你稳稳托住，化作了你生命的景观。你极具领导力和责任心，能在高压下成就一番事业",
+      roast: "别人在树底下乘凉，你在树底下种树。你这种「背着森林还能跑步」的体质，建议去当CEO",
+      summary: "你背着一座森林还能跑步，超级靠谱"
+    },
+    "2_5": {
+      name: "木坚土陷", emoji: "🏚️", relation: "克我·压力", type: "weak",
+      traditional: "木坚土陷，重压崩塌",
+      explanation: "你本就土质疏松（土弱），却遭遇了极其强硬粗壮的树根（木旺）的死死盘剥。长期的职场高压、严苛的规章制度或生活中某个强势人物的控制，正在摧毁你的自信和边界。你感到了深深的挫败与塌陷感，请务必勇敢换个环境",
+      roast: "你的地基都裂了，还在想盖几层。先别卷了，把自己拼回来再说",
+      summary: "地基裂了别再盖楼了，先把自己拼回来"
+    },
+    "2_6": {
+      name: "火炎土燥", emoji: "🏜️", relation: "生我·保护", type: "strong",
+      traditional: "火炎土燥，固执僵化",
+      explanation: "你本来就是一座沉重的大山（土强），天上还有烈日（火旺）在不断炙烤。虽然你底气十足、背景强大，但由于吸收太多保护太好，你现在的状态极度干燥、僵化。你可能变得非常固执、听不进意见、拒绝变通。你需要一点「水」的灵动来润滑你的人际关系",
+      roast: "你不是稳重，你是真的懒得动。而且你还觉得不动是一种修行。建议偶尔出门淋淋雨",
+      summary: "你太固执了，连风都吹不动你"
+    },
+    "2_7": {
+      name: "火多土焦", emoji: "🔥", relation: "生我·保护", type: "weak",
+      traditional: "土赖火生，火多土焦",
+      explanation: "你是一片娇嫩的土壤（土弱），却被猛烈的熊熊大火（火旺）无情烘烤。外界对你的过度期待、长辈的催促或你内心对成功的极度焦急，已经把你的耐心和水分全部烤干了。你现在变得极其暴躁、焦虑，行动力全无。停下来给自己降降温",
+      roast: "你把自己当烤地瓜——外面焦了，里面还没熟。别烤了，先喝口水",
+      summary: "你把自己烤焦了，先喝口水降降温"
+    },
+    "2_8": {
+      name: "重山叠嶂", emoji: "🏔️", relation: "同类·自我", type: "strong",
+      traditional: "重山叠嶂，固步自封",
+      explanation: "你的世界里全是土！你拥有无可比拟的稳定性和忠诚度，但现在的你简直像一块搬不动的巨石。你深陷在自己的执念里，认死理，极度缺乏变通能力。这种过度的自我防御让你的人生陷入了停滞，你需要强有力的「木」（全新的挑战或伴侣）来帮你破局松土",
+      roast: "你不是固执，你是活得比石头还久。连石头风化了都会变，你还在原地不动",
+      summary: "你活得比石头还硬，但石头都会风化"
+    },
+    "2_9": {
+      name: "群沙聚塔", emoji: "🏗️", relation: "同类·自我", type: "weak",
+      traditional: "无火生土，聚沙成塔",
+      explanation: "你内心深处其实缺乏自信（身弱），但周围充斥着大量同伴、规矩或世俗标准（土旺）。你选择将真实的自己隐藏在集体之中，用随大流、迎合大众的方式来获取安全感。表面上你和大家打成一片，实际上你很害怕做决定，正在失去属于自己的独特光芒",
+      roast: "你把自己藏在人群里，以为这就是合群。但合群和消失是两回事——偶尔也该让别人看到你",
+      summary: "你把自己藏在人群里，合群和消失是两回事"
+    },
+
+    // ===================== ⚔️ 金型人 =====================
+
+    "3_0": {
+      name: "金白水清", emoji: "💎", relation: "我生·输出", type: "strong",
+      traditional: "金白水清，极其通透",
+      explanation: "你是一块经过打磨的利刃（金强），且拥有源源不断的清泉（水旺）来洗涤锋芒。你目前处于极度通透、才思泉涌的状态。逻辑思维极其清晰，表达能力和创造力极强，能够游刃有余地展现才华，且带有一种清冷高贵的气质",
+      roast: "你的脑子像刚从冰箱里拿出来的刀——又冷又快。这种清冷气质建议保持，毕竟模糊的人太多了",
+      summary: "你清醒到可怕，才华和逻辑同时在线"
+    },
+    "3_1": {
+      name: "水多金沉", emoji: "🫠", relation: "我生·输出", type: "weak",
+      traditional: "金能生水，水多金沉",
+      explanation: "你本是一件小巧精致的首饰（金弱），却不小心掉进了深不见底的汪洋（水旺）之中。你可能把太多的精力、才华和情感倾注出去了，为了照顾别人或追求某个目标，过度透支了自己。你现在感到深深的疲惫和无力，甚至有一种「被淹没」的抑郁感。请立刻收回关注，多爱自己",
+      roast: "你是所有人的情感充电宝，但自己从来不充电。现在电量只剩1%了，该关机了",
+      summary: "你给所有人的都太多了，自己已经快空了"
+    },
+    "3_2": {
+      name: "利斧劈木", emoji: "🪓", relation: "我克·现实", type: "strong",
+      traditional: "身强担财，利斧劈木",
+      explanation: "你是一把极其锋利的开山斧（金强），面前正是一片茂密的森林（木旺）。你现在拥有极其强烈的野心和无可匹敌的执行力！再大的困难、再复杂的盘子，在你绝对的实力面前都会被干脆利落地劈开。你正处于降本增效、迅速斩获成就的巅峰期",
+      roast: "别人看到森林在发愁怎么绕路，你看到森林在想哪棵先砍。这种效率，建议直接当项目经理",
+      summary: "你是效率之王，什么困难都挡不住你"
+    },
+    "3_3": {
+      name: "木坚金缺", emoji: "🔪", relation: "我克·现实", type: "weak",
+      traditional: "金能克木，木坚金缺",
+      explanation: "你只是一把小小的雕刻刀（金弱），却妄想去砍伐一棵参天大树（木旺）。你给自己设定了过高的物质目标，或者想要掌控的东西太多，超出了承载力。这不仅没能让你收获成功，反而让你这把刀「卷了刃」，伤了自己。放下过度的执念吧",
+      roast: "你拿水果刀去砍树，树没事，你手疼。不是所有问题都需要硬刚",
+      summary: "你拿水果刀砍树，树没事你手疼"
+    },
+    "3_4": {
+      name: "火炼真金", emoji: "🔨", relation: "克我·压力", type: "strong",
+      traditional: "真金不怕火炼，百炼成钢",
+      explanation: "你是一块极其顽强的生铁（金强），被投入了熊熊燃烧的高炉（火旺）之中。外界的严苛规则、高压环境或强势领导，对你来说都不是折磨，而是完美的淬炼。你极其抗压，越是地狱模式越能激发斗志，正在经历脱胎换骨的升华",
+      roast: "别人被火烧疼了跑了，你被火烧得更硬了。这种「越虐越强」体质，建议直接写进英雄列传",
+      summary: "越虐越强体质，正在脱胎换骨"
+    },
+    "3_5": {
+      name: "火旺熔金", emoji: "💧", relation: "克我·压力", type: "weak",
+      traditional: "火旺熔金，高压崩溃",
+      explanation: "你是一件娇贵脆弱的金银首饰（金弱），却被毫无防备地扔进了炼钢炉（火旺）里。现实的巨大压力、领导的苛责或生活中的重担，正在对你进行严酷的摧残。你引以为傲的底线和自尊正在被一点点「融化」，时刻处于极其紧绷和焦虑的状态。赶紧寻找一个「避风港」",
+      roast: "你不是不坚强，你是被烤太久了。再硬的金属也扛不住无休止的烈火，允许自己软化一下",
+      summary: "你被烤太久了，允许自己软一下"
+    },
+    "3_6": {
+      name: "铁甲重兵", emoji: "🛡️", relation: "生我·保护", type: "strong",
+      traditional: "金土过重，铁甲重兵",
+      explanation: "你本身已经足够坚硬（金强），却还要给自己套上厚厚的泥土和重甲（土旺）。虽然你非常靠谱、极其安全，但也因为被「保护」得太好或思虑过重，导致你变得固执、死板、缺乏人情味。你隔绝了风险，也隔绝了新鲜的机遇",
+      roast: "你的防御力比城墙还厚，但问题是你连快递都收不到了。偶尔开个门，不会死",
+      summary: "你的防御力比城墙还厚，但快递都收不到"
+    },
+    "3_7": {
+      name: "土重金埋", emoji: "🕳️", relation: "生我·保护", type: "weak",
+      traditional: "金赖土生，土多金埋",
+      explanation: "你本是一块会发光的金子（金弱），但周围「生养、保护」你的力量太重了（土旺）。长辈的过度干涉、繁杂的旧规矩或你自己极其严重的思想内耗，让你感到被厚厚的泥土掩盖。虽然安稳，却有深深的「窒息感」和「怀才不遇」。你需要勇敢地破土而出",
+      roast: "你不是怀才不遇，你是被人埋得太深了。而且埋你的人还觉得自己在保护你",
+      summary: "你被埋太深了，需要破土而出"
+    },
+    "3_8": {
+      name: "刀光剑影", emoji: "⚔️", relation: "同类·自我", type: "strong",
+      traditional: "过刚易折，刀光剑影",
+      explanation: "你的八字中全是金！你极度讲义气、极其看重原则，但现在的你太「刚」了！刚愎自用，宁折不弯，说话做事像飞刀一样，极其容易在无意中刺伤身边亲近的人。在人际交往中你总是喜欢硬碰硬，这叫「过刚易折」。你需要极大的智慧（水）来柔化锋芒",
+      roast: "你以为自己在追求完美，其实只是在追求怼人。刀太快了容易伤手，偶尔磨钝一点",
+      summary: "你太刚了容易伤人，偶尔磨钝一点"
+    },
+    "3_9": {
+      name: "外强中干", emoji: "🎭", relation: "同类·自我", type: "weak",
+      traditional: "无土生金，虚有其表",
+      explanation: "你内心其实很敏感脆弱（身弱），但周围充斥着大量同伴或竞争者（金旺）。你给自己穿上了一层厚厚的金属铠甲，习惯于用冰冷、强硬的态度来掩饰内心极度缺乏安全感。你非常要面子，宁愿自己受委屈也不肯示弱。试着卸下沉重的铠甲吧",
+      roast: "你什么都看得见，但你什么都切不动——不是你不会，是你还没找到下刀的位置。但你的铠甲确实很好看",
+      summary: "你用铠甲掩饰脆弱，偶尔卸下也好"
+    },
+
+    // ===================== 💧 水型人 =====================
+
+    "4_0": {
+      name: "水木清华", emoji: "🧠", relation: "我生·输出", type: "strong",
+      traditional: "水木清华，才气纵横",
+      explanation: "你是一条底蕴深厚的滔滔江河（水强），且滋养出了一片繁茂的森林（木旺）。你目前处于极度聪明、创意爆棚的状态。你不仅拥有源源不断的灵感，更能将其完美表达和输出，思想自由而清澈，正处于自我实现的高光时刻",
+      roast: "你的脑子像一个永远在更新的搜索引擎——搜什么都快，而且出来的结果还都挺靠谱",
+      summary: "聪明到发光，创意和执行力同时在线"
+    },
+    "4_1": {
+      name: "木多水缩", emoji: "💧", relation: "我生·输出", type: "weak",
+      traditional: "水能生木，木多水缩",
+      explanation: "你本是一汪清浅的泉水（水弱），却拼命想要去灌溉整片干渴的树林（木旺）。你的想法太多，或为了照顾他人、完成繁杂任务，过度倾注了心血和精力。你现在感到灵感枯竭、精神内耗极其严重，有一种被彻底「抽干」的疲惫感。停止讨好，把精力留给自己",
+      roast: "你是所有人的灵感来源，但自己的灵感库已经空了。先关掉别人的水龙头，给自己蓄点水",
+      summary: "你的灵感给别人用了，自己的已经空了"
+    },
+    "4_2": {
+      name: "水火既济", emoji: "⚡", relation: "我克·现实", type: "strong",
+      traditional: "水火既济，身强担财",
+      explanation: "你拥有极其强悍的能量（水强），面对熊熊燃烧的烈火（火旺），你非但没被烤干，反而与其形成了完美的平衡。你目前头脑极其冷静清醒，极具商业头脑和野心。你能驾驭极大的财富盘子或高难度的现实目标，正处于理智与激情并存、大展宏图的巅峰期",
+      roast: "别人在火里被烤，你在火边开了个温泉。这种「利用一切」的能力，建议直接去上市",
+      summary: "你在火边开了个温泉，利用一切的能力拉满"
+    },
+    "4_3": {
+      name: "火炎水灼", emoji: "🔥", relation: "我克·现实", type: "weak",
+      traditional: "杯水车薪，火炎水灼",
+      explanation: "你只是一杯微凉的水（水弱），却试图去扑灭一场漫天大火（火旺）。你给自己设定了极其庞大的物质目标，或正面临极大的经济、现实焦虑。急功近利的欲望正在把你最后一点精力烤干，你越想抓紧反而越抓不住。放下不切实际的执念，承认当下的局限",
+      roast: "你想用一杯水去灭森林大火——不是你不够努力，是你对努力的规模有误解。先认清自己的水量",
+      summary: "你想用一杯水灭森林大火，先认清自己的水量"
+    },
+    "4_4": {
+      name: "高坝蓄水", emoji: "🌊", relation: "克我·压力", type: "strong",
+      traditional: "高坝蓄水，化洪为湖",
+      explanation: "你是一股桀骜不驯的洪流（水强），而面前正矗立着坚固高耸的大坝（土旺）。外界的高压环境、严苛的规则或强大的竞争对手，对你而言正是完美的约束！因为你自身能量足够强，这些「土」把你从泛滥的洪水变成了能发电、能灌溉的「平湖」。你极具抗压能力，正在高压下成长为极具城府和威望的领导者",
+      roast: "别人被堵死了，你被堵出了一座水库。这种「把阻碍变资源」的能力，是真正的顶级操作",
+      summary: "你把阻碍变成了资源，真正的顶级操作"
+    },
+    "4_5": {
+      name: "土重水塞", emoji: "🪨", relation: "克我·压力", type: "weak",
+      traditional: "土重水塞，寸步难行",
+      explanation: "你本是一条轻快的小溪（水弱），却被沉重的泥沙和岩石（土旺）死死堵住了去路。僵化的体制、刻板的规矩或生活中某座无法逾越的大山，剥夺了你最渴望的自由。你的思想和行动被处处受限，感到寸步难行、憋屈抑郁。你需要强有力的「木」来帮你疏通渠道",
+      roast: "你被生活的土方工程堵成了一潭死水。动一动，哪怕只是冒个泡也好",
+      summary: "你被堵成了一潭死水，动一动哪怕冒个泡"
+    },
+    "4_6": {
+      name: "源远流长", emoji: "❄️", relation: "生我·保护", type: "strong",
+      traditional: "金白水清，源远流长",
+      explanation: "你本就水势浩大（水强），背后还有着坚硬的冰川和矿脉（金旺）为你源源不断提供补给。你拥有极其强大的逻辑分析能力和深厚的知识储备，绝对的安全感让你做事极其理智。但此时的你可能显得过于冷漠、高冷，缺乏一点人情味和人间的「烟火气（火）」",
+      roast: "你活得像一个恒温冰箱——什么都能保鲜，但什么都带着冷气。偶尔断个电，体验一下常温生活",
+      summary: "你活得像个恒温冰箱，什么都能保鲜但都带冷气"
+    },
+    "4_7": {
+      name: "金多水浊", emoji: "🌫️", relation: "生我·保护", type: "weak",
+      traditional: "水赖金生，金多水浊",
+      explanation: "你本是清澈灵动的水（水弱），但外界僵化的规则、长辈的过度干涉或你自己过重的执念（金旺），搅浑了你的清净。你吸收了太多杂乱的信息或大道理，反而失去了原本的灵性和快乐。你可能正处于一个让你感到压抑、死板的环境中，变得有些迂腐和不自信",
+      roast: "你脑子里装了太多别人的人生道理，把自己搅浑了。偶尔倒一倒，留点空间给自己的直觉",
+      summary: "你脑子里装了太多别人的道理，把自己搅浑了"
+    },
+    "4_8": {
+      name: "江河泛滥", emoji: "🌊", relation: "同类·自我", type: "strong",
+      traditional: "江河泛滥，无堤无坝",
+      explanation: "你的八字里全都是水！你极其聪明、思维跳跃极快，极其向往绝对的自由。但此时的你完全没有边界感，行事全凭心情，朝令夕改。你泛滥的情绪和多变的决定常常让身边的人感到无所适从甚至被你「淹没」。你需要强有力的「土（自律、规矩）」来为你筑起堤坝",
+      roast: "你的脑子像开了100个标签页的浏览器——每个都很精彩，但内存快爆了。建议关掉90个，先做完一个",
+      summary: "你开了100个标签页一个都没做完"
+    },
+    "4_9": {
+      name: "随波逐流", emoji: "🌀", relation: "同类·自我", type: "weak",
+      traditional: "无金生水，随波逐流",
+      explanation: "你内心其实缺乏真正的方向感（身弱），但周围充斥着大量的信息、同伴或社会洪流（水旺）。你害怕做决定，习惯于把自己隐藏在人群中，看着别人怎么走你就怎么走。表面上你适应力很强，但夜深人静时常会感到深深的迷茫：到底什么才是自己真正想要的",
+      roast: "你不是灵活，你是连自己都骗不了。每次都说「都行」，但「都行」的意思是「你帮我选」",
+      summary: "你每次都说都行，但都行的意思是帮我选"
+    },
+  };
+
+  global.FormDataStore = { FORMS };
+
+})(typeof window !== 'undefined' ? window : this);
+
+// === end form-data.js ===
+</script>
+<script>
+// === deity-matrix.js (inlined) ===
+/**
+ * deity-matrix.js — 守护神映射矩阵 v2.0
+ * 
+ * 算法：用神五行(5) × MBTI阵营(4) = 20格 → 17位守护神
+ * 输入：cureElement(0-4) + type16('INTJ'等) → 主神 + 完整结论文案
+ * 
+ * v2.0 变化：用神计算升级为50条（含身强身弱），矩阵不变但覆盖精度提升
+ * 
+ * 数据来源：deity-matrix-algorithm.md + cure-element-v2.md
+ */
+(function(global) {
+  'use strict';
+
+  // ==================== 阵营映射 ====================
+  // 16型 → MBTI阵营（4种）
+  var TYPE_TO_CAMP = {
+    INTJ: 'NT', INTP: 'NT', ENTJ: 'NT', ENTP: 'NT',
+    INFJ: 'NF', INFP: 'NF', ENFJ: 'NF', ENFP: 'NF',
+    ISTJ: 'SJ', ISFJ: 'SJ', ESTJ: 'SJ', ESFJ: 'SJ',
+    ISTP: 'SP', ISFP: 'SP', ESTP: 'SP', ESFP: 'SP',
+  };
+
+  var CAMP_INFO = {
+    NT: { name: '想太多组', emoji: '🧠' },
+    NF: { name: '太懂事组', emoji: '💜' },
+    SJ: { name: '能扛事组', emoji: '⚓' },
+    SP: { name: '管不住组', emoji: '🔥' },
+  };
+
+  // 用神五行编号 → 名称/emoji（与 bazi-engine.js BA_ZI.wuXingNames/Emoji 一致）
+  var WX_INFO = [
+    { name: '木', emoji: '🌱' },
+    { name: '火', emoji: '🔥' },
+    { name: '土', emoji: '⛰️' },
+    { name: '金', emoji: '⚔️' },
+    { name: '水', emoji: '🌊' },
+  ];
+
+  // ==================== 17位守护神完整数据 ====================
+  var DEITIES = {
+    // ---- 木行神明 ----
+    wenshu: {
+      name: '文殊菩萨', emoji: '🦁',
+      element: '木',
+      position: '破迷开悟、照见本质',
+      quote: '般若之剑，斩断无明',
+      product: '文殊智慧笔、黄水晶',
+    },
+    yuelao: {
+      name: '月老星君', emoji: '🌙',
+      element: '木',
+      position: '信任时机、相信缘分',
+      quote: '红线已系，静待花开',
+      product: '红线手串、桃花水晶',
+    },
+    wenchang: {
+      name: '文昌帝君', emoji: '📚',
+      element: '木',
+      position: '脑力充值、关键时刻发挥',
+      quote: '笔落惊风雨',
+      product: '文昌塔、考试手串',
+    },
+    leishen: {
+      name: '九天应元雷声普化天尊', emoji: '⚡',
+      element: '木',
+      position: '破局突破、正面击碎',
+      quote: '一雷惊醒梦中人',
+      product: '雷击木手串、雷击枣木',
+    },
+
+    // ---- 火行神明 ----
+    guandi: {
+      name: '关圣帝君', emoji: '⚔️',
+      element: '火',
+      position: '守住底线、重获力量',
+      quote: '忠义千秋，一身正气',
+      product: '关公摆件、红玛瑙',
+    },
+    nezha: {
+      name: '哪吒三太子', emoji: '🔥',
+      element: '火',
+      position: '剔骨还心、重塑真我',
+      quote: '我命由我不由天',
+      product: '莲花手串、火焰挂件',
+    },
+
+    // ---- 土行神明 ----
+    dongyue: {
+      name: '东岳大帝', emoji: '⛰️',
+      element: '土',
+      position: '锚定不慌、登高望远',
+      quote: '泰山压顶不弯腰',
+      product: '泰山石敢当、玉石摆件',
+    },
+    dizang: {
+      name: '地藏王菩萨', emoji: '🌍',
+      element: '土',
+      position: '承载苦难、穿越幽暗',
+      quote: '地狱不空，誓不成佛',
+      product: '地藏经手串、黑曜石',
+    },
+
+    // ---- 金行神明 ----
+    wukong: {
+      name: '齐天大圣', emoji: '🐵',
+      element: '金',
+      position: '破除心魔、打破规则',
+      quote: '踏碎凌霄，放肆桀骜',
+      product: '朱砂手串、大圣摆件',
+    },
+    damo: {
+      name: '达摩祖师', emoji: '🧘',
+      element: '金',
+      position: '面壁专注、一苇渡江',
+      quote: '外息诸缘，内心无喘',
+      product: '达摩挂件、檀木手串',
+    },
+    caishen: {
+      name: '财神爷', emoji: '💰',
+      element: '金',
+      position: '务实搞钱、守住粮仓',
+      quote: '义中取财，方为正道',
+      product: '招财手串、貔貅挂件',
+    },
+
+    // ---- 水行神明 ----
+    laojun: {
+      name: '太上老君', emoji: '☯️',
+      element: '水',
+      position: '四两拨千斤、以柔克刚',
+      quote: '上善若水，水善利万物而不争',
+      product: '太极挂件、道家香',
+    },
+    guanyin: {
+      name: '观世音菩萨', emoji: '🪷',
+      element: '水',
+      position: '慈悲疗愈、寻声救苦',
+      quote: '千处祈求千处应',
+      product: '莲花手串、粉水晶',
+    },
+    zhenwu: {
+      name: '真武大帝', emoji: '🛡️',
+      element: '水',
+      position: '荡魔护身、重建根基',
+      quote: '镇守北方，万邪不侵',
+      product: '玄武挂件、黑檀手串',
+    },
+    longwang: {
+      name: '东海龙王', emoji: '🐉',
+      element: '水',
+      position: '应变自洽、随遇而安',
+      quote: '潜龙勿用，飞龙在天',
+      product: '龙形吊坠、海蓝宝',
+    },
+    mazu: {
+      name: '妈祖', emoji: '🏔️',
+      element: '水',
+      position: '温柔陪伴、风暴中点灯',
+      quote: '海上有灯，就不怕暗',
+      product: '妈祖吊坠、海洋水晶',
+    },
+  };
+
+  // ==================== 20格矩阵 ====================
+  // MATRIX[用神五行编号][阵营] = 神明key
+  // 用神五行: 0=木, 1=火, 2=土, 3=金, 4=水
+  // 阵营: NT, NF, SJ, SP
+  var MATRIX = {
+    0: { NT: 'wenshu',   NF: 'yuelao',  SJ: 'wenchang', SP: 'leishen' },
+    1: { NT: 'guandi',   NF: 'nezha',   SJ: 'guandi',   SP: 'nezha'   },
+    2: { NT: 'dongyue',  NF: 'dizang',  SJ: 'dongyue',  SP: 'dongyue' },
+    3: { NT: 'damo',     NF: 'wukong',  SJ: 'caishen',  SP: 'wukong'  },
+    4: { NT: 'laojun',   NF: 'guanyin', SJ: 'zhenwu',   SP: 'longwang'},
+  };
+
+  // ==================== 20格结论文案（4层递进）====================
+  // 每格: { diagnosis, why, prescription, adjustments: { state, shortTerm, longTerm } }
+  var CONCLUSIONS = {
+    // ===== 木行 =====
+    '0_NT': {
+      diagnosis: '你把"想清楚再做"活成了"想清楚再想清楚"的死循环。你需要的不是更多信息，是一刀砍掉多余选项的智慧。',
+      why: '你的用神是木（需要生长突破），但NT性格让你习惯用逻辑咀嚼一切。问题不是你缺智慧——你智慧太多了，多到淹没了行动。文殊是"破迷开悟"的神，他的剑不砍人，专门砍"想太多"。别的神给你勇气，文殊给你减法。',
+      prescription: '般若之剑不砍人，只砍你脑子里那800个"万一"。想太多了，不如想一件，然后去做。',
+      adjustments: {
+        state: '从"分析模式"切换到"实验模式"。你不需要所有答案才开始，答案是在做的过程中长出来的——就像种子不会等天气预报准了再发芽',
+        shortTerm: '今天只做一件你想了超过三个月但没动手的事。就一件。做完你来谢文殊',
+        longTerm: '建立"3秒决策机制"——小事3秒内决定，大事最多给自己3天。超过3天的事自动降级为"不值得做"',
+      },
+    },
+    '0_NF': {
+      diagnosis: '你的桃花运没问题，你的人生运被恋爱脑拖垮了。每段关系你都是先掏心掏肺，再掏空自己。',
+      why: '你的用神是木（需要自我成长），但NF性格让你把所有生长力都嫁接到了别人身上。木要往上长，你偏偏选择横向攀附。月老不是教你恋爱——他是管姻缘的老干部，见过太多"爱得死去活来最后把自己整废了"的案例。他给你的不是桃花，是定心丸。',
+      prescription: '红线系了就系了，急什么？你现在不是缺爱情，是缺"不靠爱情确认自己存在"的能力。',
+      adjustments: {
+        state: '从"我值得被爱"升级到"我一个人也挺好的"。你不需要先被爱才能完整，完整的人才会被爱——这不是鸡汤，这是因果律',
+        shortTerm: '下次想发"在吗"的时候，先去照镜子说一句"我一个人也挺好的"。然后再决定发不发',
+        longTerm: '培养一段"没有暧昧成分的深度关系"——可以是跟自己、跟事业、跟某个爱好。当你的木不再只向爱情伸枝丫，你整个人都会枝繁叶茂',
+      },
+    },
+    '0_SJ': {
+      diagnosis: '你什么都想准备好再开始。准备到什么程度呢？大概等到黄花菜都凉了、凉了又热了三遍。',
+      why: '你的用神是木（需要生机萌发），但SJ性格让你觉得"没准备好就上场等于送死"。文昌帝君管的是"关键时刻不掉链子"——他见过太多准备了三年结果考场睡着的人。你缺的不是准备，是临场发挥的胆量。',
+      prescription: '文昌帝君管的不只是考试，是"关键时刻不掉链子"。你不是没能力，你是准备过度综合征晚期。',
+      adjustments: {
+        state: '从"万事俱备"切换到"差不多就上"。你不知道的是：80%的准备已经能覆盖95%的场景。剩下的5%靠临场，那才是真正的能力',
+        shortTerm: '选一件最小的事，今天不准备，直接做。做完你会发现：准备是拖延症的体面说法',
+        longTerm: '建立"最小可行动版本"思维——每件事都问自己"最少需要什么就能开始？"然后只准备这些，剩下的边做边补',
+      },
+    },
+    '0_SP': {
+      diagnosis: '你不是没有出路，你是被困在一个四面都是墙的房间里，而且你还觉得门可能锁了、钥匙可能丢了、出去可能下雨。',
+      why: '你的用神是木（需要突破），但SP性格让你对行动本身产生了犹豫——不是不想动，是动哪个方向都有顾虑。雷神是"破局"之神，他不管什么墙什么门什么钥匙，一雷劈下去，碎了就是路。你需要的不是找到门，是创造一个出口。',
+      prescription: '雷神不管那么多。一雷劈下去，墙碎了就是路。你觉得"再忍忍就好了"，但雷神的建议是：别忍了。',
+      adjustments: {
+        state: '从"等一个确定的出口"切换到"自己砸一个"。雷劈完的废墟不是灾难现场，是新的地形。你比你以为的更能适应混乱',
+        shortTerm: '找一件你拖延了超过一个月的事。不是去"开始"，是直接砸碎现状去"完成"',
+        longTerm: '培养"先破坏后建设"的习惯。每当卡住超过一周，问自己"这件事如果用最暴力最直接的方式解决，会怎样？"——你会发现暴力方案往往也是最有效的',
+      },
+    },
+
+    // ===== 火行 =====
+    '1_NT': {
+      diagnosis: '你用"理性分析"包装了自己的胆怯。你不是在权衡利弊，你是在给"不敢"找体面的理由。',
+      why: '你的用神是火（需要勇气和行动力），但NT性格让"分析"变成了你最好的防火墙——只要有分析可以做，就不需要面对"做了可能失败"的恐惧。关公是"义勇"之神，过五关斩六将从来不写可行性报告。他给你的不是勇气，是不给自己退路的底气。',
+      prescription: '关公过五关斩六将的时候没有先做SWOT分析。有些事不是想明白了才值得做，是做了才想得明白。',
+      adjustments: {
+        state: '从"让我再想想"切换到"先干了再调"。火需要氧气，你的"再想想"等于把火闷在密封罐里——想越久，火越小',
+        shortTerm: '找一件你分析了超过三遍还没动手的事。今天，不分析，直接干',
+        longTerm: '建立"行动优先级"——但凡一件事你分析了超过两遍还在犹豫，直接降到最低优先级。真正值得做的事，你不会犹豫这么久',
+      },
+    },
+    '1_NF': {
+      diagnosis: '你把所有热情都借给别人了，自己只剩一盏快要灭的灯。你怕自己不够亮，所以拼命给别人照亮。',
+      why: '你的用神是火（需要点燃自己），但NF性格让你习惯把"发光"定义为"让身边的人觉得温暖"。哪吒剔骨还父、莲花重生——他是唯一一个先把自己拆了再重组的神。他告诉你：你的火焰不属于任何人，不借出去的时候才最亮。',
+      prescription: '哪吒说：我命由我不由天。你的光芒不需要别人的允许才能存在。关掉"别人需要我"的模式，先把自己点燃。',
+      adjustments: {
+        state: '从"我需要被需要"切换到"我先需要我自己"。火不借出去不会灭，但一直借火给别人，最后你会连自己的灶都点不燃',
+        shortTerm: '今天拒绝一件你不想做但不好意思拒绝的事。你的善良需要火焰，不然只是燃料',
+        longTerm: '给自己的生活做一次"能量审计"——列出你每周花时间精力最多的5件事，看看有几件是"为了别人"。如果超过3件，你的火快灭了，该关阀门了',
+      },
+    },
+    '1_SJ': {
+      diagnosis: '你是公司里最靠谱的那个人——也是最累的那个人。靠谱到所有人都觉得"交给你一定没问题"，但没人问过你"累不累"。',
+      why: '你的用神是火（需要力量和担当），但SJ性格让你把"靠谱"活成了"来者不拒"。关公的"义"不是有求必应——千里走单骑只为值得的人，华容道放曹操是审时度势。他给你的不是更多担当，是学会挑担子。',
+      prescription: '关公的义不是无底线付出，是"值得的事全力以赴，不值得的事拔腿就走"。你需要的不是更多责任，是学会挑担子。',
+      adjustments: {
+        state: '从"老好人式靠谱"升级到"有选择的靠谱"。关公扛青龙偃月刀的时候不会同时帮人搬砖。你的精力是有限火药，别在鞭炮上浪费',
+        shortTerm: '今天找一个你一直在扛但完全不是你义务的事，放下它。天不会塌，塌了也不该你一个人顶着',
+        longTerm: '建立"靠谱防火墙"——每月review一次你承担的所有任务，把不属于你职责范围的退回去。你越会说"这个不是我的事"，别人越尊重你的专业边界',
+      },
+    },
+    '1_SP': {
+      diagnosis: '你的能量像一颗被压了太久的弹簧——不是没有爆发力，是你一直在等一个"完美的时机"。但完美时机不存在。',
+      why: '你的用神是火（需要释放和爆发），但SP性格让你总想"在最佳时机全力出击"。哪吒削骨还父的时候查过黄道吉日吗？没有。他的每一次爆发都不是因为"时机到了"，是因为"忍不了了"。他告诉你：完美的时机就是你决定行动的那一刻。',
+      prescription: '哪吒削骨还父的时候也没挑黄道吉日。你现在需要的不是"准备好"，是"炸了再说"。压抑的能量如果不释放，最终会向内攻击你自己。',
+      adjustments: {
+        state: '从"等待完美窗口"切换到"创造窗口"。火药放在仓库里不会自己爆炸，但它会受潮。你压抑的能量每拖一天，就贬值一分',
+        shortTerm: '今天做一件让你害怕但一直想做的事。不需要完美，完成就是胜利',
+        longTerm: '建立"72小时法则"——想做的事72小时内必须行动第一步。超过72天就是白想了，超过72小时就快了，但不能再拖',
+      },
+    },
+
+    // ===== 土行 =====
+    '2_NT': {
+      diagnosis: '你的焦虑不是来自问题本身，是来自你对"可能出问题"的预演。你不是在担心明天，你在担心明天的明天的明天。',
+      why: '你的用神是土（需要稳住不慌），但NT性格让你的"稳"变成了"预演所有灾难"。东岳大帝是泰山之神——泰山会被明天的暴雨吓到吗？不会。因为它知道自己不会塌。他给你的不是"别担心"这种废话，是"你本身就不会塌"的确信。',
+      prescription: '泰山不焦虑明天是不是要下雨，因为它知道：雨来了就淋着，淋完太阳照样出来。你不是没有安全感，你是不信任"车到山前必有路"。',
+      adjustments: {
+        state: '从"预演灾难"切换到"信任承载力"。你之所以能想出100种坏情况，说明你有承受100种坏情况的心智带宽。想得出就扛得住',
+        shortTerm: '今天关掉你的待办清单，什么都不计划，过一天。然后你会发现：没计划的日子，天也没塌',
+        longTerm: '建立"焦虑登记簿"——每次焦虑时写下来，一周后回头看有多少真的发生了。统计结果会治好你的预演癖',
+      },
+    },
+    '2_NF': {
+      diagnosis: '你一个人扛了太多东西。不是没人帮你，是你觉得"说出来就是给别人添麻烦"。所以你选择一个人在深夜里消化所有情绪。',
+      why: '你的用神是土（需要承载和扎根），但NF性格让你的"承载"变成了"一个人撑"。地藏"地狱不空誓不成佛"——他是所有神明里最能扛的一个。但他扛的方式不是默默忍受，是向下扎根到最深的地方，把地狱变成可以生长的土壤。他给你的不是"别扛了"（说了你也不听），是教你怎么扛得更聪明。',
+      prescription: '地藏说"地狱不空誓不成佛"，但他从没说"你必须一个人扛"。大地承载万物不是因为它不累，是因为它的根系比你想象的深。你不是一个人，只是你忘了求助。',
+      adjustments: {
+        state: '从"独自承受"切换到"选择性卸载"。大地能承载万物是因为它有根系网络，不是因为它每一寸土壤都在独立承受。你需要的不是更硬的壳，是更多的根系',
+        shortTerm: '给一个你觉得"会打扰"的人发一条消息："最近有点累"。试试看，不会有人嫌你烦的',
+        longTerm: '建立"3人安全网"——找3个你信任的人，定期跟他们分享真实状态。不需要每次都深度，但保持"求助通道"畅通。等到真正需要帮忙的时候，你不会开不了口',
+      },
+    },
+    '2_SJ': {
+      diagnosis: '你的生活像一台精密的机器——每天运转良好，但你不确定这台机器为什么在转。你不是没有安全感，你是安全感太多了，多到变成了牢笼。',
+      why: '你的用神是土（需要扎根和稳固），但SJ性格让你的"稳固"变成了"每天都在重复"。泰山之所以稳，不是因为每天一模一样，是因为根扎在3000米以下的地壳里——上面刮风下雨它都不动，但如果它想长高，也能长。他给你的不是"别那么稳定"，是把稳定从"重复"升级为"根基"。',
+      prescription: '泰山之所以稳，不是因为它不动，是因为它知道什么时候该动什么时候该静。你的稳定不应该是"每天都一样"，应该是"无论发生什么我都稳得住"。',
+      adjustments: {
+        state: '从"每天一模一样"切换到"每天不一样但底盘不动"。真正的稳定不是可预测性，是反脆弱性——环境越乱你越稳',
+        shortTerm: '今天做一件不在你日常清单上的事。哪怕只是走一条没走过的路回家。稳定不是重复，是根基',
+        longTerm: '每月做一件"可控的失控"——去一个从没去过的地方、见一个从没见过的领域、学一个完全没用但有意思的技能。根基稳固的人不怕在上面建新东西',
+      },
+    },
+    '2_SP': {
+      diagnosis: '你像一艘没有锚的船——去哪里都行，但到哪儿都觉得不安。你追求自由，但自由的背面是"哪里都停不下来"。',
+      why: '你的用神是土（需要锚定和扎根），但SP性格让你觉得"扎根=失去自由"。东岳大帝是泰山+石敢当——石敢当的功能不是把你钉死，是让你知道"不管漂多远都有一个回得去的地方"。他给你的不是束缚，是有根的自由。',
+      prescription: '石敢当说：百鬼不侵。你的冒险精神很珍贵，但你也需要一个"不管漂多远都可以回来"的地方。自由不是没有根，是根扎得够深，怎么拽都拽不断。',
+      adjustments: {
+        state: '从"无锚漂泊"切换到"有根的游牧"。风筝不是被线困住了——恰恰是那根线让它能飞到500米高空。没有线的风筝不是自由，是失踪',
+        shortTerm: '今天选一个具体的"你的地方"——可以是某个座位、某个咖啡馆、某个角落。以后累了就回去，那是你的石敢当',
+        longTerm: '建立一个"锚点清单"——3个不管你去了哪里、做了什么都可以回来恢复能量的地方/人/事。自由的前提是你知道家在哪',
+      },
+    },
+
+    // ===== 金行 =====
+    '3_NT': {
+      diagnosis: '你用"再想想"把所有本该果断的决策拖成了"再想想"。你的分析能力是顶级武器，但你把它用在了给自己挖坑上。',
+      why: '你的用神是金（需要决断和切割），但NT性格让你的"切割"变成了"再研究一下"。达摩面壁九年——但他不是在想"我该不该面壁"，他是面完壁、想好了、然后一苇渡江走了。他的果断不是冲动，是想到底之后的绝不回头。他给你的不是"别想了"，是"想好了就不回头"。',
+      prescription: '达摩面壁九年不是因为他没想好，是他想好了就不再动摇了。你的问题不是缺智慧，是缺"想好了就不回头"的魄力。',
+      adjustments: {
+        state: '从"无限研究"切换到"限时决策"。金刚经说"应无所住而生其心"——想完了就放下，不住在"再想想"里',
+        shortTerm: '今天做一个你纠结超过两周的决定。抛硬币。不是让硬币帮你选，是硬币落地那一刻你会知道自己真正想要什么',
+        longTerm: '建立"决策日落条款"——每个决定给自己设定Deadline，时间到了就选目前最优的那个。90%的决策不需要100%的信息，剩下10%靠的是"决定了之后能把它做对"的执行力',
+      },
+    },
+    '3_NF': {
+      diagnosis: '你最大的问题不是"不知道该拒绝谁"，是"拒绝了之后会自责三天"。你的善良没有锋芒，所以它变成了软弱。',
+      why: '你的用神是金（需要边界和切割），但NF性格让你的"金"变成了一团棉花——看起来软软的很舒服，但砍不动任何东西。悟空的金箍棒一万三千五百斤——能大能小。小的时候收到耳朵里（不伤人），大的时候一棒子横扫十万天兵（该硬就硬）。他给你的不是"学会拒绝"这种温吞建议，是温柔地装上獠牙。',
+      prescription: '悟空的金箍棒能大能小——该收的时候收到耳朵里，该放的时候一万三千五百斤砸下去。你的温柔需要安装一个边界检测系统。',
+      adjustments: {
+        state: '从"讨好型善良"升级到"有原则的善良"。金不是冷酷，是精准的切割。你知道外科医生为什么用钢刀不用棉签吗？因为有些事需要切开才能好',
+        shortTerm: '今天对一个你一直不好意思拒绝的人说一次"不"。不用解释，"不方便"就够了。你不会因此失去任何值得留住的',
+        longTerm: '建立"拒绝话术库"——准备3个不同强度的拒绝模板（温和版/标准版/铁壁版），根据对象选择使用。不用现场想怎么拒绝，直接调模板',
+      },
+    },
+    '3_SJ': {
+      diagnosis: '你的付出很值钱——但你自己不这么觉得。你做了100分的事，只敢收50分的价，然后把那50分的差价叫做"人情"。',
+      why: '你的用神是金（需要守住价值），但SJ性格让你觉得"谈钱伤感情"。赵公明骑黑虎持铁鞭——他是武财神，不是做慈善的。他的"义中取财"不是不要钱，是值多少收多少，不贱卖自己的时间和能力。他给你的不是"变贪心"，是"认识到自己的标价"。',
+      prescription: '赵公明骑黑虎、持铁鞭，靠的不是便宜，是义气+实力。你的时间和能力是资产，不是公益。免费送出去的东西别人不会珍惜。',
+      adjustments: {
+        state: '从"不好意思谈钱"切换到"明码标价就是尊重"。你每次降价50%不是慷慨，是在告诉对方"我的时间不值钱"。长期下来，他们会真的这么认为',
+        shortTerm: '今天找一个你一直在免费帮忙的事，给它标个价。不是真的要收钱，是让自己知道：你的时间值多少钱',
+        longTerm: '建立"个人价目表"——把你的核心能力按市场价标出来。下次有人请你帮忙时，先看价目表再决定。免费的偶尔做可以，免费的长期做就是慢性自杀',
+      },
+    },
+    '3_SP': {
+      diagnosis: '你不是不够果断，你是在等一个"所有人都同意"的时机。但大闹天宫从来不是征得同意之后才闹的。',
+      why: '你的用神是金（需要快刀斩乱麻），但SP性格让你在"切割"时还在照顾所有人的感受。悟空从不在动手前征求群众意见——他的果断不是不考虑后果，是他知道有些事拖下去只会更难看。他给你的不是"别管别人感受"，是"该断的时候，别人感受不应该是第一优先级"。',
+      prescription: '悟空说"皇帝轮流做明年到我家"的时候没有举手表决。该断则断不是冲动，是对自己生命的尊重。拖着不放的关系比一刀切更伤人。',
+      adjustments: {
+        state: '从"共识式切割"切换到"先切后解释"。你不需要所有人都同意才做决定——你是金，金的功能是切割，不是开会',
+        shortTerm: '找一件你知道该结束但一直没结束的事（关系/项目/习惯），今天，画句号。一棒子下去，干干净净',
+        longTerm: '建立"止损协议"——在任何新关系/项目开始时就约定：如果出现X情况，立即退出，不解释。预先约定的切割比临时起意的切割容易10倍',
+      },
+    },
+
+    // ===== 水行 =====
+    '4_NT': {
+      diagnosis: '你跟世界硬刚了这么多年，头破血流但依然觉得自己"只是方式不对"。不是方式不对，是方向可能从一开始就拧了。',
+      why: '你的用神是水（需要变通和绕行），但NT性格让你觉得"绕过去=认输"。太上老君是道教最高神——他用"上善若水"四个字讲了一个道理：水不跟石头硬刚，它绕过去，然后一百年后石头被水磨圆了。他给你的不是"别坚持"，是用更高维的方式坚持。',
+      prescription: '老君说"上善若水"——水不跟石头硬刚，它绕过去。一百年后，石头被水磨圆了。你不需要赢过这个世界，你需要让它自己适应你。',
+      adjustments: {
+        state: '从"正面硬刚"切换到"侧面迂回"。水的力量不是在于它能撞碎石头（撞不碎），是在于它总能找到石头的缝隙。你跟世界较劲是因为你还没找到缝隙',
+        shortTerm: '今天找一个你一直"死磕"但没进展的事，换个角度。不是放弃，是"水式解题"——绕过去比撞过去快',
+        longTerm: '学习"水的三个策略"——遇障碍绕行、遇深谷蓄力（等足够深了再冲）、遇平地漫流（覆盖面比力度重要）。同一个目标，水有一万条路可以到',
+      },
+    },
+    '4_NF': {
+      diagnosis: '你像一块干涸的海绵——不是没有吸收能力，是你把自己拧干了去滋润别人。你给得出100分的爱，但你自己只剩负分。',
+      why: '你的用神是水（需要被滋养和恢复），但NF性格让你把"水的流动"变成了"单方向的倾泻"。观音"千处祈求千处应"，但她从不是把自己倒空了去渡人——她是观世音，她能听到所有人的声音，是因为她自己的井从未枯竭。他给你的不是"少爱别人一点"，是先把自己灌满。',
+      prescription: '观音说"千处祈求千处应"，但她从来不是把自己倒空了去渡人。先把自己灌满，溢出来的那部分才叫慈悲。空杯渡不了任何人。',
+      adjustments: {
+        state: '从"倒空自己给世界"切换到"灌满自己自然溢出"。水杯原理：半杯水的时候你焦虑"不够分"，满杯水的时候你根本不需要分——溢出去了',
+        shortTerm: '今天做一件"完全只为了自己"的事。不为了任何人，不带着任何"应该"。你值得被放在第一位',
+        longTerm: '建立"能量水位线"——每周自评一次自己的状态（满/半满/快空了）。低于半满时自动进入"自我补给模式"，拒绝一切非必要的外部请求。你的水位线是你的底线',
+      },
+    },
+    '4_SJ': {
+      diagnosis: '你把自己的生活建成了一座堡垒——安全、坚固、滴水不漏。但堡垒的功能不是保护你，是困住你。最坚固的牢笼往往是你自己建的。',
+      why: '你的用神是水（需要灵活和流动），但SJ性格让你的"防线"从弹性变成了刚性。真武大帝本身就是水之神——玄武=龟+蛇，龟是固守，蛇是灵活。他之所以能荡魔，不是因为他足够硬，是因为他比所有妖魔都灵活。他给你的不是"拆掉城墙"，是"给城墙装个门"。',
+      prescription: '真武大帝是水之神——最坚固的防线不是僵硬的墙，是流动的水。水无常形，所以无懈可击。你的"稳定"如果失去了弹性，就会变成"僵化"。',
+      adjustments: {
+        state: '从"铜墙铁壁"切换到"水坝模式"——该挡的时候挡，该放的时候放。全挡=洪水倒灌，全放=干旱枯竭。学会开关阀门比加厚城墙重要100倍',
+        shortTerm: '今天在一个你从不让步的领域，做一次让步。不是认输，是测试一下：让一步天真的会塌吗',
+        longTerm: '建立"弹性防线"——列出你的10条"绝对不妥协"原则，然后问自己：哪些是真正不可妥协的，哪些只是"习惯了不妥协"？每年至少放开一条，保持防线的活水注入',
+      },
+    },
+    '4_SP': {
+      diagnosis: '你觉得"卡住了"不是因为你不行，是因为你在沙漠里学游泳。不是你的能力有问题，是环境不对。',
+      why: '你的用神是水（需要找到自己的水域），但SP性格让你觉得"什么环境都能适应"。龙王"潜龙勿用，飞龙在天"——同一条龙，在浅水里被人当泥鳅笑，在深海里翻个身就是海啸。你的能力没问题，是放错了水域。他给你的不是"更努力"，是"找对你的海"。',
+      prescription: '龙王说"潜龙勿用，飞龙在天"——同一条龙，在浅水里被人笑，在深海里是王。你不是不行，你只是没找到自己的海。',
+      adjustments: {
+        state: '从"我可能不行"切换到"可能是地方不对"。鱼不会因为不会爬树就觉得自己蠢。你不是能力不够，是属性不匹配',
+        shortTerm: '今天停下来想一件事：你最近觉得最"不对劲"的那件事，是不是因为你放错了位置？换个水域试试',
+        longTerm: '做一次"水域审计"——你当前的工作/关系/生活环境中，有多少是在"用鱼的技能爬树"？找到那些让你觉得"费力但不讨好"的领域，不是加力，是换环境。龙不跟沙漠较劲，龙找海',
+      },
+    },
+  };
+
+  // ==================== Tie-Breaker ====================
+  // 水×NF：用户核心困境为"过度付出/输出过载"时，妈祖替换观音
+  var TIE_BREAKERS = {
+    '4_NF': {
+      primary: 'guanyin',
+      alternate: 'mazu',
+      trigger: 'output_overload', // personality.dilemma === 'output_overload' 时切换
+    },
+  };
+
+  // ==================== 核心函数 ====================
+
+  /**
+   * 16型 → 阵营
+   * @param {string} type16 如 'INTJ'
+   * @returns {string} 'NT'|'NF'|'SJ'|'SP'
+   */
+  function getCamp(type16) {
+    return TYPE_TO_CAMP[type16] || 'NT'; // 默认NT
+  }
+
+  /**
+   * 主入口：用神五行 × 16型 → 守护神完整结果
+   * 
+   * @param {number} cureElementWX 用神五行编号 (0=木,1=火,2=土,3=金,4=水)
+   * @param {string} type16 16型人格如 'INTJ'
+   * @param {string} [dilemma] 核心困境key（用于Tie-Breaker）
+   * @returns {object} { deity, conclusion, camp, cureElement, matrixKey }
+   */
+  function getDeityPrescription(cureElementWX, type16, dilemma) {
+    var camp = getCamp(type16);
+    var matrixKey = cureElementWX + '_' + camp;
+
+    // 查矩阵
+    var deityKey = MATRIX[cureElementWX] ? MATRIX[cureElementWX][camp] : null;
+    if (!deityKey) return null;
+
+    // Tie-Breaker检查
+    var tb = TIE_BREAKERS[matrixKey];
+    if (tb && dilemma === tb.trigger) {
+      deityKey = tb.alternate;
+    }
+
+    var deity = DEITIES[deityKey];
+    var conclusion = CONCLUSIONS[matrixKey] || null;
+
+    return {
+      deityKey: deityKey,
+      deity: deity,
+      conclusion: conclusion,
+      camp: camp,
+      campInfo: CAMP_INFO[camp],
+      cureElement: WX_INFO[cureElementWX],
+      matrixKey: matrixKey,
+    };
+  }
+
+  /**
+   * 简化版：直接查矩阵返回神明key
+   * @param {number} cureElementWX 用神五行编号
+   * @param {string} camp 阵营 'NT'|'NF'|'SJ'|'SP'
+   * @returns {string} 神明key
+   */
+  function lookupMatrix(cureElementWX, camp) {
+    return MATRIX[cureElementWX] ? MATRIX[cureElementWX][camp] : null;
+  }
+
+  // ==================== 向后兼容 ====================
+  // 保留旧的8神数据结构，让前端逐步迁移
+  var DEITIES_OLD = {
+    wukong:    { name: '齐天大圣', emoji: '🐵', position: '破除心魔、勇猛精进',     product: '朱砂 / 红玛瑙' },
+    nezha:     { name: '哪吒三太子', emoji: '🔥', position: '剔骨还心、重塑真我',     product: '绿檀 / 白菩提' },
+    wenshu:    { name: '文殊菩萨', emoji: '🦁', position: '破迷开悟、照见本质',     product: '黄水晶 / 文殊智慧笔' },
+    damo:      { name: '达摩祖师', emoji: '🧘', position: '面壁专注、一苇渡江',     product: '白水晶 / 菩提子' },
+    guanyin:   { name: '观音大士', emoji: '🪷', position: '慈悲疗愈、寻声救苦',     product: '粉水晶 / 莲花手串' },
+    dizang:    { name: '地藏菩萨', emoji: '🌍', position: '承载苦难、穿越幽暗',     product: '黑曜石 / 地藏牌' },
+    guandi:    { name: '关圣帝君', emoji: '⚔️', position: '守住底线、重获力量',     product: '红玛瑙 / 关公像' },
+    zhenwu:    { name: '真武大帝', emoji: '🛡️', position: '荡魔护身、重建根基',     product: '玄武令 / 黑碧玺' },
+  };
+
+  // 旧的16型→主辅神映射（v1.0兼容）
+  var TYPE_DEITY_MAP = {
+    INTJ: { main: 'wenshu', sub: 'damo',    mainReason: '洞察全局→文殊的智慧匹配战略思维',     subReason: '面壁专注→达摩的定力辅助深度思考' },
+    INTP: { main: 'wenshu', sub: 'wukong',  mainReason: '知识爆炸→文殊破迷开悟',              subReason: '行动破局→悟空打破思维茧房' },
+    ENTJ: { main: 'zhenwu', sub: 'wenshu',  mainReason: '执行力拉满→真武的刚毅匹配领导力',     subReason: '战略清晰→文殊补充决策智慧' },
+    ENTP: { main: 'wukong', sub: 'wenshu',  mainReason: '创意破局→悟空的颠覆力匹配发散思维',   subReason: '深度分析→文殊为灵感提供方向' },
+    INFJ: { main: 'guanyin', sub: 'wenshu',  mainReason: '深度共情→观音的慈悲匹配渡人本能',     subReason: '洞察本质→文殊为直觉提供理性支撑' },
+    INFP: { main: 'dizang',  sub: 'guanyin', mainReason: '内心承载→地藏的大愿匹配内在深度',     subReason: '疗愈自爱→观音的慈悲呵护柔软内心' },
+    ENFJ: { main: 'guanyin', sub: 'zhenwu',  mainReason: '天然引导者→观音渡人的感染力',       subReason: '守护他人→真武为慈悲加上行动力' },
+    ENFP: { main: 'wukong', sub: 'guanyin', mainReason: '灵感四射→悟空的创造力匹配热情',       subReason: '情绪管理→观音为热情加上边界感' },
+    ISTJ: { main: 'guandi',  sub: 'damo',    mainReason: '守原则→关公的忠义匹配责任感',          subReason: '专注当下→达摩的面壁辅助坚持' },
+    ISFJ: { main: 'guanyin', sub: 'guandi',  mainReason: '照顾他人→观音的慈悲匹配奉献精神',     subReason: '守住边界→关公的原则感补充边界' },
+    ESTJ: { main: 'zhenwu', sub: 'guandi',  mainReason: '推进力强→真武的行动力匹配执行力',     subReason: '守底线→关公的原则为执行加上方向' },
+    ESFJ: { main: 'guanyin', sub: 'guandi',  mainReason: '团队核心→观音的温暖匹配凝聚力',       subReason: '守住自己→关公的原则防止过度付出' },
+    ISTP: { main: 'damo',    sub: 'nezha',   mainReason: '独立冷静→达摩的面壁专注匹配独处力',     subReason: '自由精神→哪吒的重塑鼓励突破' },
+    ISFP: { main: 'nezha',   sub: 'guanyin', mainReason: '活出自我→哪吒的重塑匹配真实感',       subReason: '情感疗愈→观音的慈悲呵护敏感内心' },
+    ESTP: { main: 'wukong', sub: 'zhenwu',  mainReason: '即刻行动→悟空的敏捷匹配冒险精神',     subReason: '稳健底盘→真武为行动加上定力' },
+    ESFP: { main: 'nezha',   sub: 'wukong',  mainReason: '尽情绽放→哪吒的洒脱匹配自由精神',     subReason: '创意行动→悟空的自由为洒脱加油' },
+  };
+
+  // ==================== 导出 ====================
+  global.DeityMatrix = {
+    // 新API（v2.0）
+    DEITIES,
+    MATRIX,
+    CONCLUSIONS,
+    TYPE_TO_CAMP,
+    CAMP_INFO,
+    WX_INFO,
+    TIE_BREAKERS,
+    getCamp,
+    getDeityPrescription,
+    lookupMatrix,
+
+    // 旧API兼容（前端逐步迁移用）
+    DEITIES_OLD,
+    TYPE_DEITY_MAP,
+
+    // 旧名字空间兼容（index.html 直接引用 DeityData 时不会报错）
+    DEITIES_LEGACY: DEITIES_OLD,
+  };
+
+  // 同时挂 DeityData 名字空间，保证旧代码不报错
+  global.DeityData = {
+    DEITIES: DEITIES_OLD,
+    TYPE_DEITY_MAP: TYPE_DEITY_MAP,
+  };
+
+})(typeof window !== 'undefined' ? window : this);
+
+// === end deity-matrix.js ===
+</script>
+<script>
+// === compensation-engine.js (inlined) ===
+/**
+ * compensation-engine.js
+ * 代偿有效性引擎 v1.0
+ * 
+ * 核心公式：用神（缺的五行）× MBTI阵营 = 🟢有效代偿 / 🔴无效防御
+ * 
+ * 对外API：
+ *   CompensationEngine.analyze(type16, cureElement) → { isEffective, diagnosisTag, copywriting, prescription }
+ * 
+ * 参数：
+ *   type16       — 'INTJ' | 'INFP' | ... （16种MBTI类型）
+ *   cureElement  — '木' | '火' | '土' | '金' | '水' （用神/缺的五行）
+ */
+
+var CompensationEngine = (function () {
+
+  // ==================== 20格矩阵 ====================
+
+  var MATRIX = {
+    '木': { NT: false, NF: true,  SJ: false, SP: false },
+    '火': { NT: false, NF: true,  SJ: false, SP: true  },
+    '土': { NT: false, NF: false, SJ: true,  SP: false },
+    '金': { NT: true,  NF: false, SJ: true,  SP: false },
+    '水': { NT: true,  NF: false, SJ: false, SP: true  }
+  };
+
+  // ==================== 10条极限反差文案 ====================
+
+  var COPYWRITINGS = {
+    '木_1': {
+      tag: '逆生长的仙人掌',
+      copy: '你的命盘其实极度缺【木】——按理说，你应该是个不懂得自我滋养、生命力枯竭、拼命向外索取却永远填不满的人。但令人惊叹的是，你硬生生用后天的温柔和同理心，把自己养成了一个有温度的人。\n\n木是向下扎根的能力，而你的根不是扎在土壤里，是扎在人心里。你通过理解别人来理解自己，通过温暖别人来获得生命力。你的代偿极其有效——你确实活了下来，甚至活得很有温度。\n\n但代价是什么？你的生命力永远系在别人身上。别人开心你就茂盛，别人离开你就枯萎。你不是不想扎根，你只是还没找到那片值得你自己生长的土壤。',
+      prescription: '智慧不是用来分析别人的，是让你第一次看清自己真正需要什么。'
+    },
+    '木_0': {
+      tag: '没有根的操作系统',
+      copy: '你的命盘极度缺【木】——你这辈子最缺的东西是生机、是向下扎根的能力、是允许自己慢慢生长的耐心。但你选了最讽刺的解法：你试图用极致的理性和逻辑来解决一个需要用心去感受的题目。\n\n你在用Excel管理自己的人生，用KPI衡量自己的成长，用思维导图规划自己的感情。你把「成长」变成了一个可以优化的项目——但木的生长不是靠优化出来的，是靠向下扎根、向上伸展、然后在某个春天突然开花。\n\n你生了需要阳光和土壤的病，却把自己关在无菌实验室里吃药。不是你不够努力，是方法完全反了。',
+      prescription: '不是让你放弃理性，而是让你的理性终于有了一个值得守护的东西。'
+    },
+    '火_1': {
+      tag: '篝火旁的诗人',
+      copy: '你的命盘极度缺【火】——按理说，你应该是个内心冷清、缺乏热情、不敢发光的人。但你硬生生用内心的火焰，把自己燃成了一个人格自带温度的存在。\n\n你缺的是外在的火——那种烧穿一切的野心和霸气。但你找到了另一种火：你用共情点燃连接，用故事温暖陌生人的夜，用一封深夜的长文让另一个人觉得自己不是一个人。你的火不是烈日，是烛光——小，但精准，照到每个最需要光的角落。\n\n你的代偿有效到可怕。但你知道代价是什么吗？你一直在用微小的火去暖整个世界，自己的手却从来没有被温暖过。',
+      prescription: '不是让你更拼命地燃烧，而是让你终于可以被照暖。'
+    },
+    '火_0': {
+      tag: '熄灭的灯塔',
+      copy: '你的命盘极度缺【火】——你最需要的是热情、是表达、是允许自己被看见的勇气。但你偏偏选了最窒息的解法：你试图用责任和规矩来掩盖内心的冰冷。\n\n你用靠谱代替热情，用执行代替创造，用"懂事"代替"想要"。你活得像一座灯塔——所有人都靠你的光导航，但没有人问过你，灯塔自己需要光吗？\n\n你缺的是火，你给自己装的是钟表。你把人生的每一天都排得严丝合缝，精确到分钟，但你内心最荒凉的那个角落，你从来没有安排时间去照亮。',
+      prescription: '不是让你更自律，而是让你终于允许自己失控一次。'
+    },
+    '土_1': {
+      tag: '纸上建城堡的人',
+      copy: '你的命盘极度缺【土】——按理说，你应该是个没有根基、随波逐流、内心永远缺乏安全感的人。但你硬生生用后天极致的自律和秩序感，把自己锻造成了别人眼中最靠谱的人。\n\n你没有天生的地基，所以你用制度打了地基。你没有本能的稳重，所以你用计划表稳住了自己。别人靠感觉活着，你靠Excel活着。你建的每一座城堡都在纸上——但不可思议的是，你居然真的住进去了。\n\n你的代偿堪称奇迹。但只有你自己知道，你有多害怕哪天Excel崩了、计划乱了、制度失效了——你会像没有地基的沙堡一样，一场浪就没了。',
+      prescription: '不是让你更自律，而是让你知道，有些人会替你守住地基。'
+    },
+    '土_0': {
+      tag: '云端的建筑师',
+      copy: '你的命盘极度缺【土】——你最需要的是扎根、是承载力、是不被动摇的定力。但你选了最飘的解法：你试图用爱和共情来代替根基。\n\n你像一朵云——所有人都觉得你很美，但没有一个人能在你身上建房子。你用情绪做地基、用灵感画蓝图、用感动代替执行。你有无数个"好想去做"的念头，却连一个"今天就开始"的行动都没有。\n\n你缺的是土，你给自己灌的是风。你的精神世界五彩斑斓，但现实世界里，你连一个花盆都没有。',
+      prescription: '不是让你变得更无趣，而是让你第一次知道，站住不动也是一种力量。'
+    },
+    '金_1': {
+      tag: '带血的剃刀',
+      copy: '你的命盘极度缺【金】——按理说，你应该是个没有底线、不懂拒绝的讨好型人格。但令人战栗的是，你硬生生靠后天的痛苦觉醒，把自己逼成了最冷血理智的人。\n\n你赢了，你的策略极其有效。你给自己装上了锋利的机械义体，精准切割了所有消耗你的人。但只有你自己知道，这套"理智装甲"有多重。你每天都在耗费巨量的心血去维持这份冷酷，你在深夜里一定经常感到极度的孤独和疲惫吧？',
+      prescription: '不是让你更锋利，而是让你允许自己做一个不用时刻清醒的凡人。'
+    },
+    '金_0': {
+      tag: '肉身挡刀的圣徒',
+      copy: '你的命盘极度缺【金】——你当下最需要的是翻脸不认人的刀和绝对的边界感。但你选了最致命的解法——你试图用无底线的共情和温暖去感化伤害你的人。\n\n你生了需要动手术的病，却在给自己喂糖水。越缺金你越不敢拒绝，越奉献别人越觉得理所当然。你以为自己在燃烧照亮别人，其实你只是在被别人当柴烧！',
+      prescription: '神明降临，是要来强行夺走你手里的糖，塞给你一把刀。'
+    },
+    '水_1': {
+      tag: '用逻辑模拟海洋的人',
+      copy: '你的命盘极度缺【水】——按理说，你应该是个思维僵化、不懂变通、撞了南墙还要再撞三次的人。但不可思议的是，你用极致的分析能力，硬生生模拟出了水的流动。\n\n你不会顺其自然，但你会计算最优路径。你不懂随波逐流，但你会建模预测潮汐方向。别人靠直觉转弯，你靠数据转弯——虽然慢了半拍，但每一次转向都精准无比。\n\n你的代偿有效到让人嫉妒。但你有多累，只有你自己知道。别人随口说一句"算了"就能翻篇的事，你需要在脑子里跑完三个方案才能放下。你用CPU模拟了整个海洋，但CPU是会过热的。',
+      prescription: '不是让你放弃思考，而是让你知道，有些答案不需要推导，只需要沉下去。'
+    },
+    '水_0': {
+      tag: '混凝土做的鱼',
+      copy: '你的命盘极度缺【水】——你最需要的是变通、是灵活、是允许计划被打乱的勇气。但你选了最硬的解法：你把自己浇铸成了钢筋混凝土。\n\n别人遇到河流会绕路，你会建桥。别人遇到堵车会换路线，你会提前两小时出发。你把人生的每一个变量都控制死了——但你忘了，水是永远不会被控制的。\n\n你缺的是变通，你给自己装的是刹车。你活得像一个精密的齿轮，每天准时转动，永远不会出错——但齿轮不会游泳，而你现在掉进了一条河里。',
+      prescription: '不是让你放弃秩序，而是让你学会，有时候放手比抓紧更需要勇气。'
+    }
+  };
+
+  // ==================== 内部工具函数 ====================
+
+  /**
+   * 从16型字符串提取阵营
+   * INTJ → 'NT', INFP → 'NF', ISTJ → 'SJ', ESTP → 'SP'
+   */
+  function getGroup(type16) {
+    if (!type16 || type16.length < 4) return null;
+    return type16.substring(1, 3); // 取中间两位：N/S + T/F
+  }
+
+  // ==================== 对外API ====================
+
+  /**
+   * 主分析函数
+   * @param {string} type16       - 'INTJ' | 'INFP' | ...
+   * @param {string} cureElement  - '木' | '火' | '土' | '金' | '水'
+   * @returns {object|null} 失败返回null
+   *   {
+   *     isEffective:  true/false,
+   *     group:        'NT'/'NF'/'SJ'/'SP',
+   *     cureElement:  '木'/'火'/'土'/'金'/'水',
+   *     tag:          '带血的剃刀',          // 系统诊断词
+   *     copy:         '你的命盘...',          // 完整文案（含\n换行）
+   *     prescription: '不是让你...'           // 神明处方
+   *   }
+   */
+  function analyze(type16, cureElement) {
+    var group = getGroup(type16);
+    if (!group) return null;
+
+    var row = MATRIX[cureElement];
+    if (!row) return null;
+
+    var isEffective = !!row[group];
+
+    // 查文案：key = 五行 + '_' + 1(有效)/0(无效)
+    var key = cureElement + '_' + (isEffective ? 1 : 0);
+    var cw = COPYWRITINGS[key];
+
+    return {
+      isEffective: isEffective,
+      group: group,
+      cureElement: cureElement,
+      tag: cw ? cw.tag : '',
+      copy: cw ? cw.copy : '',
+      prescription: cw ? cw.prescription : ''
+    };
+  }
+
+  // 公开接口
+  return {
+    analyze: analyze,
+    // 暴露矩阵供测试用
+    _MATRIX: MATRIX,
+    _getGroup: getGroup
+  };
+
+})();
+
+// === end compensation-engine.js ===
+</script>
+
+<script>
+// ==================== APP STATE ====================
+var currentQ = 0;
+var answers = null;
+var answeredMap = {}; // questionId -> selected optionIndex
+var resultData = null; // 存储最终结果供分享用
+
+// ==================== NAVIGATION ====================
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(function(p) { p.classList.remove('active'); });
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+// ==================== QUIZ LOGIC ====================
+function startQuiz() {
+  currentQ = 0;
+  answers = PersonalityEngine.createAnswers();
+  answeredMap = {};
+  showPage('page-quiz');
+  renderQuestion();
+}
+
+// 进度文案——5乐章节奏，对齐31题
+// 🎵入场(题2-6) → 🎵上头(题7-12) → 🎵扎心(题13-17) → 🎵深潜(题18-23) → 🎵回暖(题24-31)
+var PROGRESS_LABELS = [
+  // 🎵 入场（0-16%）
+  '放轻松，就当刷小红书', '还行，继续', '你对朋友圈的态度很有趣', '社交达人还是社恐，快出来了', '快过了新手村',
+  // 🎵 上头（16-39%）
+  '开始上头了', '你的消费观暴露了', '这题有点扎心', '你的逻辑还是你的嘴', '神正在翻你的档案…', '有意思，你比想象中有趣',
+  // 🎵 扎心（39-55%）
+  '进入深水区了', 'DDL战士还是时间管理大师', '旅行的样子出卖了你', '多任务模式启动', '你的神已经到了，正在找你',
+  // 🎵 深潜（55-74%）
+  '认真想，这道题很重要', '下面哪个更像你？', '你的灵魂正在被读取', '神正在开会讨论你…', '你的队友在等你', '人生这道选择题…',
+  // 🎵 回暖（74-100%）
+  '第二回合，再聊聊', '你讲故事的方式出卖了你', '说明书到底看不看', '断舍离还是囤积癖', '社交电量还剩多少', '你的同事需要你', '最后两题了', '你的守护神即将揭晓',
+];
+function getProgressLabel(pct) {
+  var idx = Math.min(Math.floor(pct / 100 * PROGRESS_LABELS.length), PROGRESS_LABELS.length - 1);
+  return PROGRESS_LABELS[idx];
+}
+
+// 彩蛋——特定题号完成后闪过一句吐槽（对齐31题关键节点）
+var SOUL_SNACKS = {
+  10: '你的神正在翻你的档案…',
+  16: '这道题有点危险，小心答',
+  23: '你的神已经到了，正在找你',
+  29: '最后两题了，你的神有点犹豫该派谁来',
+};
+
+function renderQuestion() {
+  var questions = PersonalityEngine.QUESTIONS;
+  var q = questions[currentQ];
+  var total = questions.length;
+  var pct = (currentQ / total * 100);
+  document.getElementById('progress-fill').style.width = pct + '%';
+  document.getElementById('progress-text').textContent = (currentQ + 1) + ' / ' + total + '  ' + getProgressLabel(pct);
+
+  // 上一题按钮：第1题隐藏
+  var btnPrev = document.getElementById('btn-prev');
+  if (currentQ > 0) {
+    btnPrev.classList.add('visible');
+  } else {
+    btnPrev.classList.remove('visible');
+  }
+
+  var card = document.getElementById('question-card');
+  card.style.animation = 'none';
+  card.offsetHeight; // reflow
+  card.style.animation = 'fadeIn .4s ease both';
+
+  // 不同题型不同卡片class
+  card.className = 'question-card';
+  if (q.type === 'grip') card.classList.add('card-grip');
+  else if (q.type === 'dilemma') card.classList.add('card-dilemma');
+  else if (q.type === 'business') card.classList.add('card-final');
+
+  if (q.type === 'date') {
+    // 出生日期输入
+    card.innerHTML =
+      '<div class="question-number">' + q.number + '</div>' +
+      '<div class="question-title">' + q.title + '</div>' +
+      '<div class="question-subtitle">' + (q.subtitle || '') + '</div>' +
+      '<div class="date-input-group">' +
+        '<div class="birth-row">' +
+          '<div class="birth-field"><label>年</label><input type="number" id="birth-year" min="1900" max="2026" placeholder="1990"></div>' +
+          '<div class="birth-sep">年</div>' +
+          '<div class="birth-field"><label>月</label><input type="number" id="birth-month" min="1" max="12" placeholder="6"></div>' +
+          '<div class="birth-sep">月</div>' +
+          '<div class="birth-field"><label>日</label><input type="number" id="birth-day" min="1" max="31" placeholder="15"></div>' +
+        '</div>' +
+        '<div class="birth-field" style="flex-direction:row;gap:8px;align-items:center;margin-top:4px">' +
+          '<label style="font-size:12px;color:var(--text-muted)">时辰</label>' +
+          '<select id="birth-hour" style="padding:8px 12px;background:var(--bg-primary);border:1px solid rgba(212,168,71,0.3);border-radius:8px;color:var(--gold);font-size:14px;outline:none">' +
+            '<option value="0">子时 (23-1点)</option>' +
+            '<option value="1">丑时 (1-3点)</option>' +
+            '<option value="3">寅时 (3-5点)</option>' +
+            '<option value="5">卯时 (5-7点)</option>' +
+            '<option value="7">辰时 (7-9点)</option>' +
+            '<option value="9">巳时 (9-11点)</option>' +
+            '<option value="11" selected>午时 (11-13点)</option>' +
+            '<option value="13">未时 (13-15点)</option>' +
+            '<option value="15">申时 (15-17点)</option>' +
+            '<option value="17">酉时 (17-19点)</option>' +
+            '<option value="19">戌时 (19-21点)</option>' +
+            '<option value="21">亥时 (21-23点)</option>' +
+          '</select>' +
+          '<span style="font-size:11px;color:var(--text-muted)">不确定就选中午</span>' +
+        '</div>' +
+        '<div class="birth-error" id="birth-error"></div>' +
+        '<button class="btn-confirm" onclick="submitDate()">确定</button>' +
+      '</div>';
+    // 如果之前选过，恢复
+    if (answers.birth) {
+      document.getElementById('birth-year').value = answers.birth.year;
+      document.getElementById('birth-month').value = answers.birth.month;
+      document.getElementById('birth-day').value = answers.birth.day;
+      document.getElementById('birth-hour').value = answers.birth.hour;
+    }
+  } else {
+    // 选择题
+    var optsHtml = '';
+    q.options.forEach(function(opt, idx) {
+      var isSelected = answeredMap[currentQ] === idx;
+      optsHtml +=
+        '<div class="option-btn' + (isSelected ? ' selected' : '') + '" onclick="selectOption(' + idx + ')">' +
+          '<span class="option-label">' + opt.label + '</span>' +
+          '<span>' + opt.text + '</span>' +
+        '</div>';
+    });
+    card.innerHTML =
+      '<div class="question-number">' + q.number + '</div>' +
+      '<div class="question-title">' + q.title + '</div>' +
+      (q.subtitle ? '<div class="question-subtitle">' + q.subtitle + '</div>' : '') +
+      '<div class="options">' + optsHtml + '</div>';
+  }
+}
+
+function submitDate() {
+  var year = parseInt(document.getElementById('birth-year').value);
+  var month = parseInt(document.getElementById('birth-month').value);
+  var day = parseInt(document.getElementById('birth-day').value);
+  var hour = parseInt(document.getElementById('birth-hour').value);
+  var errEl = document.getElementById('birth-error');
+
+  if (!year || year < 1900 || year > 2026) { errEl.textContent = '请输入有效年份'; return; }
+  if (!month || month < 1 || month > 12) { errEl.textContent = '月份 1-12'; return; }
+  if (!day || day < 1 || day > 31) { errEl.textContent = '日期 1-31'; return; }
+  errEl.textContent = '';
+
+  answers.birth = { year: year, month: month, day: day, hour: hour };
+  answeredMap[currentQ] = 0; // mark as answered
+  goNext();
+}
+
+function selectOption(idx) {
+  // 高亮选中
+  var card = document.getElementById('question-card');
+  card.querySelectorAll('.option-btn').forEach(function(b) { b.classList.remove('selected'); });
+  card.querySelectorAll('.option-btn')[idx].classList.add('selected');
+
+  // 记录答案
+  PersonalityEngine.recordAnswer(answers, currentQ, idx);
+  answeredMap[currentQ] = idx;
+
+  // 延迟后自动下一题
+  setTimeout(goNext, 350);
+}
+
+function goNext() {
+  var total = PersonalityEngine.QUESTIONS.length;
+  // 彩蛋：特定题号完成后闪过一句吐槽
+  if (SOUL_SNACKS[currentQ]) {
+    var card = document.getElementById('question-card');
+    card.style.animation = 'none';
+    card.offsetHeight;
+    card.className = 'question-card';
+    card.style.animation = 'fadeIn .3s ease both';
+    card.innerHTML =
+      '<div style="text-align:center;padding:40px 20px">' +
+        '<div style="font-size:28px;margin-bottom:16px;color:var(--gold)"><i class="ri-sparkling-2-fill"></i></div>' +
+        '<div style="font-size:14px;color:var(--gold);line-height:1.8;letter-spacing:1px">' + SOUL_SNACKS[currentQ] + '</div>' +
+      '</div>';
+    setTimeout(function() {
+      if (currentQ < total - 1) { currentQ++; renderQuestion(); }
+      else { showLoading(); }
+    }, 1200);
+  } else {
+    if (currentQ < total - 1) {
+      currentQ++;
+      renderQuestion();
+    } else {
+      showLoading();
+    }
+  }
+}
+
+function goPrev() {
+  if (currentQ > 0) {
+    currentQ--;
+    renderQuestion();
+  }
+}
+
+// ==================== LOADING ====================
+function showLoading() {
+  showPage('page-loading');
+  var tips = [
+    '八位东方神正在开会讨论你...',
+    '你的命盘正在被1024个小和尚同时推算...',
+    '荣格正在从潜意识里给你写信...',
+    '观音大士和关圣帝君在协商你的治疗方案...',
+    '系统正在为你的神办理入驻手续...',
+    '文殊菩萨正在检查你的认知偏差...',
+    '达摩祖师说你的情况有点复杂...',
+  ];
+  var tipIdx = 0;
+  var tipEl = document.getElementById('loading-tip');
+  var tipInterval = setInterval(function() {
+    tipIdx = (tipIdx + 1) % tips.length;
+    tipEl.style.opacity = 0;
+    setTimeout(function() { tipEl.textContent = tips[tipIdx]; tipEl.style.opacity = 1; }, 300);
+  }, 1500);
+
+  setTimeout(function() {
+    clearInterval(tipInterval);
+    generateResult();
+  }, 3500);
+}
+
+// ==================== RESULT GENERATION ====================
+function generateResult() {
+  var bazi = BaZiEngine.analyzeBaZi(answers.birth.year, answers.birth.month, answers.birth.day, answers.birth.hour);
+  var personality = PersonalityEngine.analyzePersonality(answers);
+  var formData = FormDataStore.FORMS[bazi.formKey] || null;
+
+  // 用新矩阵API获取守护神（用神五行 × 16型阵营）
+  var prescription = null;
+  var mainGod = null;
+  var deityConclusion = null;
+  if (bazi.cureElement && personality.type16) {
+    prescription = DeityMatrix.getDeityPrescription(
+      bazi.cureElement.wx, personality.type16, personality.dilemma
+    );
+    if (prescription) {
+      mainGod = prescription.deity;
+      deityConclusion = prescription.conclusion;
+    }
+  }
+
+  // 向后兼容：新API失败时降级到旧映射
+  if (!mainGod) {
+    var deityMap = personality.type16 ? DeityData.TYPE_DEITY_MAP[personality.type16] : null;
+    mainGod = deityMap ? DeityData.DEITIES[deityMap.main] : null;
+  }
+
+  // 代偿有效性判定（用神×阵营）
+  var compensation = null;
+  if (bazi.cureElement && personality.type16) {
+    compensation = CompensationEngine.analyze(personality.type16, bazi.cureElement.wx);
+  }
+
+  // 存储供分享用
+  resultData = { bazi: bazi, personality: personality, formData: formData, mainGod: mainGod, prescription: prescription, compensation: compensation };
+
+  // 渲染4面（情绪曲线：笑→准→扎心→顿悟）
+  renderFace1(personality.typeInfo);                           // 身份认同
+  renderFace2(bazi, personality, formData);                   // 出厂设置
+  renderFace3(compensation);                                  // 代偿判定
+  renderFace4(mainGod, deityConclusion, personality.typeInfo); // 守护神压轴
+
+  // 启动滚动触发
+  requestAnimationFrame(function() {
+    initScrollReveal();
+  });
+
+  showPage('page-result');
+}
+
+// ==================== 波兰尼节奏：滚动揭示 ====================
+function initScrollReveal() {
+  var faces = document.querySelectorAll('.result-face');
+  // 默认冻结所有动画（保留face-1，它已经在视口中）
+  faces.forEach(function(face, idx) {
+    if (idx === 0) return; // 第一个面直接播放
+    freezeAnimations(face);
+    face._revealed = false;
+  });
+
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting && !entry.target._revealed) {
+        entry.target._revealed = true;
+        unfreezeAnimations(entry.target);
+      }
+    });
+  }, { threshold: 0.15 });
+
+  faces.forEach(function(face, idx) {
+    if (idx > 0) observer.observe(face);
+  });
+}
+
+// 冻结动画：所有atmo-first/text-later先不跑，等触发
+function freezeAnimations(container) {
+  var els = container.querySelectorAll('.atmo-first, .text-later, .text-later-d1, .text-later-d2, .text-later-d3, .text-later-d4');
+  els.forEach(function(el) {
+    el.style.animationPlayState = 'paused';
+    el._frozen = true;
+  });
+}
+
+// 解冻动画
+function unfreezeAnimations(container) {
+  var els = container.querySelectorAll('.atmo-first, .text-later, .text-later-d1, .text-later-d2, .text-later-d3, .text-later-d4');
+  els.forEach(function(el) {
+    el.style.animationPlayState = 'running';
+    el._frozen = false;
+  });
+}
+
+// ==================== FACE 1: 身份认同（笑 → 用户笑了，觉得准） ====================
+function renderFace1(typeInfo) {
+  var html = '';
+
+  // === 波兰尼节奏：氛围先行，文字延迟 ===
+  // 第一层：称号emoji + 光晕（氛围层）
+  html +=
+    '<div class="face1-header atmo-first">' +
+      '<div class="atmo-glow" style="margin:0 auto;width:140px;height:140px;position:relative;background:radial-gradient(circle,rgba(212,168,71,0.12) 0%, transparent 70%)">' +
+        '<div class="face1-emoji" style="font-size:72px">' + typeInfo.emoji + '</div>' +
+      '</div>' +
+    '</div>';
+
+  // 第二层：称号 + tagline（文字延迟1s）
+  html +=
+    '<div class="text-later" style="text-align:center;margin-bottom:24px">' +
+      '<div class="face1-badge">YOUR SOUL IDENTITY</div>' +
+      '<div class="face1-title" style="margin-top:12px">' + typeInfo.title + '</div>' +
+      '<div class="face1-tagline">' + typeInfo.tagline + '</div>' +
+    '</div>';
+
+  // 第三层：毒舌金句（文字延迟1.5s）— 第一屏截图核心
+  html +=
+    '<div class="section-card text-later-d1">' +
+      '<div class="section-content" style="text-align:center;padding:8px 0">' +
+        '<p style="color:var(--text-muted);font-size:12px;margin-bottom:10px;letter-spacing:1px">来自系统的吐槽</p>' +
+        '<p style="color:var(--text-primary);line-height:2;font-size:15px;font-style:italic">' + typeInfo.roast + '</p>' +
+      '</div>' +
+    '</div>';
+
+  document.getElementById('face-1').innerHTML = html;
+}
+
+// ==================== FACE 2: 出厂设置（准 → 用户知道自己的配置） ====================
+function renderFace2(bazi, personality, formData) {
+  var typeInfo = personality.typeInfo;
+  var wuXingEmoji = ['🌱','🔥','⛰️','⚔️','🌊'];
+  var wuXingLabel = ['木','火','土','金','水'];
+  var energyTag = bazi.strength.isStrong ? '能量充沛型' : '蓄力待发型';
+  var energyEmoji = bazi.strength.isStrong ? '🔋' : '🪫';
+
+  // 五行光晕颜色
+  var glowColors = [
+    'rgba(106,176,106,0.12)', // 木-绿
+    'rgba(224,96,96,0.12)',   // 火-红
+    'rgba(212,168,71,0.12)',  // 土-金
+    'rgba(200,200,216,0.10)', // 金-银
+    'rgba(106,158,224,0.12)'  // 水-蓝
+  ];
+  var glowColor = glowColors[bazi.dayMasterWX] || glowColors[0];
+
+  // === 波兰尼节奏 ===
+  // 第一层：五行属性emoji（氛围层）
+  var html =
+    '<div class="face1-header atmo-first">' +
+      '<div class="atmo-glow" style="margin:8px auto;width:120px;height:120px;position:relative;background:radial-gradient(circle,' + glowColor + ' 0%, transparent 70%)">' +
+        '<div class="face1-emoji" style="font-size:56px">' + wuXingEmoji[bazi.dayMasterWX] + '</div>' +
+      '</div>' +
+    '</div>';
+
+  // 第二层：标题（文字延迟1s）
+  html +=
+    '<div class="text-later" style="text-align:center;margin-bottom:24px">' +
+      '<div class="face1-badge">FACTORY SETTINGS</div>' +
+      '<div class="face1-title" style="margin-top:10px">你的出厂设置</div>' +
+      '<div style="font-size:13px;color:var(--text-muted);margin-top:6px">这些是出厂写死的，改不了</div>' +
+    '</div>';
+
+  // 第三层：处方表（文字延迟1.5s）
+  html +=
+    '<div class="section-card text-later-d1">' +
+      '<div class="section-title">📋 属性面板</div>' +
+      '<div class="section-content" style="display:flex;flex-direction:column;gap:12px">' +
+        '<div style="display:flex;justify-content:space-between;align-items:center;padding-bottom:10px;border-bottom:1px solid rgba(255,255,255,0.05)">' +
+          '<span style="color:var(--text-muted);font-size:13px">先天属性</span>' +
+          '<span style="color:var(--text-primary);font-weight:600;font-size:15px">' + wuXingEmoji[bazi.dayMasterWX] + ' ' + wuXingLabel[bazi.dayMasterWX] + '型</span>' +
+        '</div>' +
+        '<div style="display:flex;justify-content:space-between;align-items:center;padding-bottom:10px;border-bottom:1px solid rgba(255,255,255,0.05)">' +
+          '<span style="color:var(--text-muted);font-size:13px">能量类型</span>' +
+          '<span style="color:var(--text-primary);font-weight:600;font-size:15px">' + energyEmoji + ' ' + energyTag + '</span>' +
+        '</div>' +
+        '<div style="display:flex;justify-content:space-between;align-items:center">' +
+          '<span style="color:var(--text-muted);font-size:13px">用神（你缺的）</span>' +
+          '<span style="color:var(--red-accent);font-weight:600;font-size:14px">' + (bazi.cureElement ? wuXingEmoji[bazi.cureElement.wx] + ' 缺' + wuXingLabel[bazi.cureElement.wx] : '—') + '</span>' +
+        '</div>' +
+      '</div>' +
+    '</div>';
+
+  // 第四层：终极诊断（文字延迟2s）
+  if (formData) {
+    html +=
+      '<div class="section-card text-later-d2">' +
+        '<div class="section-title">⚡ 终极诊断</div>' +
+        '<div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">' +
+          '<span style="font-size:40px">' + formData.emoji + '</span>' +
+          '<div>' +
+            '<div style="font-size:18px;font-weight:700;color:var(--gold)">' + formData.name + '</div>' +
+            '<div style="font-size:12px;color:var(--text-muted);margin-top:2px;font-style:italic">「' + formData.traditional + '」</div>' +
+          '</div>' +
+        '</div>' +
+        '<div class="roast-text roast-highlight" style="font-size:14px;line-height:1.9">' + formData.roast + '</div>' +
+      '</div>';
+  }
+
+  document.getElementById('face-2').innerHTML = html;
+}
+
+// ==================== FACE 3: 代偿判定（扎心暴击） ====================
+function renderFace3(compensation) {
+  var html = '';
+
+  if (!compensation) {
+    // 无代偿数据时显示默认
+    html = '<div class="section-card"><div class="section-content" style="text-align:center;color:var(--text-muted)">代偿数据加载中…</div></div>';
+    document.getElementById('face-3').innerHTML = html;
+    return;
+  }
+
+  var compIcon = compensation.isEffective ? '🟢' : '🔴';
+  var compLabel = compensation.isEffective ? '有效代偿' : '无效防御';
+  var compColor = compensation.isEffective ? '#4ade80' : '#f87171';
+
+  // === 波兰尼节奏 ===
+  // 第一层：判定标题（氛围层）
+  html +=
+    '<div class="text-later" style="text-align:center;margin-bottom:24px">' +
+      '<div class="face1-badge">SYSTEM VERDICT</div>' +
+      '<div style="display:flex;align-items:center;justify-content:center;gap:10px;margin-top:12px">' +
+        '<span style="font-size:36px">' + compIcon + '</span>' +
+        '<span class="face1-title" style="margin:0;color:' + compColor + '">' + compLabel + '</span>' +
+      '</div>' +
+      (compensation.tag ? '<div style="font-size:13px;color:var(--text-muted);margin-top:8px;font-style:italic">系统诊断词：「' + compensation.tag + '」</div>' : '') +
+    '</div>';
+
+  // 第二层：扎心文案（文字延迟1s）
+  var paragraphs = compensation.copy.split('\n\n');
+  var visibleCopy = paragraphs.slice(0, 2).join('<br><br>');
+  var hiddenCopy = paragraphs.length > 2 ? paragraphs.slice(2).join('<br><br>') : '';
+  var expandBtn = hiddenCopy ? '<div class="comp-expand-btn" onclick="this.parentElement.querySelector(\'.comp-hidden\').style.display=\'block\';this.style.display=\'none\'" style="color:var(--gold-dim);font-size:12px;cursor:pointer;margin-top:10px;text-align:center">▼ 展开完整诊断</div><div class="comp-hidden" style="display:none">' + hiddenCopy + '</div>' : '';
+
+  html +=
+    '<div class="section-card text-later-d1" style="border:1px solid ' + compColor + '22;background:linear-gradient(135deg,rgba(0,0,0,0.3) 0%,' + compColor + '08 100%)">' +
+      '<div class="roast-text" style="font-size:14px;line-height:1.9;margin-bottom:6px">' + visibleCopy + '</div>' +
+      expandBtn +
+    '</div>';
+
+  // 第三层：处方（文字延迟1.5s）
+  html +=
+    '<div class="section-card text-later-d2" style="border-color:var(--gold);border-style:solid">' +
+      '<div class="section-content" style="text-align:center">' +
+        '<p style="font-size:15px;color:var(--gold);line-height:2;font-weight:600;font-style:italic">' +
+          '「' + compensation.prescription + '」' +
+        '</p>' +
+      '</div>' +
+    '</div>';
+
+  document.getElementById('face-3').innerHTML = html;
+}
+
+// ==================== FACE 4: 守护神压轴（顿悟 → 全页情绪最高点） ====================
+function renderFace4(mainGod, deityConclusion, typeInfo) {
+  var html = '';
+
+  if (!mainGod) {
+    html = '<div class="section-card"><div class="section-content" style="text-align:center;color:var(--text-muted)">守护神加载中…</div></div>';
+    document.getElementById('face-4').innerHTML = html;
+    return;
+  }
+
+  // 五行光晕颜色
+  var elementIndex = 0;
+  var elements = ['木','火','土','金','水'];
+  if (mainGod.element) {
+    elementIndex = elements.indexOf(mainGod.element);
+    if (elementIndex < 0) elementIndex = 0;
+  }
+  var glowColors = [
+    'rgba(106,176,106,0.15)', // 木-绿
+    'rgba(224,96,96,0.15)',   // 火-红
+    'rgba(212,168,71,0.15)',  // 土-金
+    'rgba(200,200,216,0.12)', // 金-银
+    'rgba(106,158,224,0.15)'  // 水-蓝
+  ];
+  var glowColor = glowColors[elementIndex];
+
+  // === 波兰尼节奏：氛围先行 ===
+  // 第一层：大emoji + 光晕（氛围层）— 压轴视觉效果
+  html +=
+    '<div class="face1-header atmo-first">' +
+      '<div class="atmo-glow" style="margin:0 auto;width:180px;height:180px;position:relative;background:radial-gradient(circle,' + glowColor + ' 0%, transparent 70%)">' +
+        '<div style="font-size:90px;margin:12px 0;animation:floatSlow 4s ease-in-out infinite;filter:drop-shadow(0 0 30px rgba(212,168,71,0.4))">' + mainGod.emoji + '</div>' +
+      '</div>' +
+    '</div>';
+
+  // 第二层：神名 + 职能（文字延迟1s）
+  html +=
+    '<div class="text-later" style="text-align:center;margin-bottom:28px">' +
+      '<div class="face1-badge">YOUR DEITY PRESCRIPTION</div>' +
+      '<div class="face1-title" style="margin-top:12px">' + mainGod.name + '</div>' +
+      '<div style="font-size:13px;color:var(--text-muted);margin-top:6px;letter-spacing:2px">' + mainGod.position + '</div>' +
+    '</div>';
+
+  // 第三层：诊断（文字延迟1.5s）— 从代偿自然引出守护神
+  if (deityConclusion) {
+    html +=
+      '<div class="section-card text-later-d1">' +
+        '<div class="section-content">' +
+          '<p style="font-size:15px;color:var(--text-primary);line-height:2;margin-bottom:12px;text-align:center;font-weight:600">' +
+            deityConclusion.diagnosis +
+          '</p>' +
+        '</div>' +
+      '</div>';
+
+    // 第四层：为什么是TA（文字延迟2s）
+    html +=
+      '<div class="section-card text-later-d2">' +
+        '<div class="section-title">为什么是' + mainGod.name + '？</div>' +
+        '<div class="section-content">' +
+          '<p style="font-size:14px;color:var(--text-secondary);line-height:2">' +
+            deityConclusion.why +
+          '</p>' +
+        '</div>' +
+      '</div>';
+
+    // 第五层：药方语录（文字延迟2.5s）
+    html +=
+      '<div class="section-card text-later-d3" style="border-color:var(--gold);border-style:solid">' +
+        '<div class="section-content" style="text-align:center">' +
+          '<div style="font-size:32px;margin-bottom:8px">' + mainGod.emoji + '</div>' +
+          '<p style="font-size:15px;color:var(--gold);line-height:2;font-weight:600;font-style:italic">' +
+            '「' + deityConclusion.prescription + '」' +
+          '</p>' +
+        '</div>' +
+      '</div>';
+
+    // 第六层：调整建议（文字延迟3s）— 可折叠
+    if (deityConclusion.adjustments) {
+      var adj = deityConclusion.adjustments;
+      html +=
+        '<div class="section-card text-later-d3">' +
+          '<div class="section-title">🛠️ 调频建议</div>' +
+          '<div class="section-content" style="display:flex;flex-direction:column;gap:16px">' +
+            '<div>' +
+              '<div style="font-size:12px;color:var(--gold-dim);margin-bottom:6px">状态切换</div>' +
+              '<div style="font-size:14px;color:var(--text-secondary);line-height:1.8">' + adj.state + '</div>' +
+            '</div>' +
+            '<div>' +
+              '<div style="font-size:12px;color:var(--gold-dim);margin-bottom:6px">短期行动</div>' +
+              '<div style="font-size:14px;color:var(--text-primary);line-height:1.8">' + adj.shortTerm + '</div>' +
+            '</div>' +
+            '<div class="comp-expand-btn" onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display===\'none\'?\'block\':\'none\'" style="color:var(--gold-dim);font-size:12px;cursor:pointer;text-align:center">▼ 长期修炼</div>' +
+            '<div style="display:none">' +
+              '<div style="font-size:12px;color:var(--gold-dim);margin-bottom:6px">长期方案</div>' +
+              '<div style="font-size:14px;color:var(--text-secondary);line-height:1.8">' + adj.longTerm + '</div>' +
+            '</div>' +
+          '</div>' +
+        '</div>';
+    }
+  } else {
+    // 降级模式
+    html +=
+      '<div class="section-card text-later-d1">' +
+        '<div class="section-content">' +
+          '<p style="font-size:14px;color:var(--text-secondary);line-height:2">' +
+            '你是一个「<strong style="color:var(--gold)">' + typeInfo.title + '</strong>」，<br>' +
+            '所以' + mainGod.name + '被派来帮你——' +
+          '</p>' +
+        '</div>' +
+      '</div>';
+  }
+
+  // 第七层：分享卡 + CTA + 免责（文字延迟3.5s）
+  var shareRoast = typeInfo.roast.length > 60 ? typeInfo.roast.substring(0, 60) + '…' : typeInfo.roast;
+  var comp = resultData.compensation;
+  var compBadge = '';
+  if (comp) {
+    var compIcon = comp.isEffective ? '🟢' : '🔴';
+    var compText = comp.isEffective ? '有效代偿' : '无效防御';
+    var tagText = comp.tag ? '「' + comp.tag + '」' : '';
+    compBadge = '<div style="display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border-radius:20px;font-size:12px;background:' +
+      (comp.isEffective ? 'rgba(74,222,128,0.1);color:#4ade80' : 'rgba(248,113,113,0.1);color:#f87171') +
+      ';margin:6px 0">' + compIcon + ' ' + compText + (tagText ? ' · ' + tagText : '') + '</div>';
+  }
+
+  // CTA差异化文案
+  var ctaCopy = '';
+  var ctaBtn = '';
+  if (comp) {
+    if (comp.isEffective) {
+      ctaCopy = '你赢了，但只有你自己知道有多累。<br>你的守护神给你准备了一份减负道具<br>让理智装甲暂时可以脱下来 →';
+      ctaBtn = '<button class="cta-btn" onclick="alert(\'将跳转至产品页（演示模式）\')"><i class="ri-hand-heart-line"></i> 查看守护神推荐</button>';
+    } else {
+      ctaCopy = '系统告诉你代码跑偏了，不是你的问题。<br>你的守护神给你准备了翻盘装备<br>换套武器，重来 →';
+      ctaBtn = '<button class="cta-btn" onclick="alert(\'将跳转至产品页（演示模式）\')"><i class="ri-sword-line"></i> 查看守护神推荐</button>';
+    }
+  } else {
+    ctaCopy = '你的守护神给你准备了一份专属能量道具<br>补上你缺的那一块 →';
+    ctaBtn = '<button class="cta-btn" onclick="alert(\'将跳转至产品页（演示模式）\')"><i class="ri-search-eye-line"></i> 查看守护神推荐</button>';
+  }
+
+  html +=
+    '<div class="share-card text-later-d4">' +
+      '<div class="share-card-title">📋 测了吗</div>' +
+      '<div class="share-card-emoji">' + typeInfo.emoji + '</div>' +
+      '<div class="share-card-type">' + typeInfo.title + '</div>' +
+      compBadge +
+      '<div style="font-size:14px;color:var(--gold);margin:6px 0">' + mainGod.emoji + ' 守护神：' + mainGod.name + '</div>' +
+      '<div class="share-card-roast">「' + shareRoast + '」</div>' +
+      '<div><button class="btn-share" onclick="shareResult()">📤 分享给朋友</button></div>' +
+      '<div class="share-card-brand">测了吗</div>' +
+    '</div>' +
+    '<div class="section-card text-later-d4 cta-section">' +
+      '<div class="cta-text">' + ctaCopy + '</div>' +
+      ctaBtn +
+    '</div>' +
+    '<div class="result-disclaimer text-later-d4">' +
+      '此报告由玄学CT机自动生成，不构成医学建议。<br>' +
+      '但如果你觉得说中了你，那可能是神仙真的在加班。' +
+    '</div>' +
+    '<span class="retest-link text-later-d4" onclick="startQuiz()">重新测试</span>';
+
+  document.getElementById('face-4').innerHTML = html;
+}
+
+// ==================== SHARE ====================
+function shareResult() {
+  var mainGodName = resultData.mainGod ? resultData.mainGod.name : '';
+  var typeTitle = resultData.personality.typeInfo.title;
+  var comp = resultData.compensation;
+  // 分享文案：制造好奇心，不暴露内部术语
+  var hook = '';
+  if (comp) {
+    if (comp.isEffective) {
+      hook = '说我靠后天硬扛补齐了命盘的缺口，但代价只有我自己知道。';
+    } else {
+      hook = '说我一直在用错误的方式解决问题，难怪越努力越累。';
+    }
+  }
+  var text = '我的守护神是' + mainGodName + '，人格类型「' + typeTitle + '」。' +
+    (hook ? hook + '\n') +
+    '测测你的守护神是谁 →';
+  if (navigator.share) {
+    navigator.share({
+      title: '测了吗 — 看看你的守护神是谁',
+      text: text,
+      url: window.location.href
+    }).catch(function() {});
+  } else {
+    text += '\n' + window.location.href;
+    navigator.clipboard.writeText(text).then(function() {
+      alert('分享内容已复制到剪贴板！');
+    }).catch(function() {
+      prompt('请手动复制分享给朋友：', text);
+    });
+  }
+}
+</script>
+<script>
+// ==================== 星星粒子 ====================
+(function() {
+  var container = document.getElementById('stars-container');
+  if (!container) return;
+  var count = 40;
+  for (var i = 0; i < count; i++) {
+    var star = document.createElement('div');
+    star.className = 'star';
+    star.style.left = Math.random() * 100 + '%';
+    star.style.top = Math.random() * 100 + '%';
+    star.style.setProperty('--dur', (3 + Math.random() * 4) + 's');
+    star.style.setProperty('--delay', (Math.random() * 5) + 's');
+    var size = 1 + Math.random() * 2;
+    star.style.width = size + 'px';
+    star.style.height = size + 'px';
+    container.appendChild(star);
+  }
+})();
+</script>
+</body>
+</html>

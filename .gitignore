@@ -1,0 +1,15 @@
+# 忽略本地运行和调试文件（这些不需要部署到网站）
+*.log
+*.tmp
+*.pyc
+__pycache__/
+.DS_Store
+
+# _dev 里的是开发调试脚本，不部署
+_dev/
+
+# _data 里的大 JSON 如果不需要可以忽略（体积大）
+# _data/classics-extract.json
+
+# ngrok 日志
+*.ngrok*
