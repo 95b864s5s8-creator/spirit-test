@@ -7,8 +7,8 @@
 ## 快速链接
 
 - **GitHub 仓库**：https://github.com/95b864s5s8-creator/spirit-test
-- **新版网站**：`https://your-site.netlify.app`（部署后填入）
-- **旧版网站**：`https://your-site.netlify.app/index.旧版.html`
+- **新版网站**：https://soul-code.netlify.app
+- **旧版网站**：https://soul-code.netlify.app/index.旧版.html
 
 ---
 
