@@ -1215,17 +1215,11 @@ function sendToWebhook(email) {
     deity: r ? (r.mainGod ? r.mainGod.name : '') : '',
     dilemma: r ? (r.personality.dilemma || '') : '',
     ts: new Date().toISOString(),
-    // 用户叠加态（包含喜用神、阵营等综合信息）
+    // 用户叠加态（核心字段）
     sw_camp: userState ? userState.camp : '',
     sw_cure: userState ? userState.cure : '',
     sw_name: userState ? userState.name : '',
-    sw: userState ? userState.sw : '',
-    sw_label: userState ? userState.sw_label : '',
-    sw_summary: userState ? userState.summary : '',
-    sw_mask: userState ? userState.mask : '',
-    sw_deficit: userState ? userState.deficit : '',
-    sw_collision: userState ? userState.collision : '',
-    sw_state_text: userState ? userState.state_text : ''
+    sw: userState ? userState.sw : ''
   };
   fetch(WEBHOOK_URL, {
     method: 'POST',
