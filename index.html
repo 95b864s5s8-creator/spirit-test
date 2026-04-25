@@ -401,6 +401,52 @@ body::after{
 .loading-dots::after{content:'';animation:dots 1.5s steps(4,end) infinite}
 @keyframes dots{0%{content:''}25%{content:'.'}50%{content:'..'}75%{content:'...'}}
 
+/* ==================== Email Gate Page ==================== */
+#page-email-gate{justify-content:center;text-align:center;padding:40px 24px}
+.gate-seal{font-size:56px;margin-bottom:24px;animation:pulse 2s ease-in-out infinite}
+.gate-title{
+  font-size:22px;font-weight:400;color:var(--text-primary);letter-spacing:3px;
+  margin-bottom:10px;line-height:1.5
+}
+.gate-subtitle{font-size:13px;color:var(--text-muted);line-height:1.9;margin-bottom:32px;max-width:300px;margin-left:auto;margin-right:auto}
+.gate-input-wrap{
+  display:flex;flex-direction:column;gap:12px;width:100%;max-width:320px;
+  margin:0 auto 16px
+}
+.gate-input{
+  width:100%;padding:14px 18px;
+  background:rgba(197,160,89,0.06);
+  border:1px solid rgba(197,160,89,0.25);
+  border-radius:8px;
+  font-size:15px;color:var(--text-primary);
+  text-align:center;letter-spacing:1px;
+  transition:border-color .25s
+}
+.gate-input:focus{outline:none;border-color:var(--gold)}
+.gate-input::placeholder{color:var(--text-muted)}
+.btn-gate{
+  width:100%;max-width:320px;margin:0 auto;
+  display:block;padding:16px;
+  background:var(--gold);color:#fff;font-size:15px;
+  letter-spacing:3px;border:none;border-radius:8px;cursor:pointer;
+  transition:background .2s;font-weight:600
+}
+.btn-gate:hover{background:var(--gold-light)}
+.btn-gate:disabled{background:rgba(197,160,89,0.4);cursor:not-allowed}
+.gate-skip{
+  margin-top:16px;font-size:11px;color:var(--text-muted);
+  text-decoration:underline;cursor:pointer;letter-spacing:1px
+}
+.gate-skip:hover{color:var(--text-secondary)}
+.gate-privacy{font-size:10px;color:rgba(0,0,0,0.2);margin-top:8px;letter-spacing:0.5px}
+.gate-progress-hint{
+  font-size:11px;color:var(--gold-dim);letter-spacing:2px;
+  margin-bottom:28px;padding:8px 20px;
+  border:1px solid rgba(197,160,89,0.15);border-radius:20px;
+  display:inline-block
+}
+.gate-error{font-size:12px;color:var(--red-accent);margin-top:6px;min-height:18px}
+
 /* ==================== Result Page — 档案风格 ==================== */
 #page-result{justify-content:flex-start;padding-top:0;padding-bottom:120px}
 
@@ -745,6 +791,22 @@ body::after{
   <div class="loading-sub" id="loading-tip">八位东方神正在开会讨论你...</div>
 </div>
 
+<!-- ==================== Page: Email Gate ==================== -->
+<div class="page" id="page-email-gate">
+  <div class="gate-seal">🔮</div>
+  <div class="gate-progress-hint">✦ 档案生成完毕 · 封印中 ✦</div>
+  <h2 class="gate-title">你的灵魂确诊单<br>已生成</h2>
+  <p class="gate-subtitle">输入邮箱，立即解锁你的【核心代号】与守护神完整解析</p>
+  <div class="gate-input-wrap">
+    <input class="gate-input" type="email" inputmode="email" id="gate-email"
+      placeholder="your@email.com" autocomplete="email" autocapitalize="off">
+    <div class="gate-error" id="gate-error"></div>
+    <button class="btn-gate" id="btn-gate-submit" onclick="submitEmailGate()">查看我的灵魂档案 →</button>
+  </div>
+  <div class="gate-skip" onclick="skipEmailGate()">跳过，直接看结果</div>
+  <div class="gate-privacy">我们不发垃圾邮件 · 随时可退订</div>
+</div>
+
 <!-- ==================== Page: Result (长滚动) ==================== -->
 <div class="page" id="page-result">
   <!-- 顶部固定导航栏 -->
@@ -1066,43 +1128,140 @@ function showLoading() {
 
   setTimeout(function() {
     clearInterval(tipInterval);
-    generateResult();
+    // 先在后台计算结果，再显示 Email Gate
+    precomputeResult();
+    showPage('page-email-gate');
+    // 重置 Email Gate 状态
+    document.getElementById('gate-email').value = '';
+    document.getElementById('gate-error').textContent = '';
+    document.getElementById('btn-gate-submit').disabled = false;
   }, 3500);
 }
 
+// ==================== CONFIG ====================
+var WEBHOOK_URL = ''; // 填入 Make.com Webhook URL
+
+// ==================== EMAIL GATE ====================
+var _precomputedResult = null;
+
+function precomputeResult() {
+  // Loading 期间提前计算好结果，避免邮箱提交后等待
+  try {
+    var bazi = BaZiEngine.analyzeBaZi(answers.birth.year, answers.birth.month, answers.birth.day, answers.birth.hour);
+    var personality = PersonalityEngine.analyzePersonality(answers);
+    var formData = FormDataStore.FORMS[bazi.formKey] || null;
+    var prescription = null;
+    var mainGod = null;
+    var deityConclusion = null;
+    if (bazi.cureElement && personality.type16) {
+      prescription = DeityMatrix.getDeityPrescription(bazi.cureElement.wx, personality.type16, personality.dilemma);
+      if (prescription) { mainGod = prescription.deity; deityConclusion = prescription.conclusion; }
+    }
+    if (!mainGod) {
+      var deityMap = personality.type16 ? DeityData.TYPE_DEITY_MAP[personality.type16] : null;
+      mainGod = deityMap ? DeityData.DEITIES[deityMap.main] : null;
+    }
+    var compensation = null;
+    if (bazi.cureElement && personality.type16) {
+      compensation = CompensationEngine.analyze(personality.type16, bazi.cureElement.name);
+    }
+    _precomputedResult = { bazi: bazi, personality: personality, formData: formData, mainGod: mainGod, prescription: prescription, deityConclusion: deityConclusion, compensation: compensation };
+  } catch(e) {
+    _precomputedResult = null;
+  }
+}
+
+// 获取 UTM source（兼容 ?source=tiktok）
+function getTrafficSource() {
+  var params = new URLSearchParams(window.location.search);
+  return params.get('source') || params.get('utm_source') || 'direct';
+}
+
+// 发送数据到 Make.com Webhook（fire & forget，不阻塞 UI）
+function sendToWebhook(email) {
+  if (!WEBHOOK_URL) return;
+  var r = _precomputedResult;
+  var payload = {
+    email: email,
+    source: getTrafficSource(),
+    type16: r ? (r.personality.type16 || '') : '',
+    bazi_cure: r ? (r.bazi.cureElement ? r.bazi.cureElement.name : '') : '',
+    deity: r ? (r.mainGod ? r.mainGod.name : '') : '',
+    dilemma: r ? (r.personality.dilemma || '') : '',
+    ts: new Date().toISOString()
+  };
+  fetch(WEBHOOK_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload)
+  }).catch(function() {}); // 静默失败，不影响用户体验
+}
+
+function validateEmail(v) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim());
+}
+
+function submitEmailGate() {
+  var emailInput = document.getElementById('gate-email');
+  var errorEl = document.getElementById('gate-error');
+  var btn = document.getElementById('btn-gate-submit');
+  var email = emailInput.value.trim();
+
+  if (!validateEmail(email)) {
+    errorEl.textContent = '请输入有效的邮箱地址';
+    emailInput.focus();
+    return;
+  }
+
+  errorEl.textContent = '';
+  btn.disabled = true;
+  btn.textContent = '解封中...';
+
+  // 异步发 Webhook，立即跳结果页
+  sendToWebhook(email);
+  setTimeout(function() { showResultFromGate(); }, 300);
+}
+
+function skipEmailGate() {
+  showResultFromGate();
+}
+
+function showResultFromGate() {
+  generateResult(_precomputedResult);
+}
+
 // ==================== RESULT GENERATION ====================
-function generateResult() {
-  var bazi = BaZiEngine.analyzeBaZi(answers.birth.year, answers.birth.month, answers.birth.day, answers.birth.hour);
-  var personality = PersonalityEngine.analyzePersonality(answers);
-  var formData = FormDataStore.FORMS[bazi.formKey] || null;
+function generateResult(precomputed) {
+  // 优先使用 Loading 期间预计算的结果，否则实时计算
+  var bazi, personality, formData, prescription, mainGod, deityConclusion, compensation;
+  if (precomputed) {
+    bazi = precomputed.bazi;
+    personality = precomputed.personality;
+    formData = precomputed.formData;
+    prescription = precomputed.prescription;
+    mainGod = precomputed.mainGod;
+    deityConclusion = precomputed.deityConclusion;
+    compensation = precomputed.compensation;
+  } else {
+    bazi = BaZiEngine.analyzeBaZi(answers.birth.year, answers.birth.month, answers.birth.day, answers.birth.hour);
+    personality = PersonalityEngine.analyzePersonality(answers);
+    formData = FormDataStore.FORMS[bazi.formKey] || null;
+    prescription = null; mainGod = null; deityConclusion = null;
+    if (bazi.cureElement && personality.type16) {
+      prescription = DeityMatrix.getDeityPrescription(bazi.cureElement.wx, personality.type16, personality.dilemma);
+      if (prescription) { mainGod = prescription.deity; deityConclusion = prescription.conclusion; }
+    }
+    if (!mainGod) {
+      var deityMap = personality.type16 ? DeityData.TYPE_DEITY_MAP[personality.type16] : null;
+      mainGod = deityMap ? DeityData.DEITIES[deityMap.main] : null;
+    }
+    compensation = (bazi.cureElement && personality.type16) ? CompensationEngine.analyze(personality.type16, bazi.cureElement.name) : null;
+  }
 
   // 设置导航栏档案编号
   var archiveNo = 'Archive ' + Math.floor(1000 + Math.random() * 9000);
   var navEl = document.getElementById('nav-archive-no');
   if (navEl) navEl.textContent = archiveNo;
-
-  var prescription = null;
-  var mainGod = null;
-  var deityConclusion = null;
-  if (bazi.cureElement && personality.type16) {
-    prescription = DeityMatrix.getDeityPrescription(
-      bazi.cureElement.wx, personality.type16, personality.dilemma
-    );
-    if (prescription) {
-      mainGod = prescription.deity;
-      deityConclusion = prescription.conclusion;
-    }
-  }
-
-  if (!mainGod) {
-    var deityMap = personality.type16 ? DeityData.TYPE_DEITY_MAP[personality.type16] : null;
-    mainGod = deityMap ? DeityData.DEITIES[deityMap.main] : null;
-  }
-
-  var compensation = null;
-  if (bazi.cureElement && personality.type16) {
-    compensation = CompensationEngine.analyze(personality.type16, bazi.cureElement.name);
-  }
 
   resultData = { bazi: bazi, personality: personality, formData: formData, mainGod: mainGod, prescription: prescription, compensation: compensation };
 
