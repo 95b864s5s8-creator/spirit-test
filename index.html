@@ -1182,27 +1182,31 @@ function sendToWebhook(email) {
   if (!WEBHOOK_URL) return;
   var r = _precomputedResult;
 
-  // 构建全部20格叠加态数据
-  var camps = ['NT', 'NF', 'SJ', 'SP'];
-  var elements = ['木', '火', '土', '金', '水'];
-  var allStates = {};
-  camps.forEach(function(camp) {
-    elements.forEach(function(elem) {
-      var profile = SuperpositionEngine.getProfile(camp, elem);
-      if (profile) {
-        var key = camp + '_' + elem;
-        allStates[key] = {
-          name: profile.name || '',
-          summary: profile.summary || '',
-          mask: profile.mask ? profile.mask.text : '',
-          deficit: profile.deficit ? profile.deficit.text : '',
-          collision: profile.collision ? profile.collision.text : '',
-          s_result: profile.s_result ? profile.s_result.text : '',
-          w_result: profile.w_result ? profile.w_result.text : ''
-        };
-      }
-    });
-  });
+  // 获取用户的叠加态数据
+  var userState = null;
+  if (r && r.personality && r.personality.type16 && r.bazi && r.bazi.cureElement) {
+    var camp = DeityMatrix.getCamp(r.personality.type16);
+    var cureName = r.bazi.cureElement.name;
+    var isStrong = r.bazi.strength ? r.bazi.strength.isStrong : true;
+    var profile = SuperpositionEngine.getProfile(camp, cureName);
+    if (profile) {
+      var swSuffix = isStrong ? 'S' : 'W';
+      var swLabel = isStrong ? '外化' : '内化';
+      var stateResult = isStrong ? profile.s_result : profile.w_result;
+      userState = {
+        camp: camp,
+        cure: cureName,
+        name: profile.name || '',
+        sw: swSuffix,
+        sw_label: swLabel,
+        summary: profile.summary || '',
+        mask: profile.mask ? profile.mask.text : '',
+        deficit: profile.deficit ? profile.deficit.text : '',
+        collision: profile.collision ? profile.collision.text : '',
+        state_text: stateResult ? stateResult.text : ''
+      };
+    }
+  }
 
   var payload = {
     email: email,
@@ -1212,7 +1216,17 @@ function sendToWebhook(email) {
     deity: r ? (r.mainGod ? r.mainGod.name : '') : '',
     dilemma: r ? (r.personality.dilemma || '') : '',
     ts: new Date().toISOString(),
-    all_states: allStates
+    // 用户叠加态
+    sw_camp: userState ? userState.camp : '',
+    sw_cure: userState ? userState.cure : '',
+    sw_name: userState ? userState.name : '',
+    sw: userState ? userState.sw : '',
+    sw_label: userState ? userState.sw_label : '',
+    sw_summary: userState ? userState.summary : '',
+    sw_mask: userState ? userState.mask : '',
+    sw_deficit: userState ? userState.deficit : '',
+    sw_collision: userState ? userState.collision : '',
+    sw_state_text: userState ? userState.state_text : ''
   };
   fetch(WEBHOOK_URL, {
     method: 'POST',
