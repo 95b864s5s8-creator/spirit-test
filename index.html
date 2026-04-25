@@ -1212,11 +1212,10 @@ function sendToWebhook(email) {
     email: email,
     source: getTrafficSource(),
     type16: r ? (r.personality.type16 || '') : '',
-    bazi_cure: r ? (r.bazi.cureElement ? r.bazi.cureElement.name : '') : '',
     deity: r ? (r.mainGod ? r.mainGod.name : '') : '',
     dilemma: r ? (r.personality.dilemma || '') : '',
     ts: new Date().toISOString(),
-    // 用户叠加态
+    // 用户叠加态（包含喜用神、阵营等综合信息）
     sw_camp: userState ? userState.camp : '',
     sw_cure: userState ? userState.cure : '',
     sw_name: userState ? userState.name : '',
