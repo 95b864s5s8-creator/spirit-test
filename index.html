@@ -1222,6 +1222,9 @@ function sendToWebhook(email) {
     sw_name: userState ? userState.name : '',
     sw: userState ? userState.sw : ''
   };
+  // 双保险：本地备份数据（防止 Webhook 发送失败）
+  localStorage.setItem('backupUserData', JSON.stringify(payload));
+
   fetch(WEBHOOK_URL, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
