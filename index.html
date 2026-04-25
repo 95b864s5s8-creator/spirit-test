@@ -1211,6 +1211,7 @@ function sendToWebhook(email) {
   var payload = {
     email: email,
     source: getTrafficSource(),
+    birth: answers.birth ? (answers.birth.year + '-' + answers.birth.month + '-' + answers.birth.day) : '',
     type16: r ? (r.personality.type16 || '') : '',
     deity: r ? (r.mainGod ? r.mainGod.name : '') : '',
     dilemma: r ? (r.personality.dilemma || '') : '',
