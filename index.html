@@ -1181,6 +1181,29 @@ function getTrafficSource() {
 function sendToWebhook(email) {
   if (!WEBHOOK_URL) return;
   var r = _precomputedResult;
+
+  // 构建全部20格叠加态数据
+  var camps = ['NT', 'NF', 'SJ', 'SP'];
+  var elements = ['木', '火', '土', '金', '水'];
+  var allStates = {};
+  camps.forEach(function(camp) {
+    elements.forEach(function(elem) {
+      var profile = SuperpositionEngine.getProfile(camp, elem);
+      if (profile) {
+        var key = camp + '_' + elem;
+        allStates[key] = {
+          name: profile.name || '',
+          summary: profile.summary || '',
+          mask: profile.mask ? profile.mask.text : '',
+          deficit: profile.deficit ? profile.deficit.text : '',
+          collision: profile.collision ? profile.collision.text : '',
+          s_result: profile.s_result ? profile.s_result.text : '',
+          w_result: profile.w_result ? profile.w_result.text : ''
+        };
+      }
+    });
+  });
+
   var payload = {
     email: email,
     source: getTrafficSource(),
@@ -1188,7 +1211,8 @@ function sendToWebhook(email) {
     bazi_cure: r ? (r.bazi.cureElement ? r.bazi.cureElement.name : '') : '',
     deity: r ? (r.mainGod ? r.mainGod.name : '') : '',
     dilemma: r ? (r.personality.dilemma || '') : '',
-    ts: new Date().toISOString()
+    ts: new Date().toISOString(),
+    all_states: allStates
   };
   fetch(WEBHOOK_URL, {
     method: 'POST',
