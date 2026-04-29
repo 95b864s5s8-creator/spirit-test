@@ -1,0 +1,253 @@
+{
+  "DEITIES": {
+    "wenshu": {
+      "name": "Manjushri",
+      "element": "Wood",
+      "position": "Bodhisattva of Wisdom, guardian of the northern path",
+      "quote": "The sword of wisdom cuts through the net of ignorance—what remains is clarity without cruelty.",
+      "product": "Wisdom Mala — sandalwood beads inscribed with the Heart Sutra"
+    },
+    "yuelao": {
+      "name": "Old Man Moon",
+      "element": "Wood",
+      "position": "Deity of fate and destined connection",
+      "quote": "Red thread binds across lifetimes; those who are meant to meet will find each other across any distance.",
+      "product": "Fate Knot Bracelet — red cord hand-woven with silver longevity lock"
+    },
+    "wenchang": {
+      "name": "Wenchang",
+      "element": "Wood",
+      "position": "God of literature and scholarly success",
+      "quote": "The brush writes destiny; ink seals achievement. Those who honor knowledge shall be honored by it.",
+      "product": "Scholar's Brush Pendant — rosewood carved brush shape with calligraphy engraving"
+    },
+    "leishen": {
+      "name": "Lord Thunder",
+      "element": "Fire",
+      "position": "Executor of heavenly justice",
+      "quote": "Thunder does not ask permission to roll; justice does not wait for convenience. The righteous need not fear the storm.",
+      "product": "Thunder Seal Ring — bronze ring engraved with lightning ward sigil"
+    },
+    "guandi": {
+      "name": "Lord Guan",
+      "element": "Fire",
+      "position": "God of loyalty, wealth, and brotherhood",
+      "quote": "Loyalty tested by fire becomes unbreakable. The true warrior's greatest victory is over his own fear.",
+      "product": "Guan Blade Amulet — miniature guan dao pendant with loyalty oath inscription"
+    },
+    "nezha": {
+      "name": "Prince Nezha",
+      "element": "Fire",
+      "position": "Rebellious youth deity of courage and self-determination",
+      "quote": "To rebuild oneself from ash is greater than never having burned at all. The hero defines themselves—no one else can.",
+      "product": "Flame Lotus Charm — cloisonné lotus with wind-fire wheel motif"
+    },
+    "yangjian": {
+      "name": "Erlang Shen",
+      "element": "Fire",
+      "position": "Celestial warrior with truth-revealing eye",
+      "quote": "The third eye sees what two eyes refuse. Truth is a blade—wield it carefully, but do not sheathe it out of fear.",
+      "product": "Truth Eye Pendant — silver pendant with celestial eye design"
+    },
+    "huode": {
+      "name": "Fire Godess",
+      "element": "Fire",
+      "position": "Goddess of hearth and domestic prosperity",
+      "quote": "The fire that warms home also guards its heart. Tend your inner flame and warmth will return multiplied.",
+      "product": "Hearth Flame Incense — proprietary blend of cinnamon, amber, and sandalwood"
+    },
+    "dongyue": {
+      "name": "Emperor of Mt. Tai",
+      "element": "Earth",
+      "position": "Ruler of the eastern peak, judge of souls",
+      "quote": "The mountain does not move for wind or rain; neither does the righteous soul bend for circumstance. Stability IS power.",
+      "product": "Tai Mountain Stone — engraved granite talisman for grounding and resolve"
+    },
+    "dizang": {
+      "name": "Ksitigarbha",
+      "element": "Earth",
+      "position": "Bodhisattva who vowed not to enter nirvana until all beings are saved",
+      "quote": "I vow to empty all hells before seeking enlightenment. No soul is beyond redemption; no darkness too deep for compassion.",
+      "product": "Vow Staff Beads — dark rosewood staff-shaped bead with earth-store sutra micro-engraving"
+    },
+    "houtu": {
+      "name": "Houtu",
+      "element": "Earth",
+      "position": "Earth goddess of fertility and nourishment",
+      "quote": "All things return to earth as they came from it. The deepest roots produce the tallest growth.",
+      "product": "Earth Mother Statue — hand-carved boxwood figurine with grain offering bowl"
+    },
+    "chenghuang": {
+      "name": "City God",
+      "element": "Earth",
+      "position": "Local guardian spirit of order and protection",
+      "quote": "Order within the walls creates peace without them. A well-guarded city begins with a well-guarded heart.",
+      "product": "City Wall Talisman — copper plaque engraved with protective city layout"
+    },
+    "wukong": {
+      "name": "Monkey King",
+      "element": "Metal",
+      "position": "Great Sage Equal to Heaven, trickster-hero of transformation",
+      "quote": "Seventy-two transformations mean nothing if you cannot transform yourself. True freedom is mastery over one's own nature.",
+      "product": "Ruyi Staff Miniature — golden metal replica with cloud-pattern grip"
+    },
+    "damo": {
+      "name": "Bodhidharma",
+      "element": "Metal",
+      "position": "Patriarch who brought Zen from India to China",
+      "quote": "Nine years facing a wall, not to escape the world but to master the mind that perceives it. The gateless gate opens inward.",
+      "product": "Wall-Gazing Mala — ebony beads with single red coral 'enlightenment' marker"
+    },
+    "caishen": {
+      "name": "God of Wealth",
+      "element": "Metal",
+      "position": "Deity of prosperity and good fortune",
+      "quote": "Wealth flows like water—it fills vessels that are ready and passes those that are closed. Prepare your container before praying for abundance.",
+      "product": "Ingot Charm — brass ingot-shaped pendant with wealth-attracting runes"
+    },
+    "zhongkui": {
+      "name": "Zhong Kui",
+      "element": "Metal",
+      "position": "Demon-queller and protector against evil spirits",
+      "quote": "Fear feeds demons; courage starves them. The demon-catcher's weapon is not his sword but his refusal to flinch.",
+      "product": "Demon-Breaker Fan — iron fan charm with Zhong Kui's seal on reverse"
+    },
+    "laojun": {
+      "name": "Laozi",
+      "element": "Water",
+      "position": "Author of the Dao De Jing, supreme Taoist sage",
+      "quote": "The water that yields conquers the stone that resists. In softness lies the strength that hardness can never achieve.",
+      "product": "Tao Te Incense — aged aloeswood blend for meditation and clarity"
+    },
+    "guanyin": {
+      "name": "Guanyin",
+      "element": "Water",
+      "position": "Bodhisattva of Compassion, she who hears the cries of the world",
+      "quote": "A thousand arms to embrace a thousand sorrows—one heart that feels each one completely. Compassion without limit; mercy without exhaustion.",
+      "product": "Compassion Vase Pendant — white jade vase shape with willow branch detail"
+    },
+    "zhenwu": {
+      "name": "Zhenwu",
+      "element": "Water",
+      "position": "Dark Emperor of the north, martial aspect of cosmic balance",
+      "quote": "Stillness in movement, movement in stillness. The black turtle does not race yet always arrives. Power that needs no demonstration is true power.",
+      "product": "Black Tortoise Seal — obsidian turtle-dragon carving with Xuanwu inscription"
+    },
+    "longwang": {
+      "name": "Dragon King",
+      "element": "Water",
+      "position": "Ruler of seas and weather",
+      "quote": "The dragon controls rain but does not hoard it—water must flow to give life. True abundance circulates; stagnation breeds decay.",
+      "product": "Dragon Scale Bracelet — braided leather with bronze dragon-scale clasp"
+    },
+    "mazu": {
+      "name": "Mazu",
+      "element": "Water",
+      "position": "Goddess of the sea, protector of sailors and travelers",
+      "quote": "The sailor cannot control the ocean but can trust the one who does. Sometimes safety lies not in strength but in surrender to greater protection.",
+      "product": "Sea Lantern Incense Holder — ceramic holder shaped like Mazu's lantern"
+    }
+  },
+  "CONCLUSIONS": {
+    "0_NT": {
+      "act1": "Your mind cuts through illusion like light through fog—you see structure where others see chaos, pattern where others see randomness. This analytical gift is extraordinary, but it carries a price: you may analyze beauty until it becomes data, dissect love until it becomes chemistry. The void between perception and participation is your territory—and your prison.",
+      "act2": "Manjushri's sword does not destroy ignorance; it reveals what was always there beneath it. Your task is not to abandon analysis but to let wisdom temper it—to see clearly AND feel deeply, to understand precisely AND love messily. The superposition demands both modes simultaneously.",
+      "act3": "When you achieve coherence: your intellect becomes a scalpel that heals rather than merely cuts. You perceive truth without detaching from it. The void fills—not with noise, but with meaning that survives your scrutiny."
+    },
+    "0_NF": {
+      "act1": "You feel everything with devastating intensity—others' joy becomes yours, their pain echoes in your chest. This empathic capacity is a rare gift, but it threatens to consume you. You are the harbor that never closes, and every ship leaves cargo you must store.",
+      "act2": "Guanyin has a thousand arms not because suffering requires infinite response, but because compassion knows no limits. Your lesson: boundaries don't diminish love—they make it sustainable. Receive as gracefully as you give.",
+      "act3": "When you achieve coherence: your empathy transforms into wisdom that heals both giver and receiver. You remain a safe harbor—but one with tides, with seasons, with the rhythm of natural giving and receiving."
+    },
+    "0_SJ": {
+      "act1": "Structure is your native language—you organize chaos into order, uncertainty into plans, potential into systems. This capability makes you invaluable and invisible in equal measure. The machine runs because you maintain it, but who maintains you?",
+      "act2": "Lord Guan's loyalty was legendary not because it was blind, but because it was chosen freely. Your devotion to duty becomes noble when balanced with devotion to self. The framework serves life, not vice versa.",
+      "act3": "When you achieve coherence: your organizational genius evolves into leadership that empowers rather than controls. Systems flex to contain life instead of constraining it. Reliability with humanity."
+    },
+    "0_SP": {
+      "act1": "You drift through possibilities like wind through grass—touching many, committing to none. Each option glimmers with potential; choosing one means extinguishing others. Freedom is your treasure and your trap.",
+      "act2": "Monkey King's seventy-two transformations were useless until he transformed himself. Rooting is not the death of freedom—it's freedom's deepening into something that matters. Choose. Then commit. Then watch how commitment opens doors drift never found.",
+      "act3": "When you achieve coherence: your adaptability becomes intentional navigation rather than aimless wandering. You explore depth instead of breadth, and discover that each choice multiplies rather than reduces possibility."
+    },
+    "1_NT": {
+      "act1": "Your mind burns through assumptions like fire through dry brush—nothing escapes your critical examination. Every idea is stress-tested; every belief must survive your scrutiny. Brilliance that illuminates can also incinerate.",
+      "act2": "Lord Thunder's judgment strikes without hesitation, but never without cause. Channel your fire toward what deserves destruction—illusion, hypocrisy, injustice—rather than letting it consume everything indiscriminately. Discrimination is wisdom's partner.",
+      "act3": "When you achieve coherence: your critical fire forges rather than destroys. Ideas that survive your scrutiny are genuinely stronger for it. You become the flame that purifies gold—not the wildfire that leaves only ash."
+    },
+    "1_NF": {
+      "act1": "Your warmth draws people from the cold of isolation—you create spaces where vulnerability feels safe, where emotion can breathe. But fires consume fuel, and yours comes from reserves that aren't being replenished.",
+      "act2": "The Fire Goddess tends the hearth not by burning herself but by feeding the flames wisely. Your warmth sustains when it flows cyclically—give, receive, give again. Accept care as naturally as you offer it.",
+      "act3": "When you achieve coherence: your warmth becomes a self-sustaining fire that warms without consuming. Others find not just comfort but renewal in your presence. The sanctuary glows from within."
+    },
+    "1_SJ": {
+      "act1": "Your commitments burn with fierce intensity—the causes you serve, the people you protect, the standards you uphold receive nothing less than total dedication. But devotion without examination can become dogma.",
+      "act2": "Nezha rebuilt himself from ash—that is faith tempered by autonomy. Serve what merits serving because you've examined it, not because habit demands it. Loyalty with eyes open exceeds loyalty blindfolded.",
+      "act3": "When you achieve coherence: your passion becomes purposeful force—directed by wisdom, sustained by genuine conviction. What you serve deserves your fire, and your fire builds rather than destroys."
+    },
+    "1_SP": {
+      "act1": "Sparks fly in every direction—each project ignites your enthusiasm, each new possibility calls your name. But sparks that don't sustain become scattered embers, and scattered embers provide neither warmth nor light.",
+      "act2": "Yang Jian's third eye sees through illusion to essence. Train this sight on yourself: which sparks are truly yours, and which reflect others' expectations? Sequence rather than scatter. Depth over distribution.",
+      "act3": "When you achieve coherence: your polymathic energy channels into mastery rather than diffusion. Each completed endeavor fuels the next. The tangle resolves into a tapestry."
+    },
+    "2_NT": {
+      "act1": "Your mind is a library where human knowledge is catalogued with meticulous precision—every fact cross-referenced, every insight shelved properly. But archives preserve rather than create; they store rather than live.",
+      "act2": "Mt. Tai Emperor stands unmoving because stability is itself a form of wisdom. Let your accumulated knowledge ground action rather than substitute for it. Build on the mountain; don't just catalogue its stones.",
+      "act3": "When you achieve coherence: your archive becomes a foundation for living wisdom. Knowledge flows outward as action rather than pooling inward as accumulation. The librarian walks among the books."
+    },
+    "2_NF": {
+      "act1": "Within you grows a lush garden of meaning—values cultivated with care, connections tended with devotion, beauty nurtured patiently. But gardens behind high walls may grow strange, beautiful, and disconnected from the world outside.",
+      "act2": "Houtu receives all things back into fertile soil—nothing is wasted, everything nourishes. Open the garden gates. Let real winds pollinate your meanings. Richness that never engages reality eventually withers in isolation.",
+      "act3": "When you achieve coherence: your garden exchanges pollen with the wider world while maintaining its unique ecology. Inner richness fuels outer engagement. Beauty that connects rather than hides."
+    },
+    "2_SJ": {
+      "act1": "You are bedrock—solid, consistent, utterly reliable. When you say something happens, it happens. This dependability is your gift and your burden: granite doesn't bend, and ledgers don't forgive.",
+      "act2": "Ksitigarbha's vow spans eternity because some promises transcend circumstance. Your reliability becomes heroic when balanced with mercy—for yourself as much as for others. Let the ledger account for human limitation.",
+      "act3": "When you achieve coherence: your steadfastness becomes trustworthiness that includes trusting yourself. Rock that supports growth rather than weight that crushes. Dependability with breathing room."
+    },
+    "2_SP": {
+      "act1": "You inhabit comfortable space between commitments—nothing pins you down, nothing holds you back. Laid-back ease conceals deeper patterns: resistance to stakes, avoidance of investment, freedom by default rather than choice.",
+      "act2": "City God maintains order within walls but must engage with the world beyond them. Choose your commitments deliberately rather than drifting past them. Something worth fighting for is worth staying for.",
+      "act3": "When you achieve coherence: your easygoing nature matures into authentic flexibility—responsive rather than reactive, available rather than absent. Dust settles into foundations."
+    },
+    "3_NT": {
+      "act1": "Your mind operates with surgical precision—separating signal from noise, identifying core problems, proposing clean solutions. Scalpels save lives but they cannot heal wounds they refuse to touch.",
+      "act2": "Monkey King's Ruyi Staff can be tiny or enormous, gentle or devastating—power lies in knowing which mode each moment requires. Use your precision to cut away obstacles to connection, not connection itself.",
+      "act3": "When you achieve coherence: your sharpness becomes an instrument of healing rather than mere cutting. Analysis serves intimacy. The scalpel knows when to set itself down and simply hold."
+    },
+    "3_NF": {
+      "act1": "Your taste is exquisite—quality matters, harmony matters, beauty matters. This refinement elevates everything it touches. But gold however beautiful is still a cage when it prevents engagement with imperfection.",
+      "act2": "Bodhidharma faced a wall for nine years not because he sought perfection but because he sought truth beyond appearance. Let some things be beautifully imperfect. The cage becomes a trellis when you stop demanding it remain locked.",
+      "act3": "When you achieve coherence: your discernment appreciates depth rather than rejecting inadequacy. Sensitivity becomes generosity—you notice beauty others miss, including the beauty in flaws."
+    },
+    "3_SJ": {
+      "act1": "Authority comes naturally to you—when you take charge, things get done properly. High expectations plus clear guidance produces results. But ruling requires subjects, and your standards can make collaboration feel like subjugation.",
+      "act2": "Zhong Kui catches demons not for glory but for protection. Your authority serves when it empowers rather than dominates. The best ruler rules least—creating conditions for others' excellence rather than demanding submission.",
+      "act3": "When you achieve coherence: your leadership evolves into stewardship. Authority given freely exceeds authority seized. The throne supports rather than isolates."
+    },
+    "3_SP": {
+      "act1": "You wield capability like a blade materializing from mist—present when needed, gone before dependency forms. Can do anything; commit to nothing. Independence that prevents intimacy is just performance.",
+      "act2": "God of Wealth teaches that abundance requires prepared vessels—open containers receive, closed ones deflect. Let yourself be needed. Interdependence enriches rather than diminishes autonomy.",
+      "act3": "When you achieve coherence: competence becomes reliable service. The blade finds a worthy hand. Fog lifts to reveal solid ground where connection can root."
+    },
+    "4_NT": {
+      "act1": "Your consciousness mirrors whatever it encounters—chameleon-like adaptation lets you understand anyone, fit anywhere. But mirrors have no substance; after enough reflections, you lose track of original face.",
+      "act2": "Laozi's water takes any shape yet retains its essential nature. Adaptation without dissolution: flow through identities without losing the self that chooses them. Contain multitudes without fragmenting.",
+      "act3": "When you achieve coherence: mirroring becomes intentional resonance. You understand others deeply without becoming them. The echo finds its source—and the source is richer for all its reflections."
+    },
+    "4_NF": {
+      "act1": "Your emotional nature provides safe harbor—acceptance without judgment, listening without fixing, presence without agenda. But harbors collect everything that washes ashore, including toxicity that poisons the waters.",
+      "act2": "Mazu protects sailors by knowing when to guide and when to let the ocean teach its own lessons. Not every storm requires your intervention. Boundaries transform dumping ground into sanctuary.",
+      "act3": "When you achieve coherence: empathy becomes sustainable compassion. Harbor with outlets as well as inlets. You remain a refuge—a clean one that nourishes rather than drowns."
+    },
+    "4_SJ": {
+      "act1": "You absorb conflict, smooth friction, maintain social cohesion through tireless effort. Everyone gets along because you make sure they do. But perpetual mediation exhausts the mediator, and smoothed-over conflicts fester beneath surfaces.",
+      "act2": "Dragon King controls rain but releases it—water must flow to give life. Some conflicts must be surfaced rather than smoothed. Harmony achieved through suppression isn't harmony at all.",
+      "act3": "When you achieve coherence: peacemaking becomes genuine diplomacy. Vessel with healthy circulation. Mercury that purifies rather than poisons its holder."
+    },
+    "4_SP": {
+      "act1": "You flow through identities and connections—charmingly adaptive, seemingly compatible with everyone. But echoes accumulate until waves overlap and original signal disappears. Chameleon that forgot what color it started as.",
+      "act2": "Zhenwu's stillness contains infinite potential for movement. Find the still point within your fluidity—the center around which rotation occurs. Banks give rivers direction without stopping their flow.",
+      "act3": "When you achieve coherence: adaptation becomes integration. Wave that knows its depths while dancing with surface winds. Echo that traces back to a clear, strong voice."
+    }
+  }
+}

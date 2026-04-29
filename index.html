@@ -1033,10 +1033,15 @@ function renderQuestion(direction) {
     var optsHtml = '';
     q.options.forEach(function(opt, idx) {
       var isSelected = answeredMap[currentQ] === idx;
+      // i18n 翻译：形态选项
+      var fKey = currentQ + '_' + idx;
+      var tr = i18n.tf(fKey);
+      var label = (tr && tr.label) ? tr.label : opt.label;
+      var otext = (tr && tr.text) ? tr.text : opt.text;
       optsHtml +=
         '<div class="option-btn' + (isSelected ? ' selected' : '') + '" onclick="selectOption(' + idx + ')">' +
-          '<span class="option-label">' + opt.label + '</span>' +
-          '<span>' + opt.text + '</span>' +
+          '<span class="option-label">' + label + '</span>' +
+          '<span>' + otext + '</span>' +
         '</div>';
     });
     card.innerHTML =
@@ -1165,11 +1170,12 @@ function precomputeResult() {
     var deityConclusion = null;
     if (bazi.cureElement && personality.type16) {
       prescription = DeityMatrix.getDeityPrescription(bazi.cureElement.wx, personality.type16, personality.dilemma);
-      if (prescription) { mainGod = prescription.deity; deityConclusion = prescription.conclusion; }
+      if (prescription) { mainGod = prescription.deity; if (mainGod) mainGod.id = prescription.deityKey; deityConclusion = prescription.conclusion; }
     }
     if (!mainGod) {
       var deityMap = personality.type16 ? DeityData.TYPE_DEITY_MAP[personality.type16] : null;
       mainGod = deityMap ? DeityData.DEITIES[deityMap.main] : null;
+      if (mainGod && deityMap) mainGod.id = deityMap.main;
     }
     var compensation = null;
     if (bazi.cureElement && personality.type16) {
@@ -1294,11 +1300,12 @@ function generateResult(precomputed) {
     prescription = null; mainGod = null; deityConclusion = null;
     if (bazi.cureElement && personality.type16) {
       prescription = DeityMatrix.getDeityPrescription(bazi.cureElement.wx, personality.type16, personality.dilemma);
-      if (prescription) { mainGod = prescription.deity; deityConclusion = prescription.conclusion; }
+      if (prescription) { mainGod = prescription.deity; if (mainGod) mainGod.id = prescription.deityKey; deityConclusion = prescription.conclusion; }
     }
     if (!mainGod) {
-      var deityMap = personality.type16 ? DeityData.TYPE_DEITY_MAP[personality.type16] : null;
-      mainGod = deityMap ? DeityData.DEITIES[deityMap.main] : null;
+      var deityMap2 = personality.type16 ? DeityData.TYPE_DEITY_MAP[personality.type16] : null;
+      mainGod = deityMap2 ? DeityData.DEITIES[deityMap2.main] : null;
+      if (mainGod && deityMap2) mainGod.id = deityMap2.main;
     }
     compensation = (bazi.cureElement && personality.type16) ? CompensationEngine.analyze(personality.type16, bazi.cureElement.name) : null;
   }
@@ -1372,6 +1379,8 @@ function renderFace1(typeInfo, compensation, bazi, personality, mainGod) {
   var cureName = bazi.cureElement ? bazi.cureElement.name : '';
   var isStrong = bazi.strength.isStrong;
   var spName = SuperpositionEngine.getFullName(camp, cureName, isStrong);
+  // 叠加态英文名翻译
+  var spNameEn = i18n.ts(camp + '_' + cureName) || spName;
   var campInfo = DeityMatrix.CAMP_INFO[camp] || DeityMatrix.CAMP_INFO.NT;
   var archiveNo = generateArchiveNo();
 
@@ -1398,7 +1407,7 @@ function renderFace1(typeInfo, compensation, bazi, personality, mainGod) {
   // 叠加态命名
   html +=
     '<div class="text-later" style="text-align:center;margin-bottom:48px;padding:0 20px">' +
-      '<div class="face1-title">' + spName + '</div>' +
+      '<div class="face1-title">' + (i18n.getLang() === 'en' ? (spNameEn || spName) : spName) + '</div>' +
       '<div style="font-size:12px;color:var(--text-muted);letter-spacing:4px;margin-top:12px;font-family:monospace;text-transform:uppercase">' + campInfo.name + '</div>' +
     '</div>';
 
@@ -1433,12 +1442,24 @@ function renderFace2(bazi, personality, formData, compensation) {
     '</div>';
 
   if (profile) {
-    var sections = [
-      { label: i18n.t('result.mask_title'),      title: i18n.t('result.mask_subtitle'),     text: profile.mask ? profile.mask.text : '',     color: 'var(--green-accent)' },
-      { label: i18n.t('result.deficit_title'),   title: i18n.t('result.deficit_subtitle'),  text: profile.deficit ? profile.deficit.text : '', color: 'var(--red-accent)' },
-      { label: i18n.t('result.collision_title'), title: i18n.t('result.collision_subtitle'),text: profile.collision ? profile.collision.text : '', color: 'var(--gold)' },
-      { label: i18n.t('result.outcome_title'),   title: i18n.t('result.outcome_subtitle'),  text: (isStrong ? profile.s_result : profile.w_result) ? (isStrong ? profile.s_result.text : profile.w_result.text) : '', color: 'var(--blue-accent)' }
+    var trSp = i18n.ts(camp + '_' + cureName);
+    // 翻译映射：mask → The Mask / deficit → The Deficit 等
+    var secData = [
+      { lk: 'mask',      il: 'result.mask_title',     is: 'result.mask_subtitle' },
+      { lk: 'deficit',   il: 'result.deficit_title',  is: 'result.deficit_subtitle' },
+      { lk: 'collision', il: 'result.collision_title', is: 'result.collision_subtitle' },
+      { lk: (isStrong ? 's_result' : 'w_result'), il: 'result.outcome_title', is: 'result.outcome_subtitle' }
     ];
+    var sections = secData.map(function(sd, i) {
+      var orig = profile[sd.lk];
+      var text = orig ? orig.text : '';
+      var titleKey = sd.is;
+      // 如果有英文翻译，覆盖原文
+      if (trSp && trSp[sd.lk]) {
+        if (trSp[sd.lk].text) text = trSp[sd.lk].text;
+      }
+      return { label: i18n.t(sd.il), title: i18n.t(titleKey), text: text, color: ['var(--green-accent)','var(--red-accent)','var(--gold)','var(--blue-accent)'][i] };
+    });
     var secDelay = ['.3s', '.5s', '.7s', '.9s'];
     var bgChars = ['面', '病', '撞', '果'];
 
@@ -1470,6 +1491,7 @@ function renderFace3(mainGod, deityConclusion, typeInfo, bazi, compensation, per
   var cureName = bazi.cureElement ? bazi.cureElement.name : '';
   var isStrong = bazi.strength.isStrong;
   var spName = SuperpositionEngine.getFullName(camp, cureName, isStrong);
+  var spNameEn3 = i18n.ts(camp + '_' + cureName) || spName;
 
   if (!mainGod) {
     html = '<div class="section-card"><div class="section-content" style="text-align:center;color:var(--text-muted)">守护神加载中…</div></div>';
@@ -1477,10 +1499,17 @@ function renderFace3(mainGod, deityConclusion, typeInfo, bazi, compensation, per
     return;
   }
 
-  // 获取守护神英文名（从position提取或生成）
-  var deitySubtitle = mainGod.position || 'Guardian';
-  if (deitySubtitle.length > 10 && deitySubtitle.indexOf('——') > -1) {
-    deitySubtitle = deitySubtitle.split('——')[1] || deitySubtitle.split('—')[1] || 'Guardian';
+  // 获取守护神翻译
+  var deityId = mainGod.id || '';
+  var trD = i18n.td(deityId);
+  // 获取结论翻译
+  var matrixKey = camp + '_' + (personality.type16 || 'NF');
+  var trC = i18n.tc(matrixKey);
+
+  var displayName = (trD && trD.name) ? trD.name : mainGod.name;
+  var displayPos = (trD && trD.position) ? trD.position : (mainGod.position || 'Guardian');
+  if (displayPos.length > 10 && displayPos.indexOf('——') > -1) {
+    displayPos = displayPos.split('——')[1] || displayPos.split('—')[1] || displayPos;
   }
 
   // 守护神区块 — 深色背景风格（参考设计）
@@ -1505,8 +1534,8 @@ function renderFace3(mainGod, deityConclusion, typeInfo, bazi, compensation, per
       '</div>' +
       // 神名
       '<div style="text-align:center;margin-bottom:12px">' +
-        '<h3 style="font-size:36px;font-weight:400;letter-spacing:0.4em;color:#f7f6f2;margin-bottom:12px">' + mainGod.name + '</h3>' +
-        '<p style="font-family:Inter,sans-serif;font-size:10px;letter-spacing:0.8em;color:#c5a059;font-weight:700;text-transform:uppercase;opacity:0.8">' + deitySubtitle + '</p>' +
+        '<h3 style="font-size:36px;font-weight:400;letter-spacing:0.4em;color:#f7f6f2;margin-bottom:12px">' + displayName + '</h3>' +
+        '<p style="font-family:Inter,sans-serif;font-size:10px;letter-spacing:0.8em;color:#c5a059;font-weight:700;text-transform:uppercase;opacity:0.8">' + displayPos + '</p>' +
       '</div>' +
       // 三幕叙事 Grid 布局
       '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:32px;margin-top:60px;padding-top:40px;border-top:1px solid rgba(247,246,242,0.1)">' +
@@ -1514,21 +1543,21 @@ function renderFace3(mainGod, deityConclusion, typeInfo, bazi, compensation, per
         '<div>' +
           '<span style="font-family:Inter,sans-serif;font-size:9px;letter-spacing:0.3em;color:#c5a059;font-weight:600;text-transform:uppercase;display:block;margin-bottom:16px">' + i18n.t('result.act1_label') + '</span>' +
           '<p style="font-size:15px;line-height:2;color:rgba(247,246,242,0.9);font-weight:300;font-style:italic">' +
-            (deityConclusion && deityConclusion.act1 ? deityConclusion.act1 : '他在众生中寻觅，只为找一个能与你灵魂波长同步的人。') +
+            (trC && trC.act1 ? trC.act1 : (deityConclusion && deityConclusion.act1 ? deityConclusion.act1 : '他在众生中寻觅，只为找一个能与你灵魂波长同步的人。')) +
           '</p>' +
         '</div>' +
         // Act II
         '<div>' +
           '<span style="font-family:Inter,sans-serif;font-size:9px;letter-spacing:0.3em;color:rgba(247,246,242,0.3);font-weight:600;text-transform:uppercase;display:block;margin-bottom:16px">' + i18n.t('result.act2_label') + '</span>' +
           '<p style="font-size:14px;line-height:2;color:rgba(247,246,242,0.6);font-weight:300">' +
-            (deityConclusion && deityConclusion.act2 ? deityConclusion.act2 : '你是那根断掉的红线，他在月光下试图为你重新续上。') +
+            (trC && trC.act2 ? trC.act2 : (deityConclusion && deityConclusion.act2 ? deityConclusion.act2 : '你是那根断掉的红线，他在月光下试图为你重新续上。')) +
           '</p>' +
         '</div>' +
         // Act III
         '<div>' +
           '<span style="font-family:Inter,sans-serif;font-size:9px;letter-spacing:0.3em;color:rgba(247,246,242,0.3);font-weight:600;text-transform:uppercase;display:block;margin-bottom:16px">' + i18n.t('result.act3_label') + '</span>' +
           '<p style="font-size:14px;line-height:2;color:rgba(247,246,242,0.6);font-weight:300">' +
-            (deityConclusion && deityConclusion.act3 ? deityConclusion.act3 : '你需要的是一个能忍受你沉默的人。将防备转化为观察，你会发现真正的自由。') +
+            (trC && trC.act3 ? trC.act3 : (deityConclusion && deityConclusion.act3 ? deityConclusion.act3 : '你需要的是一个能忍受你沉默的人。将防备转化为观察，你会发现真正的自由。')) +
           '</p>' +
         '</div>' +
       '</div>' +
@@ -1565,8 +1594,8 @@ function renderFace3(mainGod, deityConclusion, typeInfo, bazi, compensation, per
         '<div style="display:flex;align-items:center;gap:20px">' +
           '<div style="line-height:1;flex-shrink:0;font-size:48px">' + mainGod.emoji + '</div>' +
           '<div>' +
-            '<div style="font-size:22px;font-weight:400;color:var(--text-primary);letter-spacing:3px;line-height:1.4">「' + spName + '」</div>' +
-            '<div style="font-size:11px;color:var(--text-muted);margin-top:8px;letter-spacing:2px">' + mainGod.name + '</div>' +
+            '<div style="font-size:22px;font-weight:400;color:var(--text-primary);letter-spacing:3px;line-height:1.4">「' + (i18n.getLang() === 'en' ? (spNameEn3 || spName) : spName) + '」</div>' +
+            '<div style="font-size:11px;color:var(--text-muted);margin-top:8px;letter-spacing:2px">' + ((trD && trD.name) ? trD.name : mainGod.name) + '</div>' +
           '</div>' +
         '</div>' +
       '</div>' +
@@ -1601,13 +1630,17 @@ function shareResult() {
   var cureName = bazi.cureElement ? bazi.cureElement.name : '';
   var isStrong = bazi.strength.isStrong;
   var spName = SuperpositionEngine.getFullName(camp, cureName, isStrong);
+  var spNameShare = i18n.ts(camp + '_' + cureName) || spName;
+  var deityIdShare = (resultData.mainGod && resultData.mainGod.id) ? resultData.mainGod.id : '';
+  var trDShare = i18n.td(deityIdShare);
+  var mainGodNameEn = (trDShare && trDShare.name) ? trDShare.name : mainGodName;
 
   var swWord = isStrong ? '外化' : '内化';
   var hook = isStrong
     ? i18n.t('share.text_strong')
     : i18n.t('share.text_weak');
 
-  var text = '「' + spName + '」' + mainGodEmoji + mainGodName + '。' +
+  var text = '「' + (i18n.getLang() === 'en' ? (spNameShare || spName) : spName) + '」' + mainGodEmoji + (i18n.getLang() === 'en' ? mainGodNameEn : mainGodName) + '。' +
     hook + '\n' + i18n.t('share.suffix');
   if (navigator.share) {
     navigator.share({

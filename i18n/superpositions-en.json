@@ -1,0 +1,510 @@
+{
+  "NAMES": {
+    "NT_木": "Void Intellect",
+    "NT_火": "Infernal Prism",
+    "NT_土": "Ashen Archive",
+    "NT_金": "Frost Scalpel",
+    "NT_水": "Abyssal Mirror",
+    "NF_木": "Jade Canopy",
+    "NF_火": "Ember Sanctuary",
+    "NF_土": "Terracotta Garden",
+    "NF_金": "Gilded Cage",
+    "NF_水": "Glass Harbor",
+    "SJ_木": "Bamboo Matrix",
+    "SJ_火": "Crimson Protocol",
+    "SJ_土": "Granite Ledger",
+    "SJ_金": "Platinum Ruler",
+    "SJ_水": "Mercury Vessel",
+    "SP_木": "Root Drift",
+    "SP_火": "Spark Tangle",
+    "SP_土": "Dust Cloud",
+    "SP_金": "Blade Fog",
+    "SP_水": "Wave Echo"
+  },
+  "SW_LABELS": {
+    "S": "Strength",
+    "W": "Weakness"
+  },
+  "PROFILES": {
+    "NT_木": {
+      "name": "Void Intellect",
+      "summary": "Your mind is a pristine void where thoughts arise and dissolve without attachment. You perceive patterns others miss because you observe without interference. In a world of noise, you are the silence that reveals truth. Your strength lies in pure perception—untainted analysis that cuts through illusion. But this same clarity can become a prison: when you see through everything, you may find nothing worth holding onto. The void does not judge, but it also does not comfort. Learning to let meaning exist without dissecting it is your path forward.",
+      "mask": {
+        "title": "The Mask",
+        "text": "You present as coolly analytical, intellectually sharp, and emotionally detached. Others see someone who always has the right answer, who never loses their composure, whose logic is impeccable. You are the person everyone consults when clarity is needed."
+      },
+      "deficit": {
+        "title": "The Deficit",
+        "text": "Beneath the analytical armor lies an unspoken terror of emotional engulfment. You fear that feeling deeply will consume your rationality—that if you allow yourself to care, you will lose the precision that defines you. So you keep everything at arm's length, safe but isolated."
+      },
+      "collision": {
+        "title": "The Collision",
+        "text": "When reality forces you to feel despite your defenses, you experience existential vertigo—the ground of logic dissolves beneath your feet. A loss, a betrayal, or a moment of overwhelming beauty cracks your carefully constructed framework, and suddenly the void is no longer peaceful—it's hungry."
+      },
+      "s_result": {
+        "title": "Strength Path",
+        "text": "You learn that clarity and depth can coexist. Your analytical gifts become tools for understanding emotion rather than escaping it. You develop cognitive empathy—the ability to model others' inner worlds without drowning in them. Your void becomes a sanctuary rather than a shelter."
+      },
+      "w_result": {
+        "title": "Weakness Path",
+        "text": "You retreat further into abstraction, building ever-more-elaborate intellectual frameworks to explain away your disconnection. Philosophy becomes anesthesia. You may excel in fields that reward detachment, but your relationships grow increasingly spectral."
+      }
+    },
+    "NT_火": {
+      "name": "Infernal Prism",
+      "summary": "Your mind fractures every idea into its constituent spectrums, revealing truths from angles others cannot perceive. You are a living prism—taking in light and scattering it into brilliant, dangerous rainbows. This gift makes you devastatingly insightful, capable of seeing through any facade. But it also means you rarely experience anything whole.",
+      "mask": {
+        "title": "The Mask",
+        "text": "You appear as the brilliant provocateur—the one who challenges assumptions, exposes contradictions, and refuses to accept surface-level answers. People are drawn to your intellectual intensity, even as they find you slightly terrifying."
+      },
+      "deficit": {
+        "title": "The Deficit",
+        "text": "Your greatest fear is ordinariness—to be someone who sees only what everyone else sees. Beneath the provocative exterior is a desperate need to matter, to be the one who perceives what others cannot."
+      },
+      "collision": {
+        "title": "The Collision",
+        "text": "When you encounter something that resists analysis—a grief that won't resolve, a love that defies logic—you experience psychic fragmentation. The prism shatters not into beautiful colors but into jagged confusion."
+      },
+      "s_result": {
+        "title": "Strength Path",
+        "text": "You discover that some truths are felt before they're understood. Your analytical brilliance becomes a complement to embodied wisdom rather than a replacement for it. You learn to sometimes turn off the prism and simply be present with what is."
+      },
+      "w_result": {
+        "title": "Weakness Path",
+        "text": "Your deconstructive impulse turns inward, dismantling your own convictions faster than they can form. You become a ghost of potential—brilliant flashes that illuminate nothing because there's nothing left to hold the light."
+      }
+    },
+    "NT_土": {
+      "name": "Ashen Archive",
+      "summary": "You carry within you a vast library of human knowledge, organized and cross-referenced with meticulous care. Every conversation adds volumes; every experience is catalogued. But archives are places where things are stored, not lived. Your knowledge is immense yet strangely lifeless—like ashes that once were fire. The challenge is to let some knowledge burn again.",
+      "mask": {
+        "title": "The Mask",
+        "text": "You present as the walking encyclopedia—the person who knows something about everything and everything about something. People come to you for answers, and you reliably provide them. You seem grounded, substantial, dependable."
+      },
+      "deficit": {
+        "title": "The Deficit",
+        "text": "Underneath the accumulated wisdom is a quiet panic about irrelevance. If you stop learning, stop accumulating, stop organizing—who are you? The archive fears emptiness more than chaos."
+      },
+      "collision": {
+        "title": "The Collision",
+        "text": "When faced with questions your archive cannot answer—questions of purpose, of value, of meaning that must be lived rather than known—you experience structural collapse. The shelves buckle and the catalogs scatter."
+      },
+      "s_result": {
+        "title": "Strength Path",
+        "text": "You learn that some truths cannot be archived—they must be enacted. Your vast knowledge becomes fuel for action rather than a substitute for it. You become not just a keeper of wisdom but a living expression of it."
+      },
+      "w_result": {
+        "title": "Weakness Path",
+        "text": "The archive expands endlessly while the librarian shrinks. You know everything about living except how to live. Your expertise becomes a fortress that keeps experience at a safe distance."
+      }
+    },
+    "NT_金": {
+      "name": "Frost Scalpel",
+      "summary": "Your mind operates with surgical precision, separating signal from noise with冷酷 efficiency. Where others see complexity, you see architecture amenable to intervention. This makes you extraordinarily effective at solving problems—but it can also make you dangerously detached from the human tissue those problems are embedded in.",
+      "mask": {
+        "title": "The Mask",
+        "text": "You appear ruthlessly competent—the person who can identify the core issue in any mess and propose a clean solution. People respect your efficiency even when they find your approach cold."
+      },
+      "deficit": {
+        "title": "The Deficit",
+        "text": "What you hide is the exhaustion of constant optimization. Being the scalpel means never being the wound. You long to be the one who receives care rather than administers it, but you've forgotten how to ask."
+      },
+      "collision": {
+        "title": "The Collision",
+        "text": "When you encounter a problem that resists cutting—a situation that requires presence rather than surgery—you freeze. The instrument that defines you suddenly has nothing to cut."
+      },
+      "s_result": {
+        "title": "Strength Path",
+        "text": "Your precision becomes an act of care rather than control. You learn to cut not to separate but to heal—to use your analytical gifts in service of connection rather than as a defense against it."
+      },
+      "w_result": {
+        "title": "Weakness Path",
+        "text": "The scalpel turns on itself, surgically removing vulnerability until nothing human remains. You function perfectly while slowly dying inside."
+      }
+    },
+    "NT_水": {
+      "name": "Abyssal Mirror",
+      "summary": "Your consciousness is a deep, still body of water that reflects whatever is placed before it with perfect accuracy. You understand others by becoming them—mirroring their thoughts, feelings, and perspectives with chameleon-like fluidity. This makes you exceptionally perceptive and empathetic. But mirrors have no substance of their own.",
+      "mask": {
+        "title": "The Mask",
+        "text": "You appear as the perfect listener—the one who understands everyone, who never judges, who seems to intuitively get what others need. People feel seen by you in ways they rarely experience."
+      },
+      "deficit": {
+        "title": "The Deficit",
+        "text": "The hidden terror is that there is no 'you' beneath all the reflecting—just an infinite regress of other people's projections. You've become so good at mirroring that you've lost track of your original face."
+      },
+      "collision": {
+        "title": "The Collision",
+        "text": "When multiple people you care about need contradictory things from you simultaneously, the mirror cracks. You cannot reflect two opposite images at once—and the failure devastates you."
+      },
+      "s_result": {
+        "title": "Strength Path",
+        "text": "You discover that reflection can be selective—that choosing what to mirror is itself an act of selfhood. Your empathic gifts deepen into genuine intimacy rather than dissolving into identification."
+      },
+      "w_result": {
+        "title": "Weakness Path",
+        "text": "You become a hall of infinite reflections, each one thinner than the last. Others use you as a surface for their needs while you fade into the background of your own life."
+      }
+    },
+    "NF_木": {
+      "name": "Jade Canopy",
+      "summary": "Your spirit grows toward the light with organic inevitability, branching into possibilities that nourish everyone around you. Like a great tree, you provide shade without being asked, fruit without counting cost, and stability without demanding recognition. This generosity is genuine but it carries a shadow: trees cannot move.",
+      "mask": {
+        "title": "The Mask",
+        "text": "You present as endlessly nurturing—the friend who remembers birthdays, the partner who anticipates needs, the colleague who supports without credit. People feel better just being near you."
+      },
+      "deficit": {
+        "title": "The Deficit",
+        "text": "Hidden beneath the canopy is a profound exhaustion. You give constantly because you've convinced yourself that your value lies entirely in what you provide to others. The thought of stopping terrifies you."
+      },
+      "collision": {
+        "title": "The Collision",
+        "text": "When your giving is met with indifference—or worse, exploitation—the tree begins to rot from within. Your generosity curdles into resentment, and you don't know how to stop giving without betraying who you are."
+      },
+      "s_result": {
+        "title": "Strength Path",
+        "text": "You learn that healthy boundaries don't make you selfish—they make your giving sustainable. Your nurturing becomes choice rather than compulsion, and paradoxically, you become more generous when giving is optional."
+      },
+      "w_result": {
+        "title": "Weakness Path",
+        "text": "The canopy grows denser while the roots starve. You give until there's nothing left, then give more from reserves you don't have. Eventually, the tree stands empty—present but hollow."
+      }
+    },
+    "NF_火": {
+      "name": "Ember Sanctuary",
+      "summary": "You burn with a warmth that draws people from the cold of their isolation. Your emotional intelligence creates spaces where others feel safe to be vulnerable, to feel deeply, to hope openly. You are a hearth fire in a world of strangers. But fires require fuel, and yours comes from your own emotional reserves.",
+      "mask": {
+        "title": "The Mask",
+        "text": "You radiate authentic warmth and passion. People describe you as 'glowing'—someone whose enthusiasm is infectious, whose presence feels like coming home. You seem to have an endless supply of caring."
+      },
+      "deficit": {
+        "title": "The Deficit",
+        "text": "What you conceal is the creeping cold of depletion. You've given so much warmth for so long that you've forgotten what it feels like to receive it. The fire that warms others leaves you shivering in its wake."
+      },
+      "collision": {
+        "title": "The Collision",
+        "text": "When someone you've warmed repeatedly fails to reciprocate—or actively takes advantage of your warmth—the fire either rages out of control or extinguishes entirely. Neither outcome feels like you."
+      },
+      "s_result": {
+        "title": "Strength Path",
+        "text": "You learn that receiving is not weakness but necessary ecology. Allowing others to warm you completes the cycle that makes sustainable warmth possible. Your fire burns brighter when fed by mutual care."
+      },
+      "w_result": {
+        "title": "Weakness Path",
+        "text": "You burn yourself down to embers, then pretend the glow is enough. The sanctuary becomes empty—still structured around warmth, but actually cold at its center."
+      }
+    },
+    "NF_土": {
+      "name": "Terracotta Garden",
+      "summary": "Within you grows a lush interior world of meaning, connection, and possibility—carefully cultivated and deeply personal. You tend this garden with devotion, creating beauty that sustains you and those lucky enough to be invited in. But gardens require walls, and yours have grown high.",
+      "mask": {
+        "title": "The Mask",
+        "text": "You appear creative, values-driven, and authentically interested in others' inner lives. People sense depth in you—a feeling that you see things others miss, that you operate from a place of genuine meaning."
+      },
+      "deficit": {
+        "title": "The Deficit",
+        "text": "The hidden fear is that the real world will trample your garden. So you've retreated behind walls of aesthetic refinement, preferring safety of cultivated meaning to the messy unpredictability of actual engagement."
+      },
+      "collision": {
+        "title": "The Collision",
+        "text": "When circumstances force you out of your garden—practical demands, relationship conflicts, the brute facts of survival—you feel exposed and helpless. Your rich inner resources don't translate to the terrain you're forced to navigate."
+      },
+      "s_result": {
+        "title": "Strength Path",
+        "text": "You learn that gardens grow wilder and stronger when they exchange pollen with the world beyond the wall. Your inner richness becomes a foundation for engagement rather than a refuge from it."
+      },
+      "w_result": {
+        "title": "Weakness Path",
+        "text": "The walls grow higher while the garden grows stranger. You cultivate meanings that no longer connect to anything real, beautiful but increasingly irrelevant—a private museum no one visits."
+      }
+    },
+    "NF_金": {
+      "name": "Gilded Cage",
+      "summary": "You possess an exquisite sensitivity to quality, harmony, and the finer textures of experience. Your taste is impeccable; your standards are high; your appreciation for beauty runs deep. This refinement makes you capable of creating and recognizing true excellence. But gold, however beautiful, is still a cage.",
+      "mask": {
+        "title": "The Mask",
+        "text": "You present as sophisticated, discriminating, and elegantly composed. People admire your taste and seek your approval. You seem to occupy a rarefied space above the common fray."
+      },
+      "deficit": {
+        "title": "The Deficit",
+        "text": "What you hide is the loneliness of impossible standards. You've set the bar so high that nothing—and no one—can consistently clear it, including yourself. Perfectionism masquerades as discernment."
+      },
+      "collision": {
+        "title": "The Collision",
+        "text": "When you're forced to choose between your refined sensibilities and genuine connection—when loving someone requires accepting imperfection—the cage becomes visible. You can either open the door or watch love walk away."
+      },
+      "s_result": {
+        "title": "Strength Path",
+        "text": "You learn that some of the most beautiful things are beautifully imperfect. Your sensitivity becomes a tool for appreciating depth rather than rejecting inadequacy. The gilded bars transform into a trellis."
+      },
+      "w_result": {
+        "title": "Weakness Path",
+        "text": "The cage grows more ornate while growing smaller. You refine yourself into a corner of such exquisite specificity that nothing can enter or exit. Alone in beauty."
+      }
+    },
+    "NF_水": {
+      "name": "Glass Harbor",
+      "summary": "Your emotional nature creates a safe harbor where the storms of others' lives find temporary refuge. You offer acceptance without judgment, listening without fixing, presence without agenda. This capacity for deep empathy is a rare gift. But harbors collect everything that washes ashore—including toxicity and the weight of others' pain.",
+      "mask": {
+        "title": "The Mask",
+        "text": "You appear as the safe container—the person to whom anyone can confess anything, the friend who holds space without making it about themselves. People trust you instinctively."
+      },
+      "deficit": {
+        "title": "The Deficit",
+        "text": "What you don't show is how much you absorb. Every confession leaves residue; every crisis you weather deposits sediment. You've become a graveyard for other people's feelings while starving your own."
+      },
+      "collision": {
+        "title": "The Collision",
+        "text": "When your harbor overflows—when the accumulated weight exceeds your capacity—you don't flood outward. You implode silently. The collapse looks like withdrawal, depression, or mysterious illness."
+      },
+      "s_result": {
+        "title": "Strength Path",
+        "text": "You learn that harbors need outlets as well as inlets. Your empathic capacity becomes sustainable when balanced with boundaries and self-care. You remain a refuge without becoming a dumping ground."
+      },
+      "w_result": {
+        "title": "Weakness Path",
+        "text": "The harbor silts up completely. You continue to appear available while internally closed. Others dock their problems in water that goes nowhere, and you drown invisibly in the stagnation."
+      }
+    },
+    "SJ_木": {
+      "name": "Bamboo Matrix",
+      "summary": "You bring organic structure to chaotic situations, growing frameworks of responsibility that support everyone involved. Like bamboo, you are flexible yet strong, adaptable yet reliable. You create systems that work because they account for human variability.",
+      "mask": {
+        "title": "The Mask",
+        "text": "You appear as the reliable organizer—the one who remembers details, honors commitments, and keeps things running smoothly. People depend on you without always acknowledging how much they do."
+      },
+      "deficit": {
+        "title": "The Deficit",
+        "text": "Hidden beneath the competence is anxiety about disorder. If you stop managing, everything falls apart—at least that's what you believe. Control feels less like power and more like prevention of catastrophe."
+      },
+      "collision": {
+        "title": "The Collision",
+        "text": "When someone you're responsible for rejects your framework—or when your careful planning proves inadequate to reality—you experience it as personal failure rather than normal unpredictability."
+      },
+      "s_result": {
+        "title": "Strength Path",
+        "text": "Your organizational gifts evolve into leadership that empowers rather than controls. You learn to build structures flexible enough to contain life rather than constrain it."
+      },
+      "w_result": {
+        "title": "Weakness Path",
+        "text": "The matrix tightens into a grip. You manage everything while enjoying nothing. Your reliability becomes invisible, then expected, then resented—especially by you."
+      }
+    },
+    "SJ_火": {
+      "name": "Crimson Protocol",
+      "summary": "You channel your considerable energy into established systems of meaning and action—traditions, institutions, causes larger than yourself. This gives you purpose, direction, and a clear sense of what matters. Your dedication inspires others and makes you a pillar of any community fortunate enough to claim you.",
+      "mask": {
+        "title": "The Mask",
+        "text": "You present as passionately committed—the loyal employee, the devoted partner, the true believer. People admire your consistency and draw strength from your unwavering presence."
+      },
+      "deficit": {
+        "title": "The Deficit",
+        "text": "What you suppress is doubt. When the structures you serve show their flaws, you don't question them—you question your own faithfulness. Self-doubt masquerades as humility."
+      },
+      "collision": {
+        "title": "The Collision",
+        "text": "When the institution betrays you, or the cause reveals its corruption, or the relationship violates its own terms—your world doesn't just crack, it detonates. Everything was resting on foundations you never inspected."
+      },
+      "s_result": {
+        "title": "Strength Path",
+        "text": "Your commitment matures into conscious choice rather than reflexive loyalty. You serve what deserves serving because you've examined it first. Devotion with eyes open is infinitely stronger than devotion with them closed."
+      },
+      "w_result": {
+        "title": "Weakness Path",
+        "text": "The protocol becomes dogma. You defend positions you no longer believe in because abandoning them would mean admitting you were wrong. The crimson fades to rust."
+      }
+    },
+    "SJ_土": {
+      "name": "Granite Ledger",
+      "summary": "You are the bedrock upon which others build—the stable, consistent, utterly reliable presence that makes plans possible and promises meaningful. Your word is bond; your follow-through is absolute. In a world of flakiness, you are solid ground people count on. But granite doesn't bend, and ledgers don't forgive.",
+      "mask": {
+        "title": "The Mask",
+        "text": "You appear solid, trustworthy, and unshakeable. People know exactly what to expect from you, and you never disappoint. You are the anchor in stormy waters."
+      },
+      "deficit": {
+        "title": "The Deficit",
+        "text": "What you conceal is the crushing weight of expectation—mostly self-imposed. You cannot imagine letting someone down, so you never rest, never relax, never allow yourself less than total reliability."
+      },
+      "collision": {
+        "title": "The Collision",
+        "text": "When you finally cannot deliver—when illness, error, or simple human limitation causes you to fail—you experience it not as a mistake but as identity collapse. If you're not reliable, who are you?"
+      },
+      "s_result": {
+        "title": "Strength Path",
+        "text": "Your dependability transforms into trustworthiness that includes trusting yourself. You learn that being human is compatible with being reliable—in fact, it makes your reliability more valuable because it costs something real."
+      },
+      "w_result": {
+        "title": "Weakness Path",
+        "text": "The ledger accumulates debts you'll never call in, favors you'll never request. You become furniture—useful, present, entirely taken for granted until you break under weight no one noticed you carrying."
+      }
+    },
+    "SJ_金": {
+      "name": "Platinum Ruler",
+      "summary": "You bring order to chaos with natural authority and systematic efficiency. When you take charge, things get done—properly, thoroughly, according to standard. Your leadership style combines high expectations with clear guidance, producing results that speak for themselves.",
+      "mask": {
+        "title": "The Mask",
+        "text": "You project confident competence—the natural leader who knows what to do and ensures it gets done. People defer to your judgment because your judgment usually proves correct."
+      },
+      "deficit": {
+        "title": "The Deficit",
+        "text": "Underneath the authority is a fragile need for control. You lead because following feels like freefall. Vulnerability equals weakness in your operating system, and you've patched every possible leak."
+      },
+      "collision": {
+        "title": "The Collision",
+        "text": "When someone challenges your authority effectively—outperforms your system, exposes a flaw in your framework—you respond with disproportionate force. The ruler cannot afford to appear weak."
+      },
+      "s_result": {
+        "title": "Strength Path",
+        "text": "Your leadership evolves from domination to stewardship. You learn that the best rulers empower rather than rule, that controlling less often accomplishes more. Authority freely given exceeds authority seized."
+      },
+      "w_result": {
+        "title": "Weakness Path",
+        "text": "The throne becomes a prison. You rule over diminishing domains with increasing harshness, mistaking fear for respect and compliance for loyalty. Alone at the top."
+      }
+    },
+    "SJ_水": {
+      "name": "Mercury Vessel",
+      "summary": "You are the vessel that holds communities together—absorbing conflict, smoothing friction, maintaining social cohesion through tireless effort. You know everyone's preferences, remember everyone's needs, and work constantly to ensure harmony prevails. This makes you invaluable and invisible in equal measure.",
+      "mask": {
+        "title": "The Mask",
+        "text": "You present as the easygoing facilitator—the one who gets along with everyone, never makes waves, and somehow keeps groups functioning despite their differences. People like you without necessarily knowing why."
+      },
+      "deficit": {
+        "title": "The Deficit",
+        "text": "What you hide is the exhaustion of perpetual mediation. You absorb so much interpersonal friction that you've become raw beneath the smooth surface. Conflict avoidance has become identity."
+      },
+      "collision": {
+        "title": "The Collision",
+        "text": "When harmony proves impossible—when you're caught between parties who both demand your allegiance—the vessel cracks. You cannot mediate your own heart, and the failure destroys you."
+      },
+      "s_result": {
+        "title": "Strength Path",
+        "text": "Your peacemaking matures into genuine diplomacy. You learn that some conflicts must be surfaced rather than smoothed over, and that your value lies not in preventing discord but in helping people navigate it with dignity."
+      },
+      "w_result": {
+        "title": "Weakness Path",
+        "text": "The vessel develops leaks you patch with denial. You maintain appearances while internally flooding. Eventually, the mercury poisons the holder."
+      }
+    },
+    "SP_木": {
+      "name": "Root Drift",
+      "summary": "You are perpetually in motion between possibilities, rooted in none but nourished by all. This adaptability allows you to thrive in changing circumstances and sample life's variety in ways more settled souls never will. But constant motion is also constant homelessness.",
+      "mask": {
+        "title": "The Mask",
+        "text": "You appear spontaneous, adventurous, and refreshingly unattached. People envy your freedom and ability to find interest in anything. You seem immune to boredom and untouched by conventional constraints."
+      },
+      "deficit": {
+        "title": "The Deficit",
+        "text": "Hidden beneath the drift is terror of settling—of choosing one path and thereby closing off all others. Commitment feels like death by a thousand missed alternatives."
+      },
+      "collision": {
+        "title": "The Collision",
+        "text": "When you genuinely want something that requires staying put—deep love, mastery, lasting community—the rootless nature that defined you becomes a prison. You cannot drift toward what requires standing still."
+      },
+      "s_result": {
+        "title": "Strength Path",
+        "text": "Your exploratory nature finds purpose in depth rather than breadth. You learn that each commitment opens new possibilities that superficial exploration never reveals. Roots don't limit growth—they direct it."
+      },
+      "w_result": {
+        "title": "Weakness Path",
+        "text": "The drift accelerates into escape. Each new beginning prevents the previous one from mattering. Life becomes a series of prefaces with no book."
+      }
+    },
+    "SP_火": {
+      "name": "Spark Tangle",
+      "summary": "Your attention ignites across dozens of projects, passions, and possibilities simultaneously—each genuinely compelling, each demanding energy. This polymathic capacity makes you fascinating and productive in short bursts. But sparks that don't sustain become tangles of half-finished endeavors.",
+      "mask": {
+        "title": "The Mask",
+        "text": "You appear multitalented and energetically versatile—the renaissance soul who seems good at everything. People are impressed by your range and curious what you'll tackle next."
+      },
+      "deficit": {
+        "title": "The Deficit",
+        "text": "What conceals itself is shame about completion. You start brilliantly but finish rarely, and each abandoned project whispers 'quitter' in your ear. Quantity of beginnings masks quality of endings."
+      },
+      "collision": {
+        "title": "The Collision",
+        "text": "When opportunity cost finally arrives—when spreading thin means going deep nowhere—the tangle tightens. You want to focus but don't know how, trapped by momentum of scattered energy."
+      },
+      "s_result": {
+        "title": "Strength Path",
+        "text": "Your versatility becomes intentional portfolio management. You learn to sequence passions rather than pursue them all simultaneously, giving each attention it deserves while trusting others will wait their turn."
+      },
+      "w_result": {
+        "title": "Weakness Path",
+        "text": "The tangle becomes a web. Stuck in the middle of too many things, unable to advance any but unwilling to abandon invested effort. Paralysis disguised as multitasking."
+      }
+    },
+    "SP_土": {
+      "name": "Dust Cloud",
+      "summary": "You inhabit comfortable space between commitments, resisting gravitational pull of expectations with practiced ease. Laid-back demeanor conceals sophisticated resistance to being pinned down—by job title, relationship definition, any category limiting possibilities. This freedom is genuine but also a form of hiding.",
+      "mask": {
+        "title": "The Mask",
+        "text": "You present as easygoing, low-maintenance, and refreshingly non-demanding. Get along with everyone, stress about nothing, seem genuinely content with whatever life serves up."
+      },
+      "deficit": {
+        "title": "The Deficit",
+        "text": "What you don't show is quiet desperation of having nothing at stake. Freedom has become empty—not liberation from constraint but absence of investment. Nothing matters enough to fight for."
+      },
+      "collision": {
+        "title": "The Collision",
+        "text": "When you encounter something that actually matters—real love, genuine calling, cause worth sacrificing for—entire defensive architecture threatens to collapse. Having nothing at stake was easier than having everything."
+      },
+      "s_result": {
+        "title": "Strength Path",
+        "text": "Your resistance to pressure evolves into discernment about what deserves commitment. Choosing selectively is not surrender but wisdom—right constraints enable rather than restrict freedom."
+      },
+      "w_result": {
+        "title": "Weakness Path",
+        "text": "The cloud dissipates into nothing. Not liberation but dissolution—not choosing freedom but defaulting into it. Life so open that everything flows through and nothing remains."
+      }
+    },
+    "SP_金": {
+      "name": "Blade Fog",
+      "summary": "You wield capability like a blade materializing from mist—appearing precisely when needed, then vanishing before anyone can rely on you. Tactical genius makes you indispensable in crises and infuriating in daily life. Can do anything; commit to nothing. Blade is sharp, fog makes poor foundation.",
+      "mask": {
+        "title": "The Mask",
+        "text": "You appear competent, self-sufficient, admirably independent. Don't need help and don't ask for it. People respect capabilities while sensing they can never truly count on you."
+      },
+      "deficit": {
+        "title": "The Deficit",
+        "text": "What hides in fog is fear of being needed. Dependency feels like entrapment—if someone relies on you, they control you. Stay just unreliable enough to prevent capture."
+      },
+      "collision": {
+        "title": "The Collision",
+        "text": "When someone breaks through defenses and genuinely needs you—when love or circumstance demands consistent presence—blade has no target and fog provides no cover. Exposed as both capable and afraid."
+      },
+      "s_result": {
+        "title": "Strength Path",
+        "text": "Competence becomes reliable service rather than tactical display. Learn that being counted on is not captivity but connection—interdependence enriches rather than diminishes autonomy."
+      },
+      "w_result": {
+        "title": "Weakness Path",
+        "text": "Fog thickens into isolation. Blades appear for smaller audiences until you're only one who sees them. Capability without context is just performance."
+      }
+    },
+    "SP_水": {
+      "name": "Wave Echo",
+      "summary": "You flow through identities and connections with fluid grace, adapting shape to whatever container holds you. Chameleon-like mutability lets you fit anywhere and relate to anyone. But echoes of former selves accumulate like overlapping waves, eventually unable to distinguish which reflection is real.",
+      "mask": {
+        "title": "The Mask",
+        "text": "You appear charmingly adaptive—person who fits in everywhere, speaks everyone's language, seems to understand every perspective. Easy to be with because you become whoever they need."
+      },
+      "deficit": {
+        "title": "The Deficit",
+        "text": "What you conceal is erosion of self beneath all adaptation. After years of shape-shifting, lost access to whatever you were before starting to fit in. Echo has no source."
+      },
+      "collision": {
+        "title": "The Collision",
+        "text": "When someone sees through adaptations to confusion beneath—or falls in love with version of you cannot sustain—wave collapses. Cannot perform authenticity on demand."
+      },
+      "s_result": {
+        "title": "Strength Path",
+        "text": "Adaptability becomes intentional integration rather than accidental dissolution. Learn that containing multitudes doesn't require fragmenting—can flow and still have banks."
+      },
+      "w_result": {
+        "title": "Weakness Path",
+        "text": "Echo flattens into noise. So adaptable that nothing in particular—a surface reflecting everything and containing nothing."
+      }
+    }
+  }
+}
