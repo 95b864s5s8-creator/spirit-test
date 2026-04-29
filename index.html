@@ -1506,8 +1506,9 @@ function renderFace3(mainGod, deityConclusion, typeInfo, bazi, compensation, per
   // 获取守护神翻译
   var deityId = mainGod.id || '';
   var trD = i18n.td(deityId);
-  // 获取结论翻译
-  var matrixKey = camp + '_' + (personality.type16 || 'NF');
+  // 获取结论翻译 — matrixKey 格式必须与 deity-matrix.js 一致: cureElementWX(0-4) + '_' + camp
+  var cureWxIdx = (bazi && bazi.cureElement && bazi.cureElement.wx !== undefined) ? bazi.cureElement.wx : '0';
+  var matrixKey = String(cureWxIdx) + '_' + camp;
   var trC = i18n.tc(matrixKey);
 
   var displayName = (trD && trD.name) ? trD.name : mainGod.name;

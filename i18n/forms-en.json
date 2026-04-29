@@ -248,5 +248,425 @@
     "shadow": "So stable nothing grows — sterile ground",
     "label": "E",
     "text": "Expresses through stability, nourishment, and quiet presence. You are the ground others walk on — essential but often unseen."
+  },
+  "5_0": {
+    "label": "A",
+    "text": "\"Be there in five min\" — don't even change clothes"
+  },
+  "5_1": {
+    "label": "B",
+    "text": "\"Who else is going?\" — once you know someone, say \"save me a spot\""
+  },
+  "5_2": {
+    "label": "C",
+    "text": "\"Kinda tired... sure I guess\" — hesitate for ages before leaving"
+  },
+  "5_3": {
+    "label": "D",
+    "text": "\"Too tired, next time\" — did absolutely nothing, just lay on the couch"
+  },
+  "6_0": {
+    "label": "A",
+    "text": "Watch it immediately, then dive down the research rabbit hole until 3 AM"
+  },
+  "6_1": {
+    "label": "B",
+    "text": "Watched it, made sense, saved it, then kept scrolling"
+  },
+  "6_2": {
+    "label": "C",
+    "text": "Swiped past, but next video is same creator, end up watching a few more"
+  },
+  "6_3": {
+    "label": "D",
+    "text": "Read the title, thought \"another scam artist,\" swiped away instantly"
+  },
+  "7_0": {
+    "label": "A",
+    "text": "Research specs, compare reviews, read forum threads for hours, buy something completely different"
+  },
+  "7_1": {
+    "label": "B",
+    "text": "Checked ratings, picked a well-reviewed one, ordered, done"
+  },
+  "7_2": {
+    "label": "C",
+    "text": "Buy cheap version first to test, upgrade later if good"
+  },
+  "7_3": {
+    "label": "D",
+    "text": "Add to cart, hesitate forever, forget about it, or someone gifts you one"
+  },
+  "8_0": {
+    "label": "A",
+    "text": "Read a dozen \"zero to hero\" guides, research optimal path, hoard tutorials, feel productive without starting"
+  },
+  "8_1": {
+    "label": "B",
+    "text": "Learn the framework and principles first, understand what to study before doing"
+  },
+  "8_2": {
+    "label": "C",
+    "text": "Find a tutorial and follow along. First output is ugly but feels like achievement"
+  },
+  "8_3": {
+    "label": "D",
+    "text": "Bought full equipment and course kit. Still haven't removed the plastic wrap"
+  },
+  "9_0": {
+    "label": "A",
+    "text": "\"Wait — how do you make money? Where are users coming from? What's your moat?\""
+  },
+  "9_1": {
+    "label": "B",
+    "text": "\"Cool idea, but have you thought about execution?\" — validate first, then probe"
+  },
+  "9_2": {
+    "label": "C",
+    "text": "\"That's actually interesting — tell me more, let me help you refine it\""
+  },
+  "9_3": {
+    "label": "D",
+    "text": "\"OMG that's amazing! When's launch? I'll promote it!\" — more excited than them"
+  },
+  "10_0": {
+    "label": "A",
+    "text": "Write a point-by-point rebuttal with cited sources, thorough and rigorous"
+  },
+  "10_1": {
+    "label": "B",
+    "text": "Leave one comment pointing out the issue, too lazy to keep arguing"
+  },
+  "10_2": {
+    "label": "C",
+    "text": "Feels wrong but arguing is pointless, just scroll past"
+  },
+  "10_3": {
+    "label": "D",
+    "text": "Type out a whole essay, delete it all, leave a single emoji"
+  },
+  "11_0": {
+    "label": "A",
+    "text": "\"Honestly, this color doesn't match your vibe\""
+  },
+  "11_1": {
+    "label": "B",
+    "text": "\"It's unique... but maybe try another color?\" — gentle nudge"
+  },
+  "11_2": {
+    "label": "C",
+    "text": "\"Wow that's nice! It really suits you!\""
+  },
+  "11_3": {
+    "label": "D",
+    "text": "Post in group chat \"look at my friend's new bag\" while mourning their wallet inside"
+  },
+  "12_0": {
+    "label": "A",
+    "text": "Organized by function in folders, prime screen real estate for favorites, reorganize every wallpaper change"
+  },
+  "12_1": {
+    "label": "B",
+    "text": "Roughly categorized, but new apps get dumped anywhere, batch-organize later"
+  },
+  "12_2": {
+    "label": "C",
+    "text": "Occasionally do a big cleanup, but it reverts within a week"
+  },
+  "12_3": {
+    "label": "D",
+    "text": "Random placement, find apps via search, sometimes unsure which icon is which"
+  },
+  "13_0": {
+    "label": "A",
+    "text": "Finish day one, review days two and three, revise twice before submitting"
+  },
+  "13_1": {
+    "label": "B",
+    "text": "Make a plan day one, procrastinate slightly, finish night of day two"
+  },
+  "13_2": {
+    "label": "C",
+    "text": "Spend two days thinking \"should really start\", finally begin day three"
+  },
+  "13_3": {
+    "label": "D",
+    "text": "Completely forget for two days, remember at last minute, submit in panic mode"
+  },
+  "14_0": {
+    "label": "A",
+    "text": "Itinerary precise down to minutes per attraction — arrive to find it closed for renovation"
+  },
+  "14_1": {
+    "label": "B",
+    "text": "Must-see list ready, rough itinerary planned, occasional flexible adjustments"
+  },
+  "14_2": {
+    "label": "C",
+    "text": "Researched beforehand, but after arrival just go wherever the mood takes me"
+  },
+  "14_3": {
+    "label": "D",
+    "text": "Suitcase and go. Sleep wherever. Pure randomness"
+  },
+  "15_0": {
+    "label": "A",
+    "text": "Prioritize, knock them out one by one, check off each completion"
+  },
+  "15_1": {
+    "label": "B",
+    "text": "Work by priority, but mind wanders to other tasks during the first one"
+  },
+  "15_2": {
+    "label": "C",
+    "text": "Set priorities, switch halfway thinking another is more urgent, end up scrambling"
+  },
+  "15_3": {
+    "label": "D",
+    "text": "Open all three, work on whichever inspires you, finish none"
+  },
+  "16_0": {
+    "label": "A",
+    "text": "Order from multiple delivery apps, binge videos till midnight, remember nothing next morning"
+  },
+  "16_1": {
+    "label": "B",
+    "text": "Scroll through every recent chat, overthinking \"did I reply wrong there?\""
+  },
+  "16_2": {
+    "label": "C",
+    "text": "Snappy with everyone around you, \"can you stop bothering me,\" irritable over nothing"
+  },
+  "16_3": {
+    "label": "D",
+    "text": "Phone off, ignore everyone, curtains drawn, lie in bed, won't answer door for food"
+  },
+  "17_0": {
+    "label": "A",
+    "text": "Impulsive shopping spree, regret at unboxing"
+  },
+  "17_1": {
+    "label": "B",
+    "text": "Dig up every past memory, even people you haven't contacted in years"
+  },
+  "17_2": {
+    "label": "C",
+    "text": "Try to control everything, dictate how everyone \"should\" behave"
+  },
+  "17_3": {
+    "label": "D",
+    "text": "Avoid everyone, even closest friends' messages get ignored"
+  },
+  "18_0": {
+    "label": "A",
+    "text": "So exhausted. Give so much, get so little back. Nobody sees me."
+  },
+  "18_1": {
+    "label": "B",
+    "text": "Brain won't shut up. Overthinking everything but can't act on any of it."
+  },
+  "18_2": {
+    "label": "C",
+    "text": "I know exactly what to do. Just can't make myself move."
+  },
+  "18_3": {
+    "label": "D",
+    "text": "Always the one who gives more in relationships, but nobody appreciates it."
+  },
+  "18_4": {
+    "label": "E",
+    "text": "Can't pinpoint what's wrong. Just feel... nothing matters."
+  },
+  "19_0": {
+    "label": "A",
+    "text": "Look polished and impressive, but only I know how hard I'm holding it together"
+  },
+  "19_1": {
+    "label": "B",
+    "text": "Look chill and quiet, but my inner monologue is screaming at 800 RPM"
+  },
+  "19_2": {
+    "label": "C",
+    "text": "What I post is who I am. Too tired for personas, no energy to perform"
+  },
+  "19_3": {
+    "label": "D",
+    "text": "Rarely post. I'm a mystery to others, and honestly to myself too"
+  },
+  "20_0": {
+    "label": "A",
+    "text": "Read it immediately, forward to group chat with own analysis, spark another round of discussion"
+  },
+  "20_1": {
+    "label": "B",
+    "text": "Read it all but too lazy to forward. Already processed it mentally, said nothing"
+  },
+  "20_2": {
+    "label": "C",
+    "text": "Saved but didn't read. No need to think that hard. Living my own life > overanalyzing"
+  },
+  "20_3": {
+    "label": "D",
+    "text": "In group chat: \"who reads this garbage\" — then secretly opened and read two paragraphs"
+  },
+  "21_0": {
+    "label": "A",
+    "text": "Post a chore division chart on the fridge, specify who takes out trash vs dishes"
+  },
+  "21_1": {
+    "label": "B",
+    "text": "Wait until emotions cool, then talk — clearly explain grievances and expectations"
+  },
+  "21_2": {
+    "label": "C",
+    "text": "Cool down first, talk when feelings settle, try to be gentle with their perspective"
+  },
+  "21_3": {
+    "label": "D",
+    "text": "Silently do all the chores yourself, pretend it's fine, fight about the same thing again next month"
+  },
+  "22_0": {
+    "label": "A",
+    "text": "A map — got gear and levels but no clue what the main quest is"
+  },
+  "22_1": {
+    "label": "B",
+    "text": "Speed boots — know where to go but legs won't move"
+  },
+  "22_2": {
+    "label": "C",
+    "text": "Health potion — got everything but status is wrecked, need to rest"
+  },
+  "22_3": {
+    "label": "D",
+    "text": "Summoning scroll — solo dungeon crawling is lonely, need reliable teammates"
+  },
+  "23_0": {
+    "label": "A",
+    "text": "Posting actively within days, more visible than members who've been there for years"
+  },
+  "23_1": {
+    "label": "B",
+    "text": "Someone asks something I know → reply naturally, back to lurking"
+  },
+  "23_2": {
+    "label": "C",
+    "text": "Observe silently for ages, only speak when a topic genuinely fascinates me"
+  },
+  "23_3": {
+    "label": "D",
+    "text": "Full lurker mode. First message is usually helping someone click a link"
+  },
+  "24_0": {
+    "label": "A",
+    "text": "Mid-story, start analyzing causes, pull out underlying logic and connections"
+  },
+  "24_1": {
+    "label": "B",
+    "text": "Mid-story, veer into bigger topics — \"this reminds me of...\""
+  },
+  "24_2": {
+    "label": "C",
+    "text": "\"That afternoon, in that place, that person said this one thing...\" — details first"
+  },
+  "24_3": {
+    "label": "D",
+    "text": "Go off-topic mid-story, forget what I was originally talking about"
+  },
+  "25_0": {
+    "label": "A",
+    "text": "Skip manual, mash buttons randomly, figure out my own way to use it"
+  },
+  "25_1": {
+    "label": "B",
+    "text": "Glance at manual for basics, then experiment freely"
+  },
+  "25_2": {
+    "label": "C",
+    "text": "Read manual cover to cover first, follow instructions step by step"
+  },
+  "25_3": {
+    "label": "D",
+    "text": "Search YouTube for review videos instead — more intuitive than reading"
+  },
+  "26_0": {
+    "label": "A",
+    "text": "Declutter first, toss boxes of stuff, everything gets a designated spot"
+  },
+  "26_1": {
+    "label": "B",
+    "text": "Big items placed, small items boxed for later, labeled \"to sort\""
+  },
+  "26_2": {
+    "label": "C",
+    "text": "Vow to stay organized this time,一个月后又恢复猪窝模式 (back to chaos within a month)"
+  },
+  "26_3": {
+    "label": "D",
+    "text": "Everything in boxes, sort at new place. Some boxes still unopened"
+  },
+  "27_0": {
+    "label": "A",
+    "text": "By day five getting restless, frantically making plans — even convenience store meetup works"
+  },
+  "27_1": {
+    "label": "B",
+    "text": "First three days blissful, then start craving company, proactively schedule dinner"
+  },
+  "27_2": {
+    "label": "C",
+    "text": "First two days great, then slightly bored, secretly check social media"
+  },
+  "27_3": {
+    "label": "D",
+    "text": "PURE BLISS. This is heaven. Give me another week!"
+  },
+  "28_0": {
+    "label": "A",
+    "text": "Nothing personal. Objectively, they underperformed"
+  },
+  "28_1": {
+    "label": "B",
+    "text": "Nothing personal, but I'd privately vouch for them if asked"
+  },
+  "28_2": {
+    "label": "C",
+    "text": "They're annoying, but seeing them get scolded still feels uncomfortable"
+  },
+  "28_3": {
+    "label": "D",
+    "text": "Say \"so sad\" outwardly, secretly a little pleased inside"
+  },
+  "29_0": {
+    "label": "A",
+    "text": "Build a pros/cons table covering every outcome, let them choose"
+  },
+  "29_1": {
+    "label": "B",
+    "text": "\"Tell me specifics,\" then analyze point by point"
+  },
+  "29_2": {
+    "label": "C",
+    "text": "\"If you're asking me, you already know the answer\" — help them see clearly"
+  },
+  "29_3": {
+    "label": "D",
+    "text": "Ask about their feelings first — \"what do YOU actually want?\""
+  },
+  "30_0": {
+    "label": "A",
+    "text": "Show me already! Can't wait! Sharing with friends immediately!"
+  },
+  "30_1": {
+    "label": "B",
+    "text": "Already drafting share copy, deciding which groups to post in"
+  },
+  "30_2": {
+    "label": "C",
+    "text": "Slightly panicked, want to go back and double-check answers"
+  },
+  "30_3": {
+    "label": "D",
+    "text": "Whatever. Deity reveal is the only part that matters"
   }
 }
