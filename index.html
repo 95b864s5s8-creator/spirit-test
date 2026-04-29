@@ -1156,7 +1156,12 @@ function showLoading() {
 }
 
 // ==================== CONFIG ====================
-var WEBHOOK_URL = 'https://hook.us2.make.com/2mwcgkjtnnvnans7tmp2n5fhqgfhjg1x'; // CORS proxy → Make.com Webhook
+var WEBHOOK_URL = 'https://hook.us2.make.com/2mwcgkjtnnvnans7tmp2n5fhqgfhjg1x';
+
+var SUPABASE = {
+  url: 'https://wjzecnzrjblelwzyyjbu.supabase.co',
+  key: 'sb_publishable_Jv5w1zJI9Bg01ElT182-0A_Qn7ixBEf'
+};
 
 // ==================== EMAIL GATE ====================
 var _precomputedResult = null;
@@ -1247,7 +1252,53 @@ function sendToWebhook(email) {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(payload)
-  }).catch(function() {}); // 静默失败，不影响用户体验
+  }).catch(function() {}); // 静默失败
+}
+
+// 发送数据到 Supabase（fire & forget）
+function sendToSupabase(email) {
+  if (!SUPABASE.url || !SUPABASE.key) return;
+  var r = _precomputedResult;
+  var params = new URLSearchParams(window.location.search);
+
+  var userState = null;
+  if (r && r.personality && r.personality.type16 && r.bazi && r.bazi.cureElement) {
+    var camp = DeityMatrix.getCamp(r.personality.type16);
+    var cureName = r.bazi.cureElement.name;
+    var isStrong = r.bazi.strength ? r.bazi.strength.isStrong : true;
+    var profile = SuperpositionEngine.getProfile(camp, cureName);
+    if (profile) {
+      userState = { camp: camp, cure: cureName, name: profile.name || '', sw: isStrong ? 'S' : 'W' };
+    }
+  }
+
+  var spPayload = {
+    email: email,
+    mbti: r ? (r.personality.type16 || '') : '',
+    wuxing: r && r.bazi.cureElement ? (r.bazi.cureElement.name || '') : '',
+    energy: r && r.bazi.strength ? (r.bazi.strength.isStrong ? '身强' : '身弱') : '',
+    camp: userState ? userState.camp : '',
+    cure_name: userState ? userState.cure : '',
+    guardian: r ? (r.mainGod ? r.mainGod.name : '') : '',
+    source: getTrafficSource(),
+    utm_source: params.get('utm_source') || params.get('source') || null,
+    utm_medium: params.get('utm_medium') || null,
+    utm_campaign: params.get('utm_campaign') || null,
+    birth: answers.birth ? (answers.birth.year + '-' + answers.birth.month + '-' + answers.birth.day) : '',
+    deity: r ? (r.mainGod ? r.mainGod.name : '') : '',
+    dilemma: r ? (r.personality.dilemma || '') : ''
+  };
+
+  fetch(SUPABASE.url + '/rest/v1/submissions', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'apikey': SUPABASE.key,
+      'Authorization': 'Bearer ' + SUPABASE.key,
+      'Prefer': 'return=minimal'
+    },
+    body: JSON.stringify(spPayload)
+  }).catch(function() {});
 }
 
 function validateEmail(v) {
@@ -1270,8 +1321,9 @@ function submitEmailGate() {
   btn.disabled = true;
   btn.textContent = i18n.t('email.submit_loading');
 
-  // 异步发 Webhook，立即跳结果页
+  // 异步发 Webhook + Supabase，立即跳结果页
   sendToWebhook(email);
+  sendToSupabase(email);
   setTimeout(function() { showResultFromGate(); }, 300);
 }
 
