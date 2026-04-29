@@ -690,8 +690,11 @@ body::after{
 }
 .fixed-bottom-cta button:hover{transform:translateY(-3px)}
 
-/* ==================== Mobile optimizations ==================== */
-@media(max-width:380px){
+/* 语言切换按钮激活状态 */
+[data-lang-btn].active{
+  background:rgba(0,0,0,0.08);color:var(--text-primary);
+  border-color:rgba(0,0,0,0.2);font-weight:700;
+}
   .face1-title{font-size:32px}
   .deity-grid{grid-template-columns:1fr}
 }
@@ -705,15 +708,21 @@ body::after{
   <canvas id="soulMatrixCanvas"></canvas>
   <div class="paper-overlay"></div>
 
+  <!-- 语言切换按钮 -->
+  <div style="position:fixed;top:16px;right:20px;z-index:999;display:flex;gap:8px;align-items:center">
+    <button data-lang-btn="zh" onclick="i18n.setLang('zh')" style="font-family:'Inter',sans-serif;font-size:10px;letter-spacing:0.15em;padding:5px 12px;border:1px solid rgba(0,0,0,0.12);border-radius:20px;background:transparent;cursor:pointer;transition:all .3s;color:rgba(0,0,0,0.5)">中</button>
+    <button data-lang-btn="en" onclick="i18n.setLang('en')" style="font-family:'Inter',sans-serif;font-size:10px;letter-spacing:0.15em;padding:5px 12px;border:1px solid rgba(0,0,0,0.12);border-radius:20px;background:transparent;cursor:pointer;transition:all .3s;color:rgba(0,0,0,0.5)">EN</button>
+  </div>
+
   <!-- 装饰坐标 -->
-  <div class="deco-marker top-left">Matrix_Resonance_Active<br>Bazi_Metadata_Deciphering</div>
-  <div class="deco-marker bottom-right">ID_Archive_1047-W<br>Sync_Ver_10.6.2</div>
+  <div class="deco-marker top-left"><span data-i18n="landing.deco_tl_1">Matrix_Resonance_Active</span><br><span data-i18n="landing.deco_tl_2">Bazi_Metadata_Deciphering</span></div>
+  <div class="deco-marker bottom-right"><span data-i18n="landing.deco_br_1">ID_Archive_1047-W</span><br><span data-i18n="landing.deco_br_2">Sync_Ver_10.6.2</span></div>
 
   <!-- Header -->
   <header class="landing-header fade-in-up" style="animation-delay:0.1s;">
     <div class="flex items-center gap-3">
       <div class="status-dot"></div>
-      <span class="status-label">Archive Identity: SC-2026</span>
+      <span class="status-label" data-i18n="landing.status_label">Archive Identity: SC-2026</span>
     </div>
     <div class="header-line"></div>
   </header>
@@ -745,28 +754,28 @@ body::after{
 
     <!-- 品牌标题 -->
     <div class="hero-section fade-in-up" style="animation-delay:0.5s;">
-      <div class="zen-mantra">不生不灭·不增不减</div>
-      <h1 class="main-brand">Soul Code</h1>
-      <p class="sub-brand">Spirit Archive</p>
+      <div class="zen-mantra" data-i18n="landing.mantra">不生不灭·不增不减</div>
+      <h1 class="main-brand" data-i18n="landing.main_brand">Soul Code</h1>
+      <p class="sub-brand" data-i18n="landing.sub_brand">Spirit Archive</p>
     </div>
 
     <!-- 引导文案 -->
     <div class="hint-text space-y-1 mb-16 fade-in-up" style="animation-delay:0.7s;">
-      <p>你的症状已收到</p>
-      <p>正在为你匹配守护神</p>
+      <p data-i18n="landing.hint1">你的症状已收到</p>
+      <p data-i18n="landing.hint2">正在为你匹配守护神</p>
     </div>
 
     <!-- 核心按钮 -->
     <div class="fade-in-up" style="animation-delay:0.9s;">
-      <button class="btn-spirit" onclick="startQuiz()">开始测试</button>
+      <button class="btn-spirit" onclick="startQuiz()" data-i18n="landing.cta">开始测试</button>
     </div>
   </main>
 
   <!-- Footer -->
   <footer class="landing-footer fade-in-up" style="animation-delay:1.1s;">
-    <p>不问结果，只观内心</p>
+    <p data-i18n="landing.footer_quote">不问结果，只观内心</p>
     <div class="flex items-center justify-center gap-2">
-      <span class="footer-label">Rational Zen Framework v10.6.2</span>
+      <span class="footer-label" data-i18n="landing.footer_label">Rational Zen Framework v10.6.2</span>
     </div>
   </footer>
 </div>
@@ -779,7 +788,7 @@ body::after{
   </div>
   <div class="question-card" id="question-card"></div>
   <div class="quiz-nav">
-    <button class="btn-prev" id="btn-prev" onclick="goPrev()">← 上一题</button>
+    <button class="btn-prev" id="btn-prev" onclick="goPrev()" data-i18n="quiz.prev_btn">← 上一题</button>
     <span></span>
   </div>
 </div>
@@ -787,24 +796,24 @@ body::after{
 <!-- ==================== Page: Loading ==================== -->
 <div class="page" id="page-loading">
   <div class="loading-icon">☯️</div>
-  <div class="loading-text">正在生成你的专属报告<span class="loading-dots"></span></div>
-  <div class="loading-sub" id="loading-tip">八位东方神正在开会讨论你...</div>
+  <div class="loading-text" data-i18n="loading.text">正在生成你的专属报告<span class="loading-dots"></span></div>
+  <div class="loading-sub" id="loading-tip" data-i18n="loading.tip_default">八位东方神正在开会讨论你...</div>
 </div>
 
 <!-- ==================== Page: Email Gate ==================== -->
 <div class="page" id="page-email-gate">
   <div class="gate-seal">🔮</div>
-  <div class="gate-progress-hint">✦ 档案生成完毕 · 封印中 ✦</div>
-  <h2 class="gate-title">你的灵魂确诊单<br>已生成</h2>
-  <p class="gate-subtitle">输入邮箱，立即解锁你的【核心代号】与守护神完整解析</p>
+  <div class="gate-progress-hint" data-i18n="email.seal_progress">✦ 档案生成完毕 · 封印中 ✦</div>
+  <h2 class="gate-title" data-i18n="email.title">你的灵魂确诊单<br>已生成</h2>
+  <p class="gate-subtitle" data-i18n="email.subtitle">输入邮箱，立即解锁你的【核心代号】与守护神完整解析</p>
   <div class="gate-input-wrap">
     <input class="gate-input" type="email" inputmode="email" id="gate-email"
-      placeholder="your@email.com" autocomplete="email" autocapitalize="off">
+      placeholder="your@email.com" data-i18n-placeholder="email.placeholder" autocomplete="email" autocapitalize="off">
     <div class="gate-error" id="gate-error"></div>
-    <button class="btn-gate" id="btn-gate-submit" onclick="submitEmailGate()">查看我的灵魂档案 →</button>
+    <button class="btn-gate" id="btn-gate-submit" onclick="submitEmailGate()" data-i18n="email.submit_btn">查看我的灵魂档案 →</button>
   </div>
-  <div class="gate-skip" onclick="skipEmailGate()">跳过，直接看结果</div>
-  <div class="gate-privacy">我们不发垃圾邮件 · 随时可退订</div>
+  <div class="gate-skip" onclick="skipEmailGate()" data-i18n="email.skip">跳过，直接看结果</div>
+  <div class="gate-privacy" data-i18n="email.privacy">我们不发垃圾邮件 · 随时可退订</div>
 </div>
 
 <!-- ==================== Page: Result (长滚动) ==================== -->
@@ -812,7 +821,7 @@ body::after{
   <!-- 顶部固定导航栏 -->
   <div class="result-nav" id="result-nav" style="display:none">
     <div class="result-nav-left" id="nav-archive-no">Archive 0000</div>
-    <div class="result-nav-right">Status: Identified</div>
+    <div class="result-nav-right" data-i18n="result.nav_status">Status: Identified</div>
   </div>
   <!-- Face 1: 一句话总览 -->
   <div class="result-face active" id="face-1"></div>
@@ -823,6 +832,7 @@ body::after{
 </div>
 
 <!-- ==================== Engine Scripts ==================== -->
+<script charset="utf-8" src="engine/i18n.js"></script>
 <script charset="utf-8" src="engine/bazi-engine.js"></script>
 <script charset="utf-8" src="engine/personality-engine.js"></script>
 <script charset="utf-8" src="engine/form-data.js"></script>
@@ -986,32 +996,32 @@ function renderQuestion(direction) {
       '<div class="question-subtitle">' + (q.subtitle || '') + '</div>' +
       '<div class="date-input-group">' +
         '<div class="birth-row">' +
-          '<div class="birth-field"><label>年</label><input type="number" inputmode="numeric" id="birth-year" min="1900" max="2026" placeholder="1990"></div>' +
-          '<div class="birth-sep">年</div>' +
-          '<div class="birth-field"><label>月</label><input type="number" inputmode="numeric" id="birth-month" min="1" max="12" placeholder="6"></div>' +
-          '<div class="birth-sep">月</div>' +
-          '<div class="birth-field"><label>日</label><input type="number" inputmode="numeric" id="birth-day" min="1" max="31" placeholder="15"></div>' +
+          '<div class="birth-field"><label>' + i18n.t('quiz.birth_year_label') + '</label><input type="number" inputmode="numeric" id="birth-year" min="1900" max="2026" placeholder="1990"></div>' +
+          '<div class="birth-sep">' + i18n.t('quiz.birth_year_label') + '</div>' +
+          '<div class="birth-field"><label>' + i18n.t('quiz.birth_month_label') + '</label><input type="number" inputmode="numeric" id="birth-month" min="1" max="12" placeholder="6"></div>' +
+          '<div class="birth-sep">' + i18n.t('quiz.birth_month_label') + '</div>' +
+          '<div class="birth-field"><label>' + i18n.t('quiz.birth_day_label') + '</label><input type="number" inputmode="numeric" id="birth-day" min="1" max="31" placeholder="15"></div>' +
         '</div>' +
         '<div class="birth-field" style="flex-direction:row;gap:8px;align-items:center;margin-top:8px">' +
-          '<label style="font-size:12px;color:var(--text-muted)">出生时间段</label>' +
+          '<label style="font-size:12px;color:var(--text-muted)">' + i18n.t('quiz.birth_hour_label') + '</label>' +
           '<select id="birth-hour" style="padding:10px 14px;background:rgba(0,0,0,0.02);border:1px solid rgba(0,0,0,0.08);border-radius:var(--radius);color:var(--gold-dim);font-size:14px;outline:none">' +
-            '<option value="0">深夜 (23:00-01:00)</option>' +
-            '<option value="1">凌晨 (01:00-03:00)</option>' +
-            '<option value="3">凌晨 (03:00-05:00)</option>' +
-            '<option value="5">清晨 (05:00-07:00)</option>' +
-            '<option value="7">上午 (07:00-09:00)</option>' +
-            '<option value="9">上午 (09:00-11:00)</option>' +
-            '<option value="11" selected>中午 (11:00-13:00)</option>' +
-            '<option value="13">下午 (13:00-15:00)</option>' +
-            '<option value="15">下午 (15:00-17:00)</option>' +
-            '<option value="17">傍晚 (17:00-19:00)</option>' +
-            '<option value="19">晚上 (19:00-21:00)</option>' +
-            '<option value="21">夜晚 (21:00-23:00)</option>' +
+            '<option value="0">' + i18n.t('quiz.birth_hour_0') + '</option>' +
+            '<option value="1">' + i18n.t('quiz.birth_hour_1') + '</option>' +
+            '<option value="3">' + i18n.t('quiz.birth_hour_3') + '</option>' +
+            '<option value="5">' + i18n.t('quiz.birth_hour_5') + '</option>' +
+            '<option value="7">' + i18n.t('quiz.birth_hour_7') + '</option>' +
+            '<option value="9">' + i18n.t('quiz.birth_hour_9') + '</option>' +
+            '<option value="11" selected>' + i18n.t('quiz.birth_hour_11') + '</option>' +
+            '<option value="13">' + i18n.t('quiz.birth_hour_13') + '</option>' +
+            '<option value="15">' + i18n.t('quiz.birth_hour_15') + '</option>' +
+            '<option value="17">' + i18n.t('quiz.birth_hour_17') + '</option>' +
+            '<option value="19">' + i18n.t('quiz.birth_hour_19') + '</option>' +
+            '<option value="21">' + i18n.t('quiz.birth_hour_21') + '</option>' +
           '</select>' +
-          '<span style="font-size:11px;color:var(--text-muted)">不确定就选中午</span>' +
+          '<span style="font-size:11px;color:var(--text-muted)">' + i18n.t('quiz.birth_hour_hint') + '</span>' +
         '</div>' +
         '<div class="birth-error" id="birth-error"></div>' +
-        '<button class="btn-confirm" onclick="submitDate()">确定</button>' +
+        '<button class="btn-confirm" onclick="submitDate()">' + i18n.t('quiz.confirm_btn') + '</button>' +
       '</div>';
     if (answers.birth) {
       document.getElementById('birth-year').value = answers.birth.year;
@@ -1044,9 +1054,9 @@ function submitDate() {
   var hour = parseInt(document.getElementById('birth-hour').value);
   var errEl = document.getElementById('birth-error');
 
-  if (!year || year < 1900 || year > 2026) { errEl.textContent = '请输入有效年份'; return; }
-  if (!month || month < 1 || month > 12) { errEl.textContent = '月份 1-12'; return; }
-  if (!day || day < 1 || day > 31) { errEl.textContent = '日期 1-31'; return; }
+  if (!year || year < 1900 || year > 2026) { errEl.textContent = i18n.t('quiz.birth_err_year'); return; }
+  if (!month || month < 1 || month > 12) { errEl.textContent = i18n.t('quiz.birth_err_month'); return; }
+  if (!day || day < 1 || day > 31) { errEl.textContent = i18n.t('quiz.birth_err_day'); return; }
   errEl.textContent = '';
 
   answers.birth = { year: year, month: month, day: day, hour: hour };
@@ -1110,13 +1120,13 @@ function goPrev() {
 function showLoading() {
   showPage('page-loading');
   var tips = [
-    '八位东方神正在开会讨论你...',
-    '荣格正在从潜意识里给你写信...',
-    '观音大士和关圣帝君在协商你的治疗方案...',
-    '系统正在为你的神办理入驻手续...',
-    '文殊菩萨正在检查你的认知偏差...',
-    '达摩祖师说你的情况有点复杂...',
-    '你的性格档案正在被封印进法器中...',
+    i18n.t('loading.tip_0'),
+    i18n.t('loading.tip_1'),
+    i18n.t('loading.tip_2'),
+    i18n.t('loading.tip_3'),
+    i18n.t('loading.tip_4'),
+    i18n.t('loading.tip_5'),
+    i18n.t('loading.tip_6'),
   ];
   var tipIdx = 0;
   var tipEl = document.getElementById('loading-tip');
@@ -1243,14 +1253,14 @@ function submitEmailGate() {
   var email = emailInput.value.trim();
 
   if (!validateEmail(email)) {
-    errorEl.textContent = '请输入有效的邮箱地址';
+    errorEl.textContent = i18n.t('email.err_invalid');
     emailInput.focus();
     return;
   }
 
   errorEl.textContent = '';
   btn.disabled = true;
-  btn.textContent = '解封中...';
+  btn.textContent = i18n.t('email.submit_loading');
 
   // 异步发 Webhook，立即跳结果页
   sendToWebhook(email);
@@ -1418,16 +1428,16 @@ function renderFace2(bazi, personality, formData, compensation) {
   // 章节标题 - Phase II 格式
   html +=
     '<div style="margin-bottom:48px;opacity:0;animation:fadeIn .6s cubic-bezier(.4,0,.2,1) .2s both">' +
-      '<p style="font-family:Inter,sans-serif;font-size:10px;letter-spacing:0.6em;color:var(--gold);font-weight:600;text-transform:uppercase;margin-bottom:8px">Phase II : Structural Deconstruction</p>' +
-      '<h2 style="font-size:20px;font-weight:400;letter-spacing:0.2em;color:var(--text-primary)">心理空间解构</h2>' +
+      '<p style="font-family:Inter,sans-serif;font-size:10px;letter-spacing:0.6em;color:var(--gold);font-weight:600;text-transform:uppercase;margin-bottom:8px">' + i18n.t('result.phase2_label') + '</p>' +
+      '<h2 style="font-size:20px;font-weight:400;letter-spacing:0.2em;color:var(--text-primary)">' + i18n.t('result.phase2_title') + '</h2>' +
     '</div>';
 
   if (profile) {
     var sections = [
-      { label: '面具', title: '生存策略', text: profile.mask ? profile.mask.text : '', color: 'var(--green-accent)' },
-      { label: '病灶', title: '性格调性', text: profile.deficit ? profile.deficit.text : '', color: 'var(--red-accent)' },
-      { label: '碰撞', title: '渴望', text: profile.collision ? profile.collision.text : '', color: 'var(--gold)' },
-      { label: '结果', title: '补偿状态', text: (isStrong ? profile.s_result : profile.w_result) ? (isStrong ? profile.s_result.text : profile.w_result.text) : '', color: 'var(--blue-accent)' }
+      { label: i18n.t('result.mask_title'),      title: i18n.t('result.mask_subtitle'),     text: profile.mask ? profile.mask.text : '',     color: 'var(--green-accent)' },
+      { label: i18n.t('result.deficit_title'),   title: i18n.t('result.deficit_subtitle'),  text: profile.deficit ? profile.deficit.text : '', color: 'var(--red-accent)' },
+      { label: i18n.t('result.collision_title'), title: i18n.t('result.collision_subtitle'),text: profile.collision ? profile.collision.text : '', color: 'var(--gold)' },
+      { label: i18n.t('result.outcome_title'),   title: i18n.t('result.outcome_subtitle'),  text: (isStrong ? profile.s_result : profile.w_result) ? (isStrong ? profile.s_result.text : profile.w_result.text) : '', color: 'var(--blue-accent)' }
     ];
     var secDelay = ['.3s', '.5s', '.7s', '.9s'];
     var bgChars = ['面', '病', '撞', '果'];
@@ -1481,8 +1491,8 @@ function renderFace3(mainGod, deityConclusion, typeInfo, bazi, compensation, per
       '<div style="position:absolute;bottom:-20%;right:-10%;width:50%;height:70%;background:#c5a059;blur:60px;opacity:0.05;pointer-events:none;border-radius:50%"></div>' +
       // Phase III 标题
       '<div style="text-align:center;margin-bottom:48px">' +
-        '<p style="font-family:Inter,sans-serif;font-size:10px;letter-spacing:0.6em;color:#c5a059;font-weight:600;text-transform:uppercase;margin-bottom:8px">Phase III : Archetypal Guardian</p>' +
-        '<h2 style="font-size:24px;font-weight:400;letter-spacing:0.3em;color:#f7f6f2">神明矩阵匹配</h2>' +
+        '<p style="font-family:Inter,sans-serif;font-size:10px;letter-spacing:0.6em;color:#c5a059;font-weight:600;text-transform:uppercase;margin-bottom:8px">' + i18n.t('result.phase3_label') + '</p>' +
+        '<h2 style="font-size:24px;font-weight:400;letter-spacing:0.3em;color:#f7f6f2">' + i18n.t('result.phase3_title') + '</h2>' +
       '</div>' +
       // 图腾装饰（CSS-only）
       '<div style="position:relative;width:120px;height:120px;margin:0 auto 48px;display:flex;align-items:center;justify-content:center">' +
@@ -1502,21 +1512,21 @@ function renderFace3(mainGod, deityConclusion, typeInfo, bazi, compensation, per
       '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:32px;margin-top:60px;padding-top:40px;border-top:1px solid rgba(247,246,242,0.1)">' +
         // Act I
         '<div>' +
-          '<span style="font-family:Inter,sans-serif;font-size:9px;letter-spacing:0.3em;color:#c5a059;font-weight:600;text-transform:uppercase;display:block;margin-bottom:16px">Act I : Invoke</span>' +
+          '<span style="font-family:Inter,sans-serif;font-size:9px;letter-spacing:0.3em;color:#c5a059;font-weight:600;text-transform:uppercase;display:block;margin-bottom:16px">' + i18n.t('result.act1_label') + '</span>' +
           '<p style="font-size:15px;line-height:2;color:rgba(247,246,242,0.9);font-weight:300;font-style:italic">' +
             (deityConclusion && deityConclusion.act1 ? deityConclusion.act1 : '他在众生中寻觅，只为找一个能与你灵魂波长同步的人。') +
           '</p>' +
         '</div>' +
         // Act II
         '<div>' +
-          '<span style="font-family:Inter,sans-serif;font-size:9px;letter-spacing:0.3em;color:rgba(247,246,242,0.3);font-weight:600;text-transform:uppercase;display:block;margin-bottom:16px">Act II : Verify</span>' +
+          '<span style="font-family:Inter,sans-serif;font-size:9px;letter-spacing:0.3em;color:rgba(247,246,242,0.3);font-weight:600;text-transform:uppercase;display:block;margin-bottom:16px">' + i18n.t('result.act2_label') + '</span>' +
           '<p style="font-size:14px;line-height:2;color:rgba(247,246,242,0.6);font-weight:300">' +
             (deityConclusion && deityConclusion.act2 ? deityConclusion.act2 : '你是那根断掉的红线，他在月光下试图为你重新续上。') +
           '</p>' +
         '</div>' +
         // Act III
         '<div>' +
-          '<span style="font-family:Inter,sans-serif;font-size:9px;letter-spacing:0.3em;color:rgba(247,246,242,0.3);font-weight:600;text-transform:uppercase;display:block;margin-bottom:16px">Act III : Utilize</span>' +
+          '<span style="font-family:Inter,sans-serif;font-size:9px;letter-spacing:0.3em;color:rgba(247,246,242,0.3);font-weight:600;text-transform:uppercase;display:block;margin-bottom:16px">' + i18n.t('result.act3_label') + '</span>' +
           '<p style="font-size:14px;line-height:2;color:rgba(247,246,242,0.6);font-weight:300">' +
             (deityConclusion && deityConclusion.act3 ? deityConclusion.act3 : '你需要的是一个能忍受你沉默的人。将防备转化为观察，你会发现真正的自由。') +
           '</p>' +
@@ -1528,12 +1538,12 @@ function renderFace3(mainGod, deityConclusion, typeInfo, bazi, compensation, per
   html +=
     '<div style="margin:80px 0 40px">' +
       '<div style="border-left:2px solid var(--gold);padding-left:24px;margin-bottom:40px">' +
-        '<h4 style="font-family:Inter,sans-serif;font-size:10px;font-weight:900;letter-spacing:0.4em;color:var(--gold);text-transform:uppercase">Act III : Utilization</h4>' +
-        '<p style="font-size:11px;letter-spacing:0.2em;color:rgba(0,0,0,0.4);margin-top:4px;font-style:italic">行动即修行</p>' +
+        '<h4 style="font-family:Inter,sans-serif;font-size:10px;font-weight:900;letter-spacing:0.4em;color:var(--gold);text-transform:uppercase">' + i18n.t('result.act3_section_label') + '</h4>' +
+        '<p style="font-size:11px;letter-spacing:0.2em;color:rgba(0,0,0,0.4);margin-top:4px;font-style:italic">' + i18n.t('result.act3_section_sub') + '</p>' +
       '</div>' +
       '<div style="padding:32px 36px;border:1px solid rgba(0,0,0,0.04);background:rgba(255,255,255,0.5)">' +
         '<p style="font-size:16px;line-height:2.4;color:rgba(0,0,0,0.7);font-weight:300;font-style:italic;text-align:justify">' +
-          '"约瑟夫·坎贝尔曾说：\'英雄之旅不是关于力量，而是关于成为。\' 你已完成自我认知的第一圈。接下来不是等待祝福降临，而是开始主动创造属于你的秩序。倦怠的反面不是休息，而是意义感的重新注入。"' +
+          i18n.t('result.quote') +
         '</p>' +
       '</div>' +
     '</div>';
@@ -1542,7 +1552,7 @@ function renderFace3(mainGod, deityConclusion, typeInfo, bazi, compensation, per
   html +=
     '<div class="fixed-bottom-cta text-later-d3" style="position:relative;margin:0 -24px;padding:20px 24px;max-width:480px;margin-left:auto;margin-right:auto">' +
       '<button onclick="alert(\'将跳转至产品页（演示模式）\')" style="width:100%;padding:18px;background:var(--text-primary);color:var(--bg-primary);border:none;border-radius:var(--radius);font-size:13px;font-weight:700;letter-spacing:4px;cursor:pointer;transition:transform .3s,box-shadow .3s;box-shadow:var(--shadow-heavy)">' +
-        '获取生命能量平衡方案' +
+        i18n.t('result.cta_btn') +
       '</button>' +
     '</div>';
 
@@ -1551,7 +1561,7 @@ function renderFace3(mainGod, deityConclusion, typeInfo, bazi, compensation, per
     '<div class="share-card text-later-d4" style="text-align:left;padding:36px 32px 28px;margin-top:60px;position:relative;background:var(--bg-card)">' +
       '<div style="position:absolute;top:16px;right:20px;font-size:9px;color:var(--gold-dim);letter-spacing:3px;opacity:0.5">Soul Code</div>' +
       '<div style="margin-bottom:20px">' +
-        '<div style="font-size:10px;color:var(--gold-dim);letter-spacing:4px;margin-bottom:16px">SOUL REPORT</div>' +
+        '<div style="font-size:10px;color:var(--gold-dim);letter-spacing:4px;margin-bottom:16px">' + i18n.t('result.share_label') + '</div>' +
         '<div style="display:flex;align-items:center;gap:20px">' +
           '<div style="line-height:1;flex-shrink:0;font-size:48px">' + mainGod.emoji + '</div>' +
           '<div>' +
@@ -1561,13 +1571,13 @@ function renderFace3(mainGod, deityConclusion, typeInfo, bazi, compensation, per
         '</div>' +
       '</div>' +
       '<div style="border:none;border-top:1px dashed rgba(197,160,89,0.15);margin:20px 0"></div>' +
-      '<button class="btn-share" onclick="shareResult()" style="width:100%;padding:14px 0;background:rgba(197,160,89,0.06);border:1px solid rgba(197,160,89,0.15);color:var(--gold-dim);border-radius:var(--radius);font-size:13px;cursor:pointer;letter-spacing:3px;transition:var(--transition)">截图保存你的灵魂报告</button>' +
+      '<button class="btn-share" onclick="shareResult()" style="width:100%;padding:14px 0;background:rgba(197,160,89,0.06);border:1px solid rgba(197,160,89,0.15);color:var(--gold-dim);border-radius:var(--radius);font-size:13px;cursor:pointer;letter-spacing:3px;transition:var(--transition)">' + i18n.t('result.share_btn') + '</button>' +
     '</div>' +
-    '<div class="result-disclaimer text-later-d4" style="background:var(--bg-primary)">' +
+    '<div class="result-disclaimer text-later-d4" style="background:var(--bg-primary)" data-i18n="result.disclaimer">' +
       '此报告由玄学CT机自动生成，不构成医学建议。<br>' +
       '但如果你觉得说中了你，那可能是神仙真的在加班。' +
     '</div>' +
-    '<span class="retest-link text-later-d4" style="background:var(--bg-primary)" onclick="startQuiz()">重新测试</span>';
+    '<span class="retest-link text-later-d4" style="background:var(--bg-primary)" onclick="startQuiz()" data-i18n="result.retest">重新测试</span>';
 
   document.getElementById('face-3').innerHTML = html;
 }
@@ -1576,7 +1586,7 @@ function renderFace3(mainGod, deityConclusion, typeInfo, bazi, compensation, per
 function shareResult() {
   var btn = event.target;
   var origHTML = btn.innerHTML;
-  btn.innerHTML = '已复制，去分享吧';
+  btn.innerHTML = i18n.t('result.share_copied');
   btn.style.pointerEvents = 'none';
   setTimeout(function() {
     btn.innerHTML = origHTML;
@@ -1594,24 +1604,28 @@ function shareResult() {
 
   var swWord = isStrong ? '外化' : '内化';
   var hook = isStrong
-    ? '说我把痛变成了别人的问题，但只有自己知道有多累。'
-    : '说我把所有痛都吞进了自己身体里，一直没放出来过。';
+    ? i18n.t('share.text_strong')
+    : i18n.t('share.text_weak');
 
-  var text = '我的灵魂叠加态是「' + spName + '」，守护神' + mainGodEmoji + mainGodName + '。' +
-    hook + '\n测测你的叠加态和守护神 →';
+  var text = '「' + spName + '」' + mainGodEmoji + mainGodName + '。' +
+    hook + '\n' + i18n.t('share.suffix');
   if (navigator.share) {
     navigator.share({
-      title: 'Soul Code — 看看你的守护神是谁',
+      title: i18n.t('share.title'),
       text: text,
       url: window.location.href
     }).catch(function() {});
   } else {
     text += '\n' + window.location.href;
     navigator.clipboard.writeText(text).catch(function() {
-      prompt('请手动复制分享给朋友：', text);
+      prompt('', text);
     });
   }
-}
+// ==================== i18n 初始化 ====================
+i18n.init(function(lang) {
+  // 初始化完成后同步 DOM（i18n.js 已处理静态节点，这里可加后续逻辑）
+  document.documentElement.lang = lang === 'zh' ? 'zh-CN' : 'en';
+});
 </script>
 </body>
 </html>
