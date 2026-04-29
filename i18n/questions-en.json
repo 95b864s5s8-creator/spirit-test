@@ -185,7 +185,9 @@
     "Declutter or hoard?",
     "Social battery remaining?",
     "Your coworkers need you",
-    "Last two questions, your guardian is incoming"
+    "Last two questions, your guardian is incoming",
+    "Last question done — your guardian deity is about to be revealed",
+    "Your guardian deity is about to be revealed"
   ],
   "SOUL_SNACKS": {
     "10": "Your deity is reviewing your file…",
