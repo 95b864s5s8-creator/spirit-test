@@ -1446,8 +1446,8 @@ function renderFace2(bazi, personality, formData, compensation) {
     '</div>';
 
   if (profile) {
-    var trSp = i18n.ts(camp + '_' + cureName);
-    // 翻译映射：mask → The Mask / deficit → The Deficit 等
+    var spKey = camp + '_' + cureName;
+    // 翻译映射：mask / deficit / collision / s_result / w_result
     var secData = [
       { lk: 'mask',      il: 'result.mask_title',     is: 'result.mask_subtitle' },
       { lk: 'deficit',   il: 'result.deficit_title',  is: 'result.deficit_subtitle' },
@@ -1458,14 +1458,17 @@ function renderFace2(bazi, personality, formData, compensation) {
       var orig = profile[sd.lk];
       var text = orig ? orig.text : '';
       var titleKey = sd.is;
-      // 如果有英文翻译，覆盖原文
-      if (trSp && trSp[sd.lk]) {
-        if (trSp[sd.lk].text) text = trSp[sd.lk].text;
+      // 用 i18n.ts(key, field) 获取英文翻译（field=mask/deficit/collision/s_result/w_result）
+      var trField = i18n.ts(spKey, sd.lk);
+      if (trField && trField.text) {
+        text = trField.text;
       }
       return { label: i18n.t(sd.il), title: i18n.t(titleKey), text: text, color: ['var(--green-accent)','var(--red-accent)','var(--gold)','var(--blue-accent)'][i] };
     });
     var secDelay = ['.3s', '.5s', '.7s', '.9s'];
-    var bgChars = ['面', '病', '撞', '果'];
+    var bgCharsZh = ['面', '病', '撞', '果'];
+    var bgCharsEn = ['I', 'II', 'III', 'IV'];
+    var bgChars = (i18n.getLang() === 'en') ? bgCharsEn : bgCharsZh;
 
     for (var si = 0; si < sections.length; si++) {
       var sec = sections[si];
@@ -1498,7 +1501,7 @@ function renderFace3(mainGod, deityConclusion, typeInfo, bazi, compensation, per
   var spNameEn3 = i18n.ts(camp + '_' + cureName) || spName;
 
   if (!mainGod) {
-    html = '<div class="section-card"><div class="section-content" style="text-align:center;color:var(--text-muted)">守护神加载中…</div></div>';
+    html = '<div class="section-card"><div class="section-content" style="text-align:center;color:var(--text-muted)">' + (i18n.t('result.deity_loading') || 'Guardian loading...') + '</div></div>';
     document.getElementById('face-3').innerHTML = html;
     return;
   }
@@ -1585,7 +1588,7 @@ function renderFace3(mainGod, deityConclusion, typeInfo, bazi, compensation, per
   // 固定底部CTA
   html +=
     '<div class="fixed-bottom-cta text-later-d3" style="position:relative;margin:0 -24px;padding:20px 24px;max-width:480px;margin-left:auto;margin-right:auto">' +
-      '<button onclick="alert(\'将跳转至产品页（演示模式）\')" style="width:100%;padding:18px;background:var(--text-primary);color:var(--bg-primary);border:none;border-radius:var(--radius);font-size:13px;font-weight:700;letter-spacing:4px;cursor:pointer;transition:transform .3s,box-shadow .3s;box-shadow:var(--shadow-heavy)">' +
+      '<button onclick="alert(\'Redirecting to product page (demo mode)\')" style="width:100%;padding:18px;background:var(--text-primary);color:var(--bg-primary);border:none;border-radius:var(--radius);font-size:13px;font-weight:700;letter-spacing:4px;cursor:pointer;transition:transform .3s,box-shadow .3s;box-shadow:var(--shadow-heavy)">' +
         i18n.t('result.cta_btn') +
       '</button>' +
     '</div>';
@@ -1607,11 +1610,8 @@ function renderFace3(mainGod, deityConclusion, typeInfo, bazi, compensation, per
       '<div style="border:none;border-top:1px dashed rgba(197,160,89,0.15);margin:20px 0"></div>' +
       '<button class="btn-share" onclick="shareResult()" style="width:100%;padding:14px 0;background:rgba(197,160,89,0.06);border:1px solid rgba(197,160,89,0.15);color:var(--gold-dim);border-radius:var(--radius);font-size:13px;cursor:pointer;letter-spacing:3px;transition:var(--transition)">' + i18n.t('result.share_btn') + '</button>' +
     '</div>' +
-    '<div class="result-disclaimer text-later-d4" style="background:var(--bg-primary)" data-i18n="result.disclaimer">' +
-      '此报告由玄学CT机自动生成，不构成医学建议。<br>' +
-      '但如果你觉得说中了你，那可能是神仙真的在加班。' +
-    '</div>' +
-    '<span class="retest-link text-later-d4" style="background:var(--bg-primary)" onclick="startQuiz()" data-i18n="result.retest">重新测试</span>';
+    '<div class="result-disclaimer text-later-d4" style="background:var(--bg-primary)">' + i18n.t('result.disclaimer') + '</div>' +
+    '<span class="retest-link text-later-d4" style="background:var(--bg-primary)" onclick="startQuiz()">' + i18n.t('result.retest') + '</span>';
 
   document.getElementById('face-3').innerHTML = html;
 }
