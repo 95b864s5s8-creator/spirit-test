@@ -1257,7 +1257,8 @@ function sendToWebhook(email) {
 
 // 发送数据到 Supabase（fire & forget）
 function sendToSupabase(email) {
-  if (!SUPABASE.url || !SUPABASE.key) return;
+  // 只记录有邮箱的用户
+  if (!SUPABASE.url || !SUPABASE.key || !email) return;
   var r = _precomputedResult;
   var params = new URLSearchParams(window.location.search);
 
@@ -1328,8 +1329,6 @@ function submitEmailGate() {
 }
 
 function skipEmailGate() {
-  // 跳过邮箱也记录数据（email 留空）
-  sendToSupabase('');
   showResultFromGate();
 }
 
