@@ -950,7 +950,8 @@ var PROGRESS_LABELS = [
 ];
 function getProgressLabel(pct) {
   var idx = Math.min(Math.floor(pct / 100 * PROGRESS_LABELS.length), PROGRESS_LABELS.length - 1);
-  return PROGRESS_LABELS[idx];
+  var translated = i18n.tpl(idx);
+  return translated || PROGRESS_LABELS[idx];
 }
 
 // 彩蛋——特定题号完成后闪过一句吐槽
@@ -990,10 +991,11 @@ function renderQuestion(direction) {
   else card.style.animation = 'fadeIn .4s ease both';
 
   if (q.type === 'date') {
+    var tq0 = i18n.tq(String(q.id));
     card.innerHTML =
-      '<div class="question-number">' + q.number + '</div>' +
-      '<div class="question-title">' + q.title + '</div>' +
-      '<div class="question-subtitle">' + (q.subtitle || '') + '</div>' +
+      '<div class="question-number">' + (tq0 && tq0.number ? tq0.number : q.number) + '</div>' +
+      '<div class="question-title">' + (tq0 && tq0.title ? tq0.title : q.title) + '</div>' +
+      '<div class="question-subtitle">' + ((tq0 && tq0.subtitle) ? tq0.subtitle : (q.subtitle || '')) + '</div>' +
       '<div class="date-input-group">' +
         '<div class="birth-row">' +
           '<div class="birth-field"><label>' + i18n.t('quiz.birth_year_label') + '</label><input type="number" inputmode="numeric" id="birth-year" min="1900" max="2026" placeholder="1990"></div>' +
@@ -1045,9 +1047,9 @@ function renderQuestion(direction) {
         '</div>';
     });
     card.innerHTML =
-      '<div class="question-number">' + q.number + '</div>' +
-      '<div class="question-title">' + q.title + '</div>' +
-      (q.subtitle ? '<div class="question-subtitle">' + q.subtitle + '</div>' : '') +
+      '<div class="question-number">' + (function(){ var t=i18n.tq(String(q.id)); return (t&&t.number)?t.number:q.number; })() + '</div>' +
+      '<div class="question-title">' + (function(){ var t=i18n.tq(String(q.id)); return (t&&t.title)?t.title:q.title; })() + '</div>' +
+      (q.subtitle ? '<div class="question-subtitle">' + (function(){ var t=i18n.tq(String(q.id)); return (t&&t.subtitle)?t.subtitle:q.subtitle; })() + '</div>' : '') +
       '<div class="options">' + optsHtml + '</div>';
   }
 }
@@ -1098,7 +1100,7 @@ function goNext() {
     card.innerHTML =
       '<div style="text-align:center;padding:60px 20px">' +
         '<div style="font-size:36px;margin-bottom:20px;color:var(--gold)">✨</div>' +
-        '<div style="font-size:14px;color:var(--gold);line-height:2;letter-spacing:2px">' + SOUL_SNACKS[currentQ] + '</div>' +
+        '<div style="font-size:14px;color:var(--gold);line-height:2;letter-spacing:2px">' + (i18n.tsq(currentQ) || SOUL_SNACKS[currentQ]) + '</div>' +
       '</div>';
     setTimeout(function() {
       if (currentQ < total - 1) { currentQ++; renderQuestion('next'); }
@@ -1414,10 +1416,12 @@ function renderFace1(typeInfo, compensation, bazi, personality, mainGod) {
   // 简短总述
   var profile = SuperpositionEngine.getProfile(camp, cureName);
   if (profile && profile.summary) {
+    var summaryTr = i18n.ts(camp + '_' + cureName, 'summary');
+    var summaryText = summaryTr || profile.summary;
     html +=
       '<div class="section-card text-later-d1" style="margin:0 0 80px">' +
         '<div class="section-content" style="text-align:center">' +
-          '<p style="font-size:15px;color:var(--text-secondary);line-height:2.2">' + profile.summary + '</p>' +
+          '<p style="font-size:15px;color:var(--text-secondary);line-height:2.2">' + summaryText + '</p>' +
         '</div>' +
       '</div>';
   }
@@ -1543,21 +1547,21 @@ function renderFace3(mainGod, deityConclusion, typeInfo, bazi, compensation, per
         '<div>' +
           '<span style="font-family:Inter,sans-serif;font-size:9px;letter-spacing:0.3em;color:#c5a059;font-weight:600;text-transform:uppercase;display:block;margin-bottom:16px">' + i18n.t('result.act1_label') + '</span>' +
           '<p style="font-size:15px;line-height:2;color:rgba(247,246,242,0.9);font-weight:300;font-style:italic">' +
-            (trC && trC.act1 ? trC.act1 : (deityConclusion && deityConclusion.act1 ? deityConclusion.act1 : '他在众生中寻觅，只为找一个能与你灵魂波长同步的人。')) +
+            (trC && trC.act1 ? trC.act1 : (deityConclusion && deityConclusion.act1 ? deityConclusion.act1 : 'Your deity seeks among the multitudes for the one whose soul resonates with yours.')) +
           '</p>' +
         '</div>' +
         // Act II
         '<div>' +
           '<span style="font-family:Inter,sans-serif;font-size:9px;letter-spacing:0.3em;color:rgba(247,246,242,0.3);font-weight:600;text-transform:uppercase;display:block;margin-bottom:16px">' + i18n.t('result.act2_label') + '</span>' +
           '<p style="font-size:14px;line-height:2;color:rgba(247,246,242,0.6);font-weight:300">' +
-            (trC && trC.act2 ? trC.act2 : (deityConclusion && deityConclusion.act2 ? deityConclusion.act2 : '你是那根断掉的红线，他在月光下试图为你重新续上。')) +
+            (trC && trC.act2 ? trC.act2 : (deityConclusion && deityConclusion.act2 ? deityConclusion.act2 : 'You are the severed thread — your deity weaves it back under moonlight.')) +
           '</p>' +
         '</div>' +
         // Act III
         '<div>' +
           '<span style="font-family:Inter,sans-serif;font-size:9px;letter-spacing:0.3em;color:rgba(247,246,242,0.3);font-weight:600;text-transform:uppercase;display:block;margin-bottom:16px">' + i18n.t('result.act3_label') + '</span>' +
           '<p style="font-size:14px;line-height:2;color:rgba(247,246,242,0.6);font-weight:300">' +
-            (trC && trC.act3 ? trC.act3 : (deityConclusion && deityConclusion.act3 ? deityConclusion.act3 : '你需要的是一个能忍受你沉默的人。将防备转化为观察，你会发现真正的自由。')) +
+            (trC && trC.act3 ? trC.act3 : (deityConclusion && deityConclusion.act3 ? deityConclusion.act3 : 'What you need is someone who endures your silence. Transform defense into observation — you will find true freedom.')) +
           '</p>' +
         '</div>' +
       '</div>' +
@@ -1659,6 +1663,19 @@ function shareResult() {
 i18n.init(function(lang) {
   // 初始化完成后同步 DOM（i18n.js 已处理静态节点，这里可加后续逻辑）
   document.documentElement.lang = lang === 'zh' ? 'zh-CN' : 'en';
+});
+
+// 语言切换后重渲染当前页面
+window.addEventListener('i18n:change', function() {
+  var quizPage = document.getElementById('page-quiz');
+  var resultPage = document.getElementById('page-result');
+  if (resultPage && resultPage.classList.contains('active') && resultData) {
+    // 结果页：用已有数据重新渲染三屏
+    generateResult(resultData);
+  } else if (quizPage && quizPage.classList.contains('active') && typeof currentQ !== 'undefined') {
+    // 答题页：重绘当前题
+    renderQuestion();
+  }
 });
 </script>
 </body>

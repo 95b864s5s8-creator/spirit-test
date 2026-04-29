@@ -25,6 +25,7 @@ var i18n = (function() {
   var _forms = null;
   var _superpositions = null;
   var _deities = null;
+  var _questions = null;
 
   // 语言检测：URL 参数优先 → localStorage 记忆 → 默认中文
   function detectLang() {
@@ -56,13 +57,14 @@ var i18n = (function() {
   // 加载英文扩展词典
   function loadExtended(cb) {
     if (_lang !== 'zh') {
-      var pending = 3;
+      var pending = 4;
       var done = function() { if (--pending === 0) cb && cb(); };
       loadJSON('/i18n/forms-en.json', function(d){ _forms = d; done(); });
       loadJSON('/i18n/superpositions-en.json', function(d){ _superpositions = d; done(); });
       loadJSON('/i18n/deities-en.json', function(d){ _deities = d; done(); });
+      loadJSON('/i18n/questions-en.json', function(d){ _questions = d; done(); });
     } else {
-      _forms = null; _superpositions = null; _deities = null;
+      _forms = null; _superpositions = null; _deities = null; _questions = null;
       cb && cb();
     }
   }
@@ -163,6 +165,30 @@ var i18n = (function() {
     return act ? (c[act] || null) : c;
   }
 
+  // ===== 问卷题目翻译 =====
+  // tq(qid, field?) — qid 如 '0' (string), field: 'number'|'title'|'subtitle'
+  function tq(qid, field) {
+    if (_lang === 'zh' || !_questions) return null;
+    var q = _questions.QUESTIONS ? _questions.QUESTIONS[qid] : null;
+    if (!q) return null;
+    if (field) return (q[field] !== undefined ? q[field] : null);
+    return q;
+  }
+
+  // 进度文案翻译
+  function tpl(idx) {
+    if (_lang === 'zh' || !_questions) return null;
+    var labels = _questions.PROGRESS_LABELS;
+    return (labels && labels[idx] !== undefined) ? labels[idx] : null;
+  }
+
+  // 彩蛋文案翻译
+  function tsq(qid) {
+    if (_lang === 'zh' || !_questions) return null;
+    var snacks = _questions.SOUL_SNACKS;
+    return (snacks && snacks[qid] !== undefined) ? snacks[qid] : null;
+  }
+
   // 初始化
   function init(cb) {
     _lang = detectLang();
@@ -183,6 +209,9 @@ var i18n = (function() {
     tf: tf,       // form translation
     ts: ts,       // superposition translation
     td: td,       // deity translation
-    tc: tc        // conclusion translation
+    tc: tc,       // conclusion translation
+    tq: tq,       // question translation
+    tpl: tpl,     // progress label translation
+    tsq: tsq      // soul snack (easter egg) translation
   };
 })();

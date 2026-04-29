@@ -1,0 +1,196 @@
+{
+  "QUESTIONS": {
+    "0": {
+      "number": "Q1",
+      "title": "First, your birth date",
+      "subtitle": "Just pick the approximate time range"
+    },
+    "1": {
+      "number": "Q2",
+      "title": "You just added someone on WeChat. Usually you —",
+      "subtitle": ""
+    },
+    "2": {
+      "number": "Q3",
+      "title": "After hotpot with friends, you get home and —",
+      "subtitle": ""
+    },
+    "3": {
+      "number": "Q4",
+      "title": "In a 200-person group chat, someone @everyone needs a reply. You —",
+      "subtitle": ""
+    },
+    "4": {
+      "number": "Q5",
+      "title": "At a dinner table of ten, you only know two people —",
+      "subtitle": ""
+    },
+    "5": {
+      "number": "Q6",
+      "title": "Friday 10 PM, someone texts \"come hang out.\" You —",
+      "subtitle": ""
+    },
+    "6": {
+      "number": "Q7",
+      "title": "You scroll past a 3-min video titled \"This will change your life.\" You —",
+      "subtitle": ""
+    },
+    "7": {
+      "number": "Q8",
+      "title": "Want to buy something (like noise-canceling headphones). Your process:",
+      "subtitle": ""
+    },
+    "8": {
+      "number": "Q9",
+      "title": "Suddenly want to learn a new skill (editing/drawing/coding). Your approach:",
+      "subtitle": ""
+    },
+    "9": {
+      "number": "Q10",
+      "title": "A friend excitedly tells you: \"I'm building an AI-powered pet dating platform!\" You —",
+      "subtitle": ""
+    },
+    "10": {
+      "number": "Q11",
+      "title": "You see a clearly problematic post with everyone agreeing in the comments. You —",
+      "subtitle": ""
+    },
+    "11": {
+      "number": "Q12",
+      "title": "A friend spent 2000 on a bag you think is ugly, and shows it off happily. You —",
+      "subtitle": ""
+    },
+    "12": {
+      "number": "Q13",
+      "title": "Your phone apps are arranged like this —",
+      "subtitle": ""
+    },
+    "13": {
+      "number": "Q14",
+      "title": "Something must be submitted in three days. Usually you —",
+      "subtitle": ""
+    },
+    "14": {
+      "number": "Q15",
+      "title": "Spontaneous trip! Your travel style:",
+      "subtitle": ""
+    },
+    "15": {
+      "number": "Q16",
+      "title": "Three tasks due simultaneously. Your habit:",
+      "subtitle": ""
+    },
+    "16": {
+      "number": "Q17",
+      "title": "One day you feel terrible out of nowhere. Your instinctive reaction:",
+      "subtitle": "Pick the closest to your gut response"
+    },
+    "17": {
+      "number": "Q18",
+      "title": "That was your first reaction. If the anxiety lasted a week, you'd become:",
+      "subtitle": "Think carefully — might differ from your gut reaction"
+    },
+    "18": {
+      "number": "Q19",
+      "title": "Which describes your current state best?",
+      "subtitle": ""
+    },
+    "19": {
+      "number": "Q20",
+      "title": "The you on social media vs. the real you —",
+      "subtitle": ""
+    },
+    "20": {
+      "number": "Q21",
+      "title": "A friend sends you a 10,000-word essay analyzing the economy. You —",
+      "subtitle": ""
+    },
+    "21": {
+      "number": "Q22",
+      "title": "You and your roommate/partner fought about chores again. Your follow-up:",
+      "subtitle": ""
+    },
+    "22": {
+      "number": "Q23",
+      "title": "If life is an open-world game, the item you want most right now:",
+      "subtitle": ""
+    },
+    "23": {
+      "number": "Q24",
+      "title": "Added to an unfamiliar WeChat group (neighbors/industry). Your vibe:",
+      "subtitle": ""
+    },
+    "24": {
+      "number": "Q25",
+      "title": "When telling a story to friends, your habit is:",
+      "subtitle": ""
+    },
+    "25": {
+      "number": "Q26",
+      "title": "Bought a new gadget (air fryer/projector). First reaction:",
+      "subtitle": ""
+    },
+    "26": {
+      "number": "Q27",
+      "title": "Moving house / decluttering. Your style:",
+      "subtitle": ""
+    },
+    "27": {
+      "number": "Q28",
+      "title": "A whole week with zero social plans. You feel:",
+      "subtitle": ""
+    },
+    "28": {
+      "number": "Q29",
+      "title": "A highly capable but annoying coworker gets criticized by the boss. Your reaction:",
+      "subtitle": ""
+    },
+    "29": {
+      "number": "Q30",
+      "title": "A friend asks \"Should I break up / quit / go to grad school?\" You —",
+      "subtitle": ""
+    },
+    "30": {
+      "number": "Q31",
+      "title": "About to see your results. How are you feeling?",
+      "subtitle": ""
+    }
+  },
+  "PROGRESS_LABELS": [
+    "Relax, it's just a quiz",
+    "Fine, next",
+    "Your attitude toward social media is interesting",
+    "Social butterfly or hermit? Almost revealed",
+    "Past the tutorial zone",
+    "Getting into it now",
+    "Your spending habits are showing",
+    "This one's gonna sting",
+    "Your logic or your mouth?",
+    "Deity is reviewing your file…",
+    "Interesting, you're more fun than expected",
+    "Entering deep waters",
+    "DDL warrior or time management master?",
+    "Your travel style reveals everything",
+    "Multitasking mode activated",
+    "Your deity has arrived, looking for you",
+    "Think carefully, this one matters",
+    "Which sounds more like you?",
+    "Your soul is being read",
+    "The deities are debating…",
+    "Your teammates are waiting",
+    "Life is multiple-choice…",
+    "Round two, let's go deeper",
+    "How you tell stories betrays you",
+    "Read the manual or wing it?",
+    "Declutter or hoard?",
+    "Social battery remaining?",
+    "Your coworkers need you",
+    "Last two questions, your guardian is incoming"
+  ],
+  "SOUL_SNACKS": {
+    "10": "Your deity is reviewing your file…",
+    "16": "This question is dangerous, answer carefully",
+    "23": "Your deity has arrived, looking for you",
+    "29": "Last two questions — your deity is hesitating who to send"
+  }
+}
