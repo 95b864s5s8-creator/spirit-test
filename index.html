@@ -1281,9 +1281,9 @@ function sendToSupabase(email) {
     cure_name: userState ? userState.cure : '',
     guardian: r ? (r.mainGod ? r.mainGod.name : '') : '',
     source: getTrafficSource(),
-    utm_source: params.get('utm_source') || params.get('source') || null,
-    utm_medium: params.get('utm_medium') || null,
-    utm_campaign: params.get('utm_campaign') || null,
+    utm_source: params.get('utm_source') || params.get('source') || '',
+    utm_medium: params.get('utm_medium') || '',
+    utm_campaign: params.get('utm_campaign') || '',
     birth: answers.birth ? (answers.birth.year + '-' + answers.birth.month + '-' + answers.birth.day) : '',
     deity: r ? (r.mainGod ? r.mainGod.name : '') : '',
     dilemma: r ? (r.personality.dilemma || '') : ''
@@ -1328,6 +1328,8 @@ function submitEmailGate() {
 }
 
 function skipEmailGate() {
+  // 跳过邮箱也记录数据（email 留空）
+  sendToSupabase('');
   showResultFromGate();
 }
 
