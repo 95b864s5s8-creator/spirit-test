@@ -1273,16 +1273,16 @@ function sendToSupabase(email) {
   }
 
   var spPayload = {
-    "邮箱": email,
-    "来源": getTrafficSource(),
-    "叠加态名字": userState ? userState.name : '',
-    "16型人格": r ? (r.personality.type16 || '') : '',
-    "核心困境": r ? (r.personality.dilemma || '') : '',
-    "补元素": userState ? userState.cure : '',
-    "守护神": r ? (r.mainGod ? r.mainGod.name : '') : '',
-    "阵营": userState ? userState.camp : '',
-    "强弱": userState ? userState.sw : '',
-    "出生日期": answers.birth ? (answers.birth.year + '-' + answers.birth.month + '-' + answers.birth.day) : ''
+    "email": email,
+    "source": getTrafficSource(),
+    "superposition_name": userState ? userState.name : '',
+    "personality_type": r ? (r.personality.type16 || '') : '',
+    "core_dilemma": r ? (r.personality.dilemma || '') : '',
+    "cure_element": userState ? userState.cure : '',
+    "guardian": r ? (r.mainGod ? r.mainGod.name : '') : '',
+    "camp": userState ? userState.camp : '',
+    "strength": userState ? userState.sw : '',
+    "birth_date": answers.birth ? (answers.birth.year + '-' + answers.birth.month + '-' + answers.birth.day) : ''
   };
 
   fetch(SUPABASE.url + '/rest/v1/submissions', {
