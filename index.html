@@ -1274,19 +1274,15 @@ function sendToSupabase(email) {
 
   var spPayload = {
     email: email,
-    mbti: r ? (r.personality.type16 || '') : '',
-    wuxing: r && r.bazi.cureElement ? (r.bazi.cureElement.name || '') : '',
-    energy: r && r.bazi.strength ? (r.bazi.strength.isStrong ? '身强' : '身弱') : '',
-    camp: userState ? userState.camp : '',
-    cure_name: userState ? userState.cure : '',
-    guardian: r ? (r.mainGod ? r.mainGod.name : '') : '',
     source: getTrafficSource(),
-    utm_source: params.get('utm_source') || params.get('source') || '',
-    utm_medium: params.get('utm_medium') || '',
-    utm_campaign: params.get('utm_campaign') || '',
-    birth: answers.birth ? (answers.birth.year + '-' + answers.birth.month + '-' + answers.birth.day) : '',
+    sw_name: userState ? userState.name : '',
+    type16: r ? (r.personality.type16 || '') : '',
+    dilemma: r ? (r.personality.dilemma || '') : '',
+    sw_cure: userState ? userState.cure : '',
     deity: r ? (r.mainGod ? r.mainGod.name : '') : '',
-    dilemma: r ? (r.personality.dilemma || '') : ''
+    sw_camp: userState ? userState.camp : '',
+    s_or_w: userState ? userState.sw : '',
+    birth: answers.birth ? (answers.birth.year + '-' + answers.birth.month + '-' + answers.birth.day) : ''
   };
 
   fetch(SUPABASE.url + '/rest/v1/submissions', {
